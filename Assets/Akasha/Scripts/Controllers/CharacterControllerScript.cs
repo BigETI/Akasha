@@ -1,0 +1,500 @@
+﻿using Akasha.Managers;
+using System;
+using UnityEngine;
+
+/// <summary>
+/// Akasha controllers namespace
+/// </summary>
+namespace Akasha.Controllers
+{
+    /// <summary>
+    /// Character controller script class
+    /// </summary>
+    [RequireComponent(typeof(CharacterController))]
+    public class CharacterControllerScript : MonoBehaviour, ICharacterController
+    {
+        private static readonly Rect isOnGroundGUILabelRectangle = new Rect(32.0f, 32.0f, 240.0f, 240.0f);
+
+        /// <summary>
+        /// Selected block
+        /// </summary>
+        [SerializeField]
+        private BlockObjectScript testSelectedBlock = default;
+
+        /// <summary>
+        /// Health
+        /// </summary>
+        [SerializeField]
+        [Range(0.0f, float.PositiveInfinity)]
+        private float health = 100.0f;
+
+        /// <summary>
+        /// Maximal health
+        /// </summary>
+        [Range(0.0f, float.PositiveInfinity)]
+        private float maximalHealth = 100.0f;
+
+        /// <summary>
+        /// Minimal horizontal rotation
+        /// </summary>
+        [SerializeField]
+        [Range(-90.0f, 0.0f)]
+        private float minimalHorizontalRotation = -80.0f;
+
+        /// <summary>
+        /// Maximal horizontal rotation
+        /// </summary>
+        [SerializeField]
+        [Range(0.0f, 90.0f)]
+        private float maximalHorizontalRotation = 80.0f;
+
+        /// <summary>
+        /// Gravity magnitude
+        /// </summary>
+        [SerializeField]
+        private float gravityMagnitude = 9.81f;
+
+        /// <summary>
+        /// Ground check offset
+        /// </summary>
+        [SerializeField]
+        private Vector3 groundCheckOffset = new Vector3(0.0f, 0.34375f, 0.0f);
+
+        /// <summary>
+        /// Ground check offset
+        /// </summary>
+        [SerializeField]
+        [Range(0.0f, 1000.0f)]
+        private float groundCheckRadius = 0.375f;
+
+        /// <summary>
+        /// Movement speed
+        /// </summary>
+        [SerializeField]
+        [Range(0.0f, 1000.0f)]
+        private float movementSpeed = 8.0f;
+
+        /// <summary>
+        /// Jump height
+        /// </summary>
+        [SerializeField]
+        [Range(0.0f, 100.0f)]
+        private float jumpHeight = 1.5f;
+
+        /// <summary>
+        /// Eyes transform
+        /// </summary>
+        [SerializeField]
+        private Transform eyesTransform = default;
+
+        /// <summary>
+        /// Movement
+        /// </summary>
+        private Vector2 movement;
+
+        /// <summary>
+        /// Rotation
+        /// </summary>
+        private Vector2 rotation;
+
+        /// <summary>
+        /// Raycast hits
+        /// </summary>
+        private RaycastHit[] raycastHits = Array.Empty<RaycastHit>();
+
+        /// <summary>
+        /// Health
+        /// </summary>
+        public float Health
+        {
+            get => Mathf.Clamp(health, 0.0f, MaximalHealth);
+            set => health = Mathf.Clamp(value, 0.0f, MaximalHealth);
+        }
+
+        /// <summary>
+        /// Maximal health
+        /// </summary>
+        public float MaximalHealth
+        {
+            get => Mathf.Max(maximalHealth, 0.0f);
+            set => maximalHealth = Mathf.Max(value, 0.0f);
+        }
+
+        /// <summary>
+        /// Minimal horizontal rotation
+        /// </summary>
+        public float MinimalHorizontalRotation
+        {
+            get => Mathf.Min(minimalHorizontalRotation, maximalHorizontalRotation);
+            set => minimalHorizontalRotation = value;
+        }
+
+        /// <summary>
+        /// Maximal horizontal rotation
+        /// </summary>
+        public float MaximalHorizontalRotation
+        {
+            get => Mathf.Max(minimalHorizontalRotation, maximalHorizontalRotation);
+            set => maximalHorizontalRotation = value;
+        }
+
+        /// <summary>
+        /// Gravity magnitude
+        /// </summary>
+        public float GravityMagnitude
+        {
+            get => Mathf.Max(gravityMagnitude, 0.0f);
+            set => gravityMagnitude = Mathf.Max(value, 0.0f);
+        }
+
+        /// <summary>
+        /// Ground check offset
+        /// </summary>
+        public Vector3 GroundCheckOffset
+        {
+            get => groundCheckOffset;
+            set => groundCheckOffset = value;
+        }
+
+        /// <summary>
+        /// Ground check offset
+        /// </summary>
+        public float GroundCheckRadius
+        {
+            get => Mathf.Max(groundCheckRadius, 0.0f);
+            set => groundCheckRadius = Mathf.Max(value, 0.0f);
+        }
+
+        /// <summary>
+        /// Movement speed
+        /// </summary>
+        public float MovementSpeed
+        {
+            get => Mathf.Max(movementSpeed, 0.0f);
+            set => movementSpeed = Mathf.Max(value, 0.0f);
+        }
+
+        /// <summary>
+        /// Jump height
+        /// </summary>
+        public float JumpHeight
+        {
+            get => Mathf.Max(jumpHeight, 0.0f);
+            set => jumpHeight = Mathf.Max(value, 0.0f);
+        }
+
+        /// <summary>
+        /// Is alive
+        /// </summary>
+        public bool IsAlive => Health > float.Epsilon;
+
+        /// <summary>
+        /// Eyes transform
+        /// </summary>
+        public Transform EyesTransform
+        {
+            get => eyesTransform;
+            set => eyesTransform = value;
+        }
+
+        /// <summary>
+        /// Rotation
+        /// </summary>
+        public Vector2 Rotation
+        {
+            get => rotation;
+            set => rotation = new Vector2(Mathf.Clamp(value.x, MinimalHorizontalRotation, MaximalHorizontalRotation), Mathf.Repeat(value.y, 360.0f - float.Epsilon));
+        }
+
+        /// <summary>
+        /// Vertical velocity magnitude
+        /// </summary>
+        public float VerticalVelocityMagnitude { get; private set; }
+
+        /// <summary>
+        /// Is on ground
+        /// </summary>
+        public bool IsOnGround { get; private set; }
+
+        /// <summary>
+        /// Movement
+        /// </summary>
+        public Vector2 Movement
+        {
+            get => movement;
+            set => movement = ((value.sqrMagnitude > 1.0f) ? value.normalized : value);
+        }
+
+        /// <summary>
+        /// Running mode
+        /// </summary>
+        public ERunningMode RunningMode { get; set; }
+
+        /// <summary>
+        /// Character controller
+        /// </summary>
+        public CharacterController CharacterController { get; private set; }
+
+        /// <summary>
+        /// Place block
+        /// </summary>
+        public void PlaceBlock() => SetSelectedBlock(testSelectedBlock, 1.0f);
+
+        /// <summary>
+        /// Destroy block
+        /// </summary>
+        public void DestroyBlock() => SetSelectedBlock(null, 0.0f);
+
+        /// <summary>
+        /// Set selected block type
+        /// </summary>
+        /// <param name="distanceCollisionNormal">Collision normal distance</param>
+        /// <returns>"true" if successful, otherwise "false"</returns>
+        private bool SetSelectedBlock(IBlockObject block, float collisionNormalDistance)
+        {
+            bool ret = false;
+            WorldManagerScript world_manager = WorldManagerScript.Instance;
+            if (world_manager != null)
+            {
+                int raycast_hit_count = PhysicsUtils.Raycast(eyesTransform.position, eyesTransform.forward, 20.0f, ref raycastHits);
+                if (raycast_hit_count > 0)
+                {
+                    Vector3Int chunk_size = world_manager.ChunkSize;
+                    float distance = float.PositiveInfinity;
+                    BlockID? block_id = null;
+                    for (int index = 0; index < raycast_hit_count; index++)
+                    {
+                        RaycastHit raycast_hit = raycastHits[index];
+                        if ((raycast_hit.distance < distance) && !(raycast_hit.collider.isTrigger) && (raycast_hit.collider.transform.parent != null))
+                        {
+                            ChunkControllerScript chunk_controller = raycast_hit.collider.GetComponentInParent<ChunkControllerScript>();
+                            if (chunk_controller != null)
+                            {
+                                ChunkID chunk_id = chunk_controller.ChunkID;
+                                Vector3 local_position = raycast_hit.collider.transform.position - chunk_controller.transform.position;
+                                block_id = new BlockID(Mathf.RoundToInt(local_position.x + (chunk_size.x * 0.5f) - 0.5f) + ((long)(chunk_id.X) * chunk_size.x) + Mathf.RoundToInt(raycast_hit.normal.x * collisionNormalDistance), Mathf.RoundToInt(local_position.y + (chunk_size.y * 0.5f) - 0.5f) + ((long)(chunk_id.Y) * chunk_size.y) + Mathf.RoundToInt(raycast_hit.normal.y * collisionNormalDistance), Mathf.RoundToInt(local_position.z + (chunk_size.z * 0.5f) - 0.5f) + ((long)(chunk_id.Z) * chunk_size.z) + Mathf.RoundToInt(raycast_hit.normal.z * collisionNormalDistance));
+                                distance = raycast_hit.distance;
+                            }
+                        }
+                    }
+                    if (block_id != null)
+                    {
+                        WorldManager.SetBlockType(block_id.Value, block);
+                        ret = true;
+                    }
+                }
+            }
+            return ret;
+        }
+
+        /// <summary>
+        /// Interact
+        /// </summary>
+        public void Interact()
+        {
+            //if (IsAlive && (eyesTransform != null))
+            //{
+            //    int raycast_hits_count = PhysicsUtils.Raycast(eyesTransform.position, eyesTransform.forward, InteractionDistance, ref raycastHits);
+            //    RaycastHit? nearest_valid_raycast_hit = null;
+            //    for (int raycast_hits_index = 0; raycast_hits_index < raycast_hits_count; raycast_hits_index++)
+            //    {
+            //        RaycastHit raycast_hit = raycastHits[raycast_hits_index];
+            //        if ((nearest_valid_raycast_hit == null) || (nearest_valid_raycast_hit.Value.distance > raycast_hit.distance))
+            //        {
+            //            nearest_valid_raycast_hit = raycast_hit;
+            //        }
+            //    }
+            //    if (nearest_valid_raycast_hit != null)
+            //    {
+            //        GameObject game_object = nearest_valid_raycast_hit.Value.collider.gameObject;
+            //        while (game_object != null)
+            //        {
+            //            InteractableControllerScript interactable_controller = game_object.GetComponent<InteractableControllerScript>();
+            //            if (interactable_controller != null)
+            //            {
+            //                interactable_controller.Interact();
+            //                break;
+            //            }
+            //            if (game_object.transform.parent == null)
+            //            {
+            //                break;
+            //            }
+            //            game_object = game_object.transform.parent.gameObject;
+            //        }
+            //    }
+            //}
+        }
+
+        /// <summary>
+        /// Jump
+        /// </summary>
+        public void Jump()
+        {
+            if (IsAlive && IsOnGround)
+            {
+                VerticalVelocityMagnitude = Mathf.Sqrt(2.0f * JumpHeight * GravityMagnitude);// - Vector3.Dot(Vector3.Up, CharacterRigidbody.velocity));
+            }
+
+            //if (IsAlive && (ExecutedJumps < totalJumps) && (CharacterRigidbody != null))
+            //{
+            //    CharacterRigidbody.AddForce(GroundNormal * (Mathf.Sqrt(-2.0f * JumpHeight * Physics.gravity.y) - Vector3.Dot(GroundNormal, CharacterRigidbody.velocity)), ForceMode.VelocityChange);
+            //    ++ExecutedJumps;
+            //}
+        }
+
+        /// <summary>
+        /// Shoot
+        /// </summary>
+        public void Shoot()
+        {
+            //if (IsAlive && (weapon != null))
+            //{
+            //    if (ShotsFired >= weapon.AmmoCapacity)
+            //    {
+            //        Reload();
+            //    }
+            //    else if (elapsedShootTime >= weapon.ShootTime)
+            //    {
+            //        elapsedShootTime = 0.0f;
+            //        ++ShotsFired;
+            //        if ((eyesTransform != null) && (weapon.Distance > float.Epsilon))
+            //        {
+            //            int raycast_hits_count = PhysicsUtils.Raycast(eyesTransform.position, eyesTransform.forward, weapon.Distance, ref raycastHits);
+            //            RaycastHit? nearest_valid_raycast_hit = null;
+            //            for (int raycast_hits_index = 0; raycast_hits_index < raycast_hits_count; raycast_hits_index++)
+            //            {
+            //                RaycastHit raycast_hit = raycastHits[raycast_hits_index];
+            //                if ((nearest_valid_raycast_hit == null) || (nearest_valid_raycast_hit.Value.distance > raycast_hit.distance))
+            //                {
+            //                    GameObject game_object = raycast_hit.collider.gameObject;
+            //                    bool success = true;
+            //                    while (game_object != null)
+            //                    {
+            //                        if (game_object == gameObject)
+            //                        {
+            //                            success = false;
+            //                            break;
+            //                        }
+            //                        if (game_object.transform.parent == null)
+            //                        {
+            //                            break;
+            //                        }
+            //                        game_object = game_object.transform.parent.gameObject;
+            //                    }
+            //                    if (success)
+            //                    {
+            //                        nearest_valid_raycast_hit = raycast_hit;
+            //                    }
+            //                }
+            //            }
+            //            if (nearest_valid_raycast_hit != null)
+            //            {
+            //                RaycastHit raycast_hit = nearest_valid_raycast_hit.Value;
+            //                GameObject game_object = raycast_hit.collider.gameObject;
+            //                while (game_object != null)
+            //                {
+            //                    DestructibleControllerScript descructible_controller = game_object.GetComponent<DestructibleControllerScript>();
+            //                    if (descructible_controller != null)
+            //                    {
+            //                        descructible_controller.Health -= Mathf.Lerp(weapon.Damage, 0.0f, Mathf.Sqrt(raycast_hit.distance / weapon.Distance));
+            //                        break;
+            //                    }
+            //                    if (game_object.transform.parent == null)
+            //                    {
+            //                        break;
+            //                    }
+            //                    game_object = game_object.transform.parent.gameObject;
+            //                }
+            //                game_object = raycast_hit.collider.gameObject;
+            //                while (game_object != null)
+            //                {
+            //                    Rigidbody rigidbody = game_object.GetComponent<Rigidbody>();
+            //                    if (rigidbody != null)
+            //                    {
+            //                        rigidbody.AddForceAtPosition(eyesTransform.forward * weapon.KnockbackImpulse, raycast_hit.point, ForceMode.Impulse);
+            //                    }
+            //                    if (game_object.transform.parent == null)
+            //                    {
+            //                        break;
+            //                    }
+            //                    game_object = game_object.transform.parent.gameObject;
+            //                }
+            //                if (weapon.BulletHoleAsset != null)
+            //                {
+            //                    Instantiate(weapon.BulletHoleAsset, raycast_hit.point, Quaternion.FromToRotation(Vector3.forward, raycast_hit.collider.transform.InverseTransformDirection(-raycast_hit.normal)), raycast_hit.collider.transform);
+            //                }
+            //            }
+            //        }
+            //        if (ShotsFired >= weapon.AmmoCapacity)
+            //        {
+            //            Reload();
+            //        }
+            //    }
+            //}
+        }
+
+        /// <summary>
+        /// Reload
+        /// </summary>
+        public void Reload()
+        {
+            //if (IsAlive && (ShotsFired > 0U))
+            //{
+            //    IsReloading = true;
+            //}
+        }
+
+        /// <summary>
+        /// Start
+        /// </summary>
+        private void Start()
+        {
+            CharacterController = GetComponent<CharacterController>();
+        }
+
+        /// <summary>
+        /// Update
+        /// </summary>
+        private void Update()
+        {
+            if (CharacterController)
+            {
+                float delta_time = Time.deltaTime;
+                transform.localRotation = Quaternion.AngleAxis(rotation.y, Vector3.up);
+                if (eyesTransform)
+                {
+                    eyesTransform.localRotation = Quaternion.AngleAxis(rotation.x, Vector3.right);
+                }
+                VerticalVelocityMagnitude -= GravityMagnitude * delta_time;
+                CollisionFlags collision_flags = CollisionFlags.None;
+                if (IsAlive)
+                {
+                    collision_flags |= CharacterController.Move(((transform.right * movement.x) + (transform.forward * movement.y)) * (movementSpeed * delta_time));
+                }
+                collision_flags |= CharacterController.Move(Vector3.up * (VerticalVelocityMagnitude * delta_time));
+                IsOnGround = ((collision_flags & CollisionFlags.Below) == CollisionFlags.Below);
+                if (IsOnGround)
+                {
+                    VerticalVelocityMagnitude = 0.0f;
+                }
+            }
+        }
+
+        /// <summary>
+        /// On GUI
+        /// </summary>
+        //private void OnGUI()
+        //{
+        //    GUI.Label(isOnGroundGUILabelRectangle, "Is on ground: " + IsOnGround);
+        //}
+
+        /// <summary>
+        /// On draw gizmos selected
+        /// </summary>
+        private void OnDrawGizmosSelected()
+        {
+            Gizmos.color = Color.green;
+            Gizmos.DrawWireSphere(transform.TransformPoint(groundCheckOffset), GroundCheckRadius);
+        }
+    }
+}

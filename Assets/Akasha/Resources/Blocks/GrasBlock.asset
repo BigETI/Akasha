@@ -1,0 +1,16 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 753a99c5c8d5469419e0a2f1b6c81c69, type: 3}
+  m_Name: GrasBlock
+  m_EditorClassIdentifier: 
+  material: {fileID: 2100000, guid: e85b7eb66bc101c488598ab986a4ef5b, type: 2}
+  meshVariants: {fileID: 11400000, guid: c42a9e0b6591e914d8ff7edbe89b25fd, type: 2}

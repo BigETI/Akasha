@@ -1,0 +1,16 @@
+fileFormatVersion: 2
+guid: e80caa4bb56aeca4792c7d47d125d000
+MonoImporter:
+  externalObjects: {}
+  serializedVersion: 2
+  defaultReferences:
+  - noWeaponSprite: {fileID: 21300000, guid: 607b22351c50db1498096d62bc2c5648, type: 3}
+  - healthImage: {instanceID: 0}
+  - weaponNameText: {instanceID: 0}
+  - weaponAmmoText: {instanceID: 0}
+  - weaponImage: {instanceID: 0}
+  executionOrder: 0
+  icon: {instanceID: 0}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
