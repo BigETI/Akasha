@@ -1,6 +1,7 @@
 ﻿using Akasha.Controllers;
 using Akasha.Data;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using UnityEngine;
 
 /// <summary>
@@ -79,5 +80,24 @@ namespace Akasha
         /// <param name="chunkID">Chunk ID</param>
         /// <returns>Chunk controller if available, otherwise "null"</returns>
         ChunkControllerScript GetChunkController(ChunkID chunkID);
+
+        /// <summary>
+        /// Get chunk blocks task (asynchronous)
+        /// </summary>
+        /// <param name="chunkID">Chunk ID</param>
+        /// <returns>Blocks task</returns>
+        Task<IBlockObject[]> GetChunkBlocksTask(ChunkID chunkID);
+
+        /// <summary>
+        /// Set block type
+        /// </summary>
+        /// <param name="blockID">Block ID</param>
+        /// <param name="blockType">Block type</param>
+        void SetBlockType(BlockID blockID, IBlockObject blockType);
+
+        /// <summary>
+        /// Reset
+        /// </summary>
+        void ResetChunks();
     }
 }

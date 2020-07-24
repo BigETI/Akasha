@@ -7,7 +7,6 @@ using UnityEngine;
 /// </summary>
 namespace Akasha.Controllers
 {
-    // TODO: Add collision marching if movement is too fast
     /// <summary>
     /// Entity controller script class
     /// </summary>
@@ -114,7 +113,8 @@ namespace Akasha.Controllers
         /// </summary>
         /// <param name="boundsChunkID">Bounds chunk ID</param>
         /// <param name="boundsChunkBlocksSize">Bounds chunk block size</param>
-        private void UpdateChunkBlocksTask(ChunkID boundsChunkID, Vector3Int boundsChunkBlocksSize)
+        /// <param name="worldManager">World manager</param>
+        private void UpdateChunkBlocksTask(ChunkID boundsChunkID, Vector3Int boundsChunkBlocksSize, WorldManagerScript worldManager)
         {
             Vector3 bounds_center = bounds.center;
             int bounds_chunk_blocks_count = boundsChunkBlocksSize.x * boundsChunkBlocksSize.y * boundsChunkBlocksSize.z;
@@ -126,7 +126,7 @@ namespace Akasha.Controllers
             {
                 chunkBlocksTasks = new Task<IBlockObject[]>[chunkBlocks.Length];
             }
-            Parallel.For(0, chunkBlocksTasks.Length, (index) => chunkBlocksTasks[index] = WorldManager.GetChunkBlocksTask(new ChunkID(boundsChunkID.X + (index % boundsChunkBlocksSize.x) - ((boundsChunkBlocksSize.x - 1) / 2), boundsChunkID.Y + ((index / 3) % 3) - ((boundsChunkBlocksSize.y - 1) / 2), boundsChunkID.Z + (index / 9) - ((boundsChunkBlocksSize.z - 1) / 2))));
+            Parallel.For(0, chunkBlocksTasks.Length, (index) => chunkBlocksTasks[index] = worldManager.GetChunkBlocksTask(new ChunkID(boundsChunkID.X + (index % boundsChunkBlocksSize.x) - ((boundsChunkBlocksSize.x - 1) / 2), boundsChunkID.Y + ((index / 3) % 3) - ((boundsChunkBlocksSize.y - 1) / 2), boundsChunkID.Z + (index / 9) - ((boundsChunkBlocksSize.z - 1) / 2))));
             initializeChunkBlocksTasks = true;
         }
 
@@ -165,7 +165,7 @@ namespace Akasha.Controllers
                 {
                     lastBoundsChunkID = bounds_center_chunk_id;
                     lastChunkBlocksSize = bounds_chunk_blocks_size;
-                    UpdateChunkBlocksTask(bounds_center_chunk_id, bounds_chunk_blocks_size);
+                    UpdateChunkBlocksTask(bounds_center_chunk_id, bounds_chunk_blocks_size, world_manager);
                 }
                 if (chunkBlocksTasks != null)
                 {
@@ -189,7 +189,6 @@ namespace Akasha.Controllers
                     }
                     if (!ret)
                     {
-                        // TODO: Optimize!
                         Vector3Int chunk_size = world_manager.ChunkSize;
                         Vector3 bounds_center = bounds.center;
                         Vector3 bounds_size = bounds.size;
@@ -244,9 +243,6 @@ namespace Akasha.Controllers
         /// <returns>"true" if collision happened, otherwise "false"</returns>
         public bool Move(Vector3 motion)
         {
-            // TODO: Add multiple checks
-            // Test
-
             bool ret;
             Vector3 delta_motion = motion;
             Vector3 position = transform.position;
@@ -330,17 +326,6 @@ namespace Akasha.Controllers
         protected virtual void Start()
         {
             WorldTransformController = GetComponent<WorldTransformControllerScript>();
-        }
-
-        /// <summary>
-        /// Update
-        /// </summary>
-        protected virtual void Update()
-        {
-            //if (SimulateCollision(transform.position))
-            //{
-            //    Debug.Log("Is colliding!");
-            //}
         }
 
         /// <summary>

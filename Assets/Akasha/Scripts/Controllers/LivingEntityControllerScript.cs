@@ -83,9 +83,8 @@ namespace Akasha.Controllers
         /// <summary>
         /// Update
         /// </summary>
-        protected override void Update()
+        protected virtual void Update()
         {
-            base.Update();
             float health = Health;
             if (lastHealth != health)
             {

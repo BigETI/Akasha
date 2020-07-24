@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using Akasha.Data;
+using UnityEngine;
 
 /// <summary>
 /// Akasha namespace
@@ -36,6 +37,11 @@ namespace Akasha
         float JumpHeight { get; set; }
 
         /// <summary>
+        /// Inventory
+        /// </summary>
+        InventoryData Inventory { get; set; }
+
+        /// <summary>
         /// Eyes transform
         /// </summary>
         Transform EyesTransform { get; set; }
@@ -59,6 +65,16 @@ namespace Akasha
         /// Running mode
         /// </summary>
         ERunningMode RunningMode { get; set; }
+
+        /// <summary>
+        /// Selected inventory item slot index
+        /// </summary>
+        int SelectedInventoryItemSlotIndex { get; set; }
+
+        /// <summary>
+        /// Selected inventory item
+        /// </summary>
+        IInventoryItemData SelectedInventoryItem { get; }
 
         /// <summary>
         /// Place block
@@ -89,5 +105,15 @@ namespace Akasha
         /// Reload
         /// </summary>
         void Reload();
+
+        /// <summary>
+        /// Select previous inventory item slot
+        /// </summary>
+        void SelectPreviousInventoryItemSlot();
+
+        /// <summary>
+        /// Select next inventory item slot
+        /// </summary>
+        void SelectNextInventoryItemSlot();
     }
 }

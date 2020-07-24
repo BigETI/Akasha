@@ -1,4 +1,5 @@
-﻿using Akasha.Managers;
+﻿using Akasha.Data;
+using Akasha.Managers;
 using System;
 using UnityEngine;
 
@@ -12,12 +13,6 @@ namespace Akasha.Controllers
     /// </summary>
     public class CharacterControllerScript : LivingEntityControllerScript, ICharacterController
     {
-        /// <summary>
-        /// Selected block
-        /// </summary>
-        [SerializeField]
-        private BlockObjectScript testSelectedBlock = default;
-
         /// <summary>
         /// Minimal horizontal rotation
         /// </summary>
@@ -53,6 +48,12 @@ namespace Akasha.Controllers
         private float jumpHeight = 1.5f;
 
         /// <summary>
+        /// Inventory
+        /// </summary>
+        [SerializeField]
+        private InventoryData inventory = default;
+
+        /// <summary>
         /// Eyes transform
         /// </summary>
         [SerializeField]
@@ -62,6 +63,11 @@ namespace Akasha.Controllers
         /// Movement
         /// </summary>
         private Vector2 movement;
+
+        /// <summary>
+        /// Selected inventory item slot index
+        /// </summary>
+        private int selectedInventoryItemSlotIndex;
 
         /// <summary>
         /// Rotation
@@ -119,6 +125,29 @@ namespace Akasha.Controllers
         }
 
         /// <summary>
+        /// Inventory
+        /// </summary>
+        public InventoryData Inventory
+        {
+            get
+            {
+                if (inventory == null)
+                {
+                    inventory = new InventoryData();
+                }
+                return inventory;
+            }
+            set
+            {
+                if (value == null)
+                {
+                    throw new ArgumentNullException(nameof(value));
+                }
+                inventory = value;
+            }
+        }
+
+        /// <summary>
         /// Eyes transform
         /// </summary>
         public Transform EyesTransform
@@ -161,9 +190,65 @@ namespace Akasha.Controllers
         public ERunningMode RunningMode { get; set; }
 
         /// <summary>
+        /// Selected inventory item slot index
+        /// </summary>
+        public int SelectedInventoryItemSlotIndex
+        {
+            get
+            {
+                int item_count = Inventory.Items.Count;
+                if (selectedInventoryItemSlotIndex >= item_count)
+                {
+                    selectedInventoryItemSlotIndex = item_count - 1;
+                }
+                return selectedInventoryItemSlotIndex;
+            }
+            set
+            {
+                int item_count = Inventory.Items.Count;
+                selectedInventoryItemSlotIndex = value;
+                if (selectedInventoryItemSlotIndex >= item_count)
+                {
+                    selectedInventoryItemSlotIndex = item_count - 1;
+                }
+                else if (selectedInventoryItemSlotIndex < -1)
+                {
+                    selectedInventoryItemSlotIndex = -1;
+                }
+            }
+        }
+
+        /// <summary>
+        /// Selected inventory item
+        /// </summary>
+        public IInventoryItemData SelectedInventoryItem
+        {
+            get
+            {
+                IInventoryItemData ret = null;
+                int selected_inventory_item_slot_index = SelectedInventoryItemSlotIndex;
+                if ((selected_inventory_item_slot_index >= 0) && (selected_inventory_item_slot_index < Inventory.Items.Count))
+                {
+                    ret = Inventory.Items[selected_inventory_item_slot_index];
+                }
+                return ret;
+            }
+        }
+
+        /// <summary>
         /// Place block
         /// </summary>
-        public void PlaceBlock() => SetSelectedBlock(testSelectedBlock, 1.0f);
+        public void PlaceBlock()
+        {
+            IInventoryItemData item = SelectedInventoryItem;
+            if (item != null)
+            {
+                if ((item.Item is IBlockObject block) && (item.Quantity > 0U) && SetSelectedBlock(block, 1.0f))
+                {
+                    Inventory.RemoveItems(item.Item, 1U);
+                }
+            }
+        }
 
         /// <summary>
         /// Destroy block
@@ -204,7 +289,7 @@ namespace Akasha.Controllers
                     }
                     if (block_id != null)
                     {
-                        WorldManager.SetBlockType(block_id.Value, block);
+                        world_manager.SetBlockType(block_id.Value, block);
                         ret = true;
                     }
                 }
@@ -367,6 +452,36 @@ namespace Akasha.Controllers
             //{
             //    IsReloading = true;
             //}
+        }
+
+        /// <summary>
+        /// Select previous inventory item slot
+        /// </summary>
+        public void SelectPreviousInventoryItemSlot()
+        {
+            if (SelectedInventoryItemSlotIndex > 0)
+            {
+                --SelectedInventoryItemSlotIndex;
+            }
+            else
+            {
+                SelectedInventoryItemSlotIndex = Inventory.Items.Count - 1;
+            }
+        }
+
+        /// <summary>
+        /// Select next inventory item slot
+        /// </summary>
+        public void SelectNextInventoryItemSlot()
+        {
+            if (SelectedInventoryItemSlotIndex < (Inventory.Items.Count - 1))
+            {
+                ++SelectedInventoryItemSlotIndex;
+            }
+            else
+            {
+                SelectedInventoryItemSlotIndex = Mathf.Min(0, Inventory.Items.Count - 1);
+            }
         }
 
         /// <summary>

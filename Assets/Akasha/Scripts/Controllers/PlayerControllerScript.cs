@@ -170,6 +170,18 @@ namespace Akasha.Controllers
                         break;
                 }
             };
+            GameInputActions.GameActionMap.SelectWeapon.performed += (context) =>
+            {
+                float input = context.ReadValue<float>();
+                if (input <= -0.5f)
+                {
+                    CharacterController.SelectPreviousInventoryItemSlot();
+                }
+                else if (input >= 0.5f)
+                {
+                    CharacterController.SelectNextInventoryItemSlot();
+                }
+            };
             // TODO
         }
 

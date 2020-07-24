@@ -7,6 +7,13 @@
       "dependencies": {},
       "hash": "a85dd2868471b53f9b3ab3645c2c39d8f4fce1c8"
     },
+    "com.bigeti.selection-cursor-ui": {
+      "version": "https://github.com/BigETI/SelectionCursorUI.git",
+      "depth": 0,
+      "source": "git",
+      "dependencies": {},
+      "hash": "d80f12a14a0e6a05cf9bc86bb2795c1c01eaf619"
+    },
     "com.bigeti.translator": {
       "version": "https://github.com/BigETI/UnityTranslator.git",
       "depth": 0,

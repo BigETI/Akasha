@@ -295,7 +295,7 @@
                     "id": "3544246b-afe7-4c12-8c42-6f8ec96913ce",
                     "path": "<Mouse>/scroll/y",
                     "interactions": "",
-                    "processors": "",
+                    "processors": "Invert",
                     "groups": "Keyboard and mouse",
                     "action": "SelectWeapon",
                     "isComposite": false,

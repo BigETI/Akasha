@@ -12,7 +12,7 @@ namespace Akasha
     /// Block object script class
     /// </summary>
     [CreateAssetMenu(fileName = "Block", menuName = "Akasha/Block")]
-    public class BlockObjectScript : ScriptableObject, IBlockObject
+    public class BlockObjectScript : ItemObjectScript, IBlockObject
     {
         /// <summary>
         /// Block material

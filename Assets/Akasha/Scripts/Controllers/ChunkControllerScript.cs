@@ -89,13 +89,14 @@ namespace Akasha.Controllers
         /// </summary>
         /// <param name="targetChunkController">Target chunk controller</param>
         /// <param name="targetChunkID">Target chunk ID</param>
+        /// <param name="worldManager">World manager</param>
         /// <returns>Chunk block types</returns>
-        private Task<IBlockObject[]> GetChunkBlocksTaskFromChunk(ChunkControllerScript targetChunkController, ChunkID targetChunkID)
+        private Task<IBlockObject[]> GetChunkBlocksTaskFromChunk(ChunkControllerScript targetChunkController, ChunkID targetChunkID, WorldManagerScript worldManager)
         {
             Task<IBlockObject[]> ret = ((targetChunkController == null) ? null : targetChunkController.chunkBlocksTask);
             if (ret == null)
             {
-                ret = WorldManager.GetChunkBlocksTask(targetChunkID);
+                ret = worldManager.GetChunkBlocksTask(targetChunkID);
             }
             return ret;
         }
@@ -113,12 +114,12 @@ namespace Akasha.Controllers
                 if (refreshOnUpdate)
                 {
                     int block_count = chunk_size.x * chunk_size.y * chunk_size.z;
-                    Task<IBlockObject[]> top_chunk_blocks_task = GetChunkBlocksTaskFromChunk(TopChunkController, chunkID + ChunkID.Up);
-                    Task<IBlockObject[]> bottom_chunk_blocks_task = GetChunkBlocksTaskFromChunk(BottomChunkController, chunkID + ChunkID.Down);
-                    Task<IBlockObject[]> left_chunk_blocks_task = GetChunkBlocksTaskFromChunk(LeftChunkController, chunkID + ChunkID.Left);
-                    Task<IBlockObject[]> right_chunk_blocks_task = GetChunkBlocksTaskFromChunk(RightChunkController, chunkID + ChunkID.Right);
-                    Task<IBlockObject[]> front_chunk_blocks_task = GetChunkBlocksTaskFromChunk(FrontChunkController, chunkID + ChunkID.Forward);
-                    Task<IBlockObject[]> behind_chunk_blocks_task = GetChunkBlocksTaskFromChunk(BehindChunkController, chunkID + ChunkID.Back);
+                    Task<IBlockObject[]> top_chunk_blocks_task = GetChunkBlocksTaskFromChunk(TopChunkController, chunkID + ChunkID.Up, world_manager);
+                    Task<IBlockObject[]> bottom_chunk_blocks_task = GetChunkBlocksTaskFromChunk(BottomChunkController, chunkID + ChunkID.Down, world_manager);
+                    Task<IBlockObject[]> left_chunk_blocks_task = GetChunkBlocksTaskFromChunk(LeftChunkController, chunkID + ChunkID.Left, world_manager);
+                    Task<IBlockObject[]> right_chunk_blocks_task = GetChunkBlocksTaskFromChunk(RightChunkController, chunkID + ChunkID.Right, world_manager);
+                    Task<IBlockObject[]> front_chunk_blocks_task = GetChunkBlocksTaskFromChunk(FrontChunkController, chunkID + ChunkID.Forward, world_manager);
+                    Task<IBlockObject[]> behind_chunk_blocks_task = GetChunkBlocksTaskFromChunk(BehindChunkController, chunkID + ChunkID.Back, world_manager);
                     if (instantiatedBlocks.Length != block_count)
                     {
                         foreach (InstantiatedGameObject instantiated_block in instantiatedBlocks)
@@ -131,7 +132,7 @@ namespace Akasha.Controllers
                         chunkBlocksTask = null;
                         instantiatedBlocks = new InstantiatedGameObject[block_count];
                     }
-                    chunkBlocksTask = WorldManager.GetChunkBlocksTask(chunk_id);
+                    chunkBlocksTask = world_manager.GetChunkBlocksTask(chunk_id);
                     if
                     (
                         (chunkBlocksTask.Status == TaskStatus.RanToCompletion) &&

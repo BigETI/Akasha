@@ -9,7 +9,7 @@ namespace Akasha
     /// <summary>
     /// Block object interface
     /// </summary>
-    public interface IBlockObject : IScriptableObject
+    public interface IBlockObject : IItemObject
     {
         /// <summary>
         /// Block material
