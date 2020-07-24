@@ -1,4 +1,6 @@
 ﻿using Akasha.Objects;
+using System;
+using System.Collections.Generic;
 using UnityEngine;
 
 /// <summary>
@@ -25,6 +27,15 @@ namespace Akasha
         private BlockMeshVariantsObjectScript meshVariants = default;
 
         /// <summary>
+        /// Collision bounds
+        /// </summary>
+        [SerializeField]
+        private Bounds[] collisionBounds = new Bounds[]
+        {
+            new Bounds(Vector3.zero, Vector3.one)
+        };
+
+        /// <summary>
         /// Block material
         /// </summary>
         public Material Material => material;
@@ -33,5 +44,20 @@ namespace Akasha
         /// Mesh variants
         /// </summary>
         public IBlockMeshVariantsObject MeshVariants => meshVariants;
+
+        /// <summary>
+        /// Collision bounds
+        /// </summary>
+        public IReadOnlyList<Bounds> CollisionBounds
+        {
+            get
+            {
+                if (collisionBounds == null)
+                {
+                    collisionBounds = Array.Empty<Bounds>();
+                }
+                return collisionBounds;
+            }
+        }
     }
 }

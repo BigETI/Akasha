@@ -11,7 +11,7 @@ namespace Akasha.Controllers
     /// Character controller script class (old)
     /// </summary>
     [RequireComponent(typeof(Rigidbody))]
-    public class OldCharacterControllerScript : DestructibleControllerScript, IOldCharacterController
+    public class OldCharacterControllerScript : LivingEntityControllerScript, IOldCharacterController
     {
         /// <summary>
         /// Ground or wall detection distance
@@ -463,11 +463,6 @@ namespace Akasha.Controllers
         }
 
         /// <summary>
-        /// Is alive
-        /// </summary>
-        public bool IsAlive => (Health > float.Epsilon);
-
-        /// <summary>
         /// Running mode
         /// </summary>
         public ERunningMode RunningMode { get; set; }
@@ -575,7 +570,7 @@ namespace Akasha.Controllers
                             GameObject game_object = raycast_hit.collider.gameObject;
                             while (game_object != null)
                             {
-                                DestructibleControllerScript descructible_controller = game_object.GetComponent<DestructibleControllerScript>();
+                                LivingEntityControllerScript descructible_controller = game_object.GetComponent<LivingEntityControllerScript>();
                                 if (descructible_controller != null)
                                 {
                                     descructible_controller.Health -= Mathf.Lerp(weapon.Damage, 0.0f, Mathf.Sqrt(raycast_hit.distance / weapon.Distance));
@@ -680,8 +675,9 @@ namespace Akasha.Controllers
         /// <summary>
         /// Update
         /// </summary>
-        private void Update()
+        protected override void Update()
         {
+            base.Update();
             float delta_time = Time.deltaTime;
             elapsedShootTime = ((weapon == null) ? 0.0f : Mathf.Min(elapsedShootTime + delta_time, weapon.ShootTime));
             if (IsReloading)

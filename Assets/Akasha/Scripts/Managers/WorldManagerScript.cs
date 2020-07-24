@@ -35,10 +35,10 @@ namespace Akasha.Managers
         private Vector3Int chunkSize = new Vector3Int(16, 16, 16);
 
         /// <summary>
-        /// Grid size
+        /// Render distance
         /// </summary>
         [SerializeField]
-        private Vector3Int gridSize = new Vector3Int(16, 8, 16);
+        private Vector3Int renderDistances = new Vector3Int(6, 1, 6);
 
         /// <summary>
         /// Force chunk refresh grid distance
@@ -55,10 +55,10 @@ namespace Akasha.Managers
         private float clipViewAngle = 60.0f;
 
         /// <summary>
-        /// Game camera world transform controller
+        /// Follow transform controller
         /// </summary>
         [SerializeField]
-        private WorldTransformControllerScript gameCameraWorldTransformController;
+        private WorldTransformControllerScript followTransformController;
 
         /// <summary>
         /// Noise layers
@@ -141,27 +141,39 @@ namespace Akasha.Managers
         }
 
         /// <summary>
+        /// Render distances
+        /// </summary>
+        public Vector3Int RenderDistances
+        {
+            get
+            {
+                if (renderDistances.x <= 0)
+                {
+                    renderDistances.x = 1;
+                }
+                if (renderDistances.y <= 0)
+                {
+                    renderDistances.y = 1;
+                }
+                if (renderDistances.z <= 0)
+                {
+                    renderDistances.z = 1;
+                }
+                return renderDistances;
+            }
+            set => renderDistances = new Vector3Int(Mathf.Max(value.x, 0), Mathf.Max(value.y, 0), Mathf.Max(value.z, 0));
+        }
+
+        /// <summary>
         /// Chunk grid size
         /// </summary>
         public Vector3Int GridSize
         {
             get
             {
-                if (gridSize.x <= 0)
-                {
-                    gridSize.x = 1;
-                }
-                if (gridSize.y <= 0)
-                {
-                    gridSize.y = 1;
-                }
-                if (gridSize.z <= 0)
-                {
-                    gridSize.z = 1;
-                }
-                return gridSize;
+                Vector3Int render_distances = RenderDistances;
+                return new Vector3Int(render_distances.x * 2 + 1, render_distances.y * 2 + 1, render_distances.z * 2 + 1);
             }
-            set => gridSize = new Vector3Int(Mathf.Max(value.x, 1), Mathf.Max(value.y, 1), Mathf.Max(value.z, 1));
         }
 
         /// <summary>
@@ -183,12 +195,12 @@ namespace Akasha.Managers
         }
 
         /// <summary>
-        /// Game camera world transform controller
+        /// Follow transform controller
         /// </summary>
-        public WorldTransformControllerScript GameCameraWorldTransformController
+        public WorldTransformControllerScript FollowTransformController
         {
-            get => gameCameraWorldTransformController;
-            set => gameCameraWorldTransformController = value;
+            get => followTransformController;
+            set => followTransformController = value;
         }
 
         /// <summary>
@@ -272,7 +284,7 @@ namespace Akasha.Managers
         /// <param name="chunkID">Chunk ID</param>
         public void RefreshChunkController(ChunkID chunkID)
         {
-            if (gameCameraWorldTransformController == null)
+            if (followTransformController == null)
             {
                 foreach (ChunkControllerScript chunk_controller in chunkControllers)
                 {
@@ -289,7 +301,7 @@ namespace Akasha.Managers
             else
             {
                 Vector3Int grid_size = GridSize;
-                Vector3Int buffer_position = new Vector3Int(chunkID.X - gameCameraWorldTransformController.ChunkID.X + (grid_size.x / 2), chunkID.Y - gameCameraWorldTransformController.ChunkID.Y + (grid_size.y / 2), chunkID.Z - gameCameraWorldTransformController.ChunkID.Z + (grid_size.z / 2));
+                Vector3Int buffer_position = new Vector3Int(chunkID.X - followTransformController.ChunkID.X + (grid_size.x / 2), chunkID.Y - followTransformController.ChunkID.Y + (grid_size.y / 2), chunkID.Z - followTransformController.ChunkID.Z + (grid_size.z / 2));
                 if ((buffer_position.x >= 0) && (buffer_position.x < grid_size.x) && (buffer_position.y >= 0) && (buffer_position.y < grid_size.y) && (buffer_position.z >= 0) && (buffer_position.z < grid_size.z))
                 {
                     ChunkControllerScript chunk_controller = chunkControllers[buffer_position.x + (buffer_position.y * grid_size.x) + (buffer_position.z * grid_size.x * grid_size.y)];
@@ -315,7 +327,7 @@ namespace Akasha.Managers
             {
                 Vector3Int chunk_size = ChunkSize;
                 Vector3Int grid_size = GridSize;
-                game_object.transform.position = new Vector3((bufferPosition.x * chunk_size.x) - (grid_size.x * chunk_size.x * 0.5f) + chunk_size.x + 0.5f, (bufferPosition.y * chunk_size.y) - (grid_size.y * chunk_size.y * 0.5f) + chunk_size.y + 0.5f, (bufferPosition.z * chunk_size.z) - (grid_size.z * chunk_size.z * 0.5f) + chunk_size.z + 0.5f);
+                game_object.transform.position = new Vector3((bufferPosition.x * chunk_size.x) - (grid_size.x * chunk_size.x * 0.5f) + chunk_size.x, (bufferPosition.y * chunk_size.y) - (grid_size.y * chunk_size.y * 0.5f) + chunk_size.y, (bufferPosition.z * chunk_size.z) - (grid_size.z * chunk_size.z * 0.5f) + chunk_size.z);
                 ret = game_object.GetComponent<ChunkControllerScript>();
                 if (ret == null)
                 {
@@ -339,7 +351,7 @@ namespace Akasha.Managers
         public ChunkControllerScript GetChunkController(ChunkID chunkID)
         {
             ChunkControllerScript ret = null;
-            if (!gameCameraWorldTransformController)
+            if (!followTransformController)
             {
                 // Try searching in chunk controllers
                 foreach (ChunkControllerScript chunk_controller in chunkControllers)
@@ -357,7 +369,7 @@ namespace Akasha.Managers
             else
             {
                 Vector3Int grid_size = GridSize;
-                Vector3Int buffer_position = new Vector3Int(chunkID.X - gameCameraWorldTransformController.ChunkID.X + (grid_size.x / 2), chunkID.Y - gameCameraWorldTransformController.ChunkID.Y + (grid_size.y / 2), chunkID.Z - gameCameraWorldTransformController.ChunkID.Z + (grid_size.z / 2));
+                Vector3Int buffer_position = new Vector3Int(chunkID.X - followTransformController.ChunkID.X + (grid_size.x / 2), chunkID.Y - followTransformController.ChunkID.Y + (grid_size.y / 2), chunkID.Z - followTransformController.ChunkID.Z + (grid_size.z / 2));
                 if ((buffer_position.x >= 0) && (buffer_position.x < grid_size.x) && (buffer_position.y >= 0) && (buffer_position.y < grid_size.y) && (buffer_position.z >= 0) && (buffer_position.z < grid_size.z))
                 {
                     ret = chunkControllers[buffer_position.x + (buffer_position.y * grid_size.x) + (buffer_position.z * grid_size.x * grid_size.y)];
@@ -408,15 +420,15 @@ namespace Akasha.Managers
         /// </summary>
         private void Update()
         {
-            if (gameCameraWorldTransformController != null)
+            if (followTransformController != null)
             {
                 bool initialize_chunks = false;
                 bool update_chunks = false;
                 Vector3Int chunk_size = ChunkSize;
                 Vector3Int grid_size = GridSize;
                 int chunk_count = grid_size.x * grid_size.y * grid_size.z;
-                Vector3 game_camera_position = gameCameraWorldTransformController.transform.position;
-                Vector3 game_camera_forward = gameCameraWorldTransformController.transform.forward;
+                Vector3 game_camera_position = followTransformController.transform.position;
+                Vector3 game_camera_forward = followTransformController.transform.forward;
                 Vector2 game_camera_forward_plane = new Vector2(game_camera_forward.x, game_camera_forward.z);
                 game_camera_forward_plane = ((game_camera_forward_plane.sqrMagnitude > 0) ? game_camera_forward_plane.normalized : Vector2.up);
                 float clip_view_angle = ClipViewAngle;
@@ -450,7 +462,7 @@ namespace Akasha.Managers
                     for (int index = 0; index < chunk_count; index++)
                     {
                         Vector3Int buffer_position = new Vector3Int(index % grid_size.x, (index / grid_size.x) % grid_size.y, index / (grid_size.x * grid_size.y));
-                        ChunkID chunk_id = new ChunkID(buffer_position.x + gameCameraWorldTransformController.ChunkID.X - (grid_size.x / 2), buffer_position.y + gameCameraWorldTransformController.ChunkID.Y - (grid_size.y / 2), buffer_position.z + gameCameraWorldTransformController.ChunkID.Z - (grid_size.z / 2));
+                        ChunkID chunk_id = new ChunkID(buffer_position.x + followTransformController.ChunkID.X - (grid_size.x / 2), buffer_position.y + followTransformController.ChunkID.Y - (grid_size.y / 2), buffer_position.z + followTransformController.ChunkID.Z - (grid_size.z / 2));
                         chunkControllers[index] = CreateChunkController(chunk_id, buffer_position);
                     }
                     refreshChunkControllers.Clear();
@@ -461,9 +473,9 @@ namespace Akasha.Managers
                     refreshChunkControllers.Clear();
                     refreshChunkControllers.AddRange(chunkControllers);
                 }
-                if (lastChunkID != gameCameraWorldTransformController.ChunkID)
+                if (lastChunkID != followTransformController.ChunkID)
                 {
-                    Vector3Int delta = (Vector3Int)(gameCameraWorldTransformController.ChunkID - lastChunkID);
+                    Vector3Int delta = (Vector3Int)(followTransformController.ChunkID - lastChunkID);
                     for (int index = 0; index < chunkControllers.Length; index++)
                     {
                         ChunkControllerScript chunk_controller = chunkControllers[index];
@@ -489,7 +501,7 @@ namespace Akasha.Managers
                                 refreshChunkControllers.Remove(chunk_controller);
                                 Destroy(chunk_controller.gameObject);
                             }
-                            ChunkID chunk_id = (ChunkID)buffer_position + gameCameraWorldTransformController.ChunkID - (ChunkID)(grid_size / 2);
+                            ChunkID chunk_id = (ChunkID)buffer_position + followTransformController.ChunkID - (ChunkID)(grid_size / 2);
                             if (!buffer_chunk_controller)
                             {
                                 buffer_chunk_controller = CreateChunkController(chunk_id, buffer_position);
@@ -520,7 +532,7 @@ namespace Akasha.Managers
                             chunk_controller.BehindChunkController = GetChunkController(chunk_controller.ChunkID + ChunkID.Back);
                         }
                     });
-                    lastChunkID = gameCameraWorldTransformController.ChunkID;
+                    lastChunkID = followTransformController.ChunkID;
                 }
                 if (refreshChunkControllers.Count > 0)
                 {

@@ -8,7 +8,7 @@ namespace Akasha.Controllers
     /// <summary>
     /// Explosive controller script class
     /// </summary>
-    public class ExplosiveControllerScript : DestructibleControllerScript, IExplosiveController
+    public class ExplosiveControllerScript : LivingEntityControllerScript, IExplosiveController
     {
         /// <summary>
         /// Explosion radius
@@ -68,11 +68,11 @@ namespace Akasha.Controllers
             if (explosion_radius > float.Epsilon)
             {
                 float explosion_radius_squared = explosion_radius * explosion_radius;
-                DestructibleControllerScript[] destructible_controllers = FindObjectsOfType<DestructibleControllerScript>();
+                LivingEntityControllerScript[] destructible_controllers = FindObjectsOfType<LivingEntityControllerScript>();
                 if (destructible_controllers != null)
                 {
                     float maximal_damage = MaximalDamage;
-                    foreach (DestructibleControllerScript destructible_controller in destructible_controllers)
+                    foreach (LivingEntityControllerScript destructible_controller in destructible_controllers)
                     {
                         if (destructible_controller != null)
                         {
@@ -147,7 +147,7 @@ namespace Akasha.Controllers
         protected override void Start()
         {
             base.Start();
-            OnDestroyed += Explode;
+            OnDied += Explode;
         }
     }
 }

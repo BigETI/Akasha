@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using System.Collections.Generic;
+using UnityEngine;
 
 /// <summary>
 /// Akasha namespace
@@ -19,5 +20,10 @@ namespace Akasha
         /// Mesh variants
         /// </summary>
         IBlockMeshVariantsObject MeshVariants { get; }
+
+        /// <summary>
+        /// Collision bounds
+        /// </summary>
+        IReadOnlyList<Bounds> CollisionBounds { get; }
     }
 }

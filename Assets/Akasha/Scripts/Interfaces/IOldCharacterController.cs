@@ -9,7 +9,7 @@ namespace Akasha
     /// <summary>
     /// Old character controller interface
     /// </summary>
-    public interface IOldCharacterController : IDestructibleController
+    public interface IOldCharacterController : ILivingEntityController
     {
         /// <summary>
         /// Movement speed
@@ -95,11 +95,6 @@ namespace Akasha
         /// Radius
         /// </summary>
         float Radius { get; set; }
-
-        /// <summary>
-        /// Is alive
-        /// </summary>
-        bool IsAlive { get; }
 
         /// <summary>
         /// Maximal ground angle

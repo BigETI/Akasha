@@ -8,18 +8,8 @@ namespace Akasha
     /// <summary>
     /// Character controller interface
     /// </summary>
-    public interface ICharacterController : IBehaviour
+    public interface ICharacterController : ILivingEntityController
     {
-        /// <summary>
-        /// Health
-        /// </summary>
-        float Health { get; set; }
-
-        /// <summary>
-        /// Maximal health
-        /// </summary>
-        float MaximalHealth { get; set; }
-
         /// <summary>
         /// Minimal horizontal rotation
         /// </summary>
@@ -36,16 +26,6 @@ namespace Akasha
         float GravityMagnitude { get; set; }
 
         /// <summary>
-        /// Ground check offset
-        /// </summary>
-        Vector3 GroundCheckOffset { get; set; }
-
-        /// <summary>
-        /// Ground check offset
-        /// </summary>
-        float GroundCheckRadius { get; set; }
-
-        /// <summary>
         /// Movement speed
         /// </summary>
         float MovementSpeed { get; set; }
@@ -59,11 +39,6 @@ namespace Akasha
         /// Eyes transform
         /// </summary>
         Transform EyesTransform { get; set; }
-
-        /// <summary>
-        /// Is alive
-        /// </summary>
-        bool IsAlive { get; }
 
         /// <summary>
         /// Rotation
@@ -84,11 +59,6 @@ namespace Akasha
         /// Running mode
         /// </summary>
         ERunningMode RunningMode { get; set; }
-
-        /// <summary>
-        /// Character controller
-        /// </summary>
-        CharacterController CharacterController { get; }
 
         /// <summary>
         /// Place block

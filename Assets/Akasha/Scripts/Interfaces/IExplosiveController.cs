@@ -6,7 +6,7 @@ namespace Akasha
     /// <summary>
     /// Explosive controller interface
     /// </summary>
-    public interface IExplosiveController : IDestructibleController
+    public interface IExplosiveController : ILivingEntityController
     {
         /// <summary>
         /// Explosion radius

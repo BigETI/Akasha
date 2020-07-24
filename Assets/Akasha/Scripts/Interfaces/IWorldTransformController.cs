@@ -1,4 +1,5 @@
-﻿/// <summary>
+﻿using UnityEngine;
+/// <summary>
 /// Akasha namespace
 /// </summary>
 namespace Akasha
@@ -9,8 +10,20 @@ namespace Akasha
     public interface IWorldTransformController : IBehaviour
     {
         /// <summary>
-        /// Grid position
+        /// Chunk ID
         /// </summary>
         ChunkID ChunkID { get; set; }
+
+        /// <summary>
+        /// Block ID
+        /// </summary>
+        BlockID BlockID { get; set; }
+
+        /// <summary>
+        /// Get block ID
+        /// </summary>
+        /// <param name="worldPosition">World position</param>
+        /// <returns>Block ID</returns>
+        BlockID GetBlockID(Vector3 worldPosition);
     }
 }

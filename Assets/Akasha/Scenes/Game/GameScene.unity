@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 2035111234}
-  m_IndirectSpecularColor: {r: 131.19772, g: 162.48279, b: 214.93106, a: 1}
+  m_IndirectSpecularColor: {r: 131.16855, g: 162.52502, b: 215.10977, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -678,10 +678,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   chunkSize: {x: 16, y: 32, z: 16}
-  gridSize: {x: 12, y: 4, z: 12}
+  renderDistances: {x: 6, y: 1, z: 6}
   forceChunkRefreshGridDistance: 1
-  clipViewAngle: 60
-  gameCameraWorldTransformController: {fileID: 1029148660}
+  clipViewAngle: 90
+  followTransformController: {fileID: 1029148660}
   noiseLayers:
   - filter: 0
     block: {fileID: 11400000, guid: 0dbc7e0021bd2824c9a935b61791e0b6, type: 2}
@@ -967,10 +967,9 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1029148659}
-  - component: {fileID: 1029148658}
+  - component: {fileID: 1029148660}
   - component: {fileID: 1029148657}
   - component: {fileID: 1029148656}
-  - component: {fileID: 1029148660}
   m_Layer: 0
   m_Name: PlayerObject
   m_TagString: Untagged
@@ -1005,34 +1004,22 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a69ee94c734458849bdc6a8d6b1719d8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  testSelectedBlock: {fileID: 11400000, guid: e38162cfb560fd54e9419983b08e233a, type: 2}
+  bounds:
+    m_Center: {x: 0, y: 0.9, z: 0}
+    m_Extent: {x: 0.375, y: 0.9, z: 0.375}
+  maximalSampleCollisionCount: 16
+  sampleCollisionDistanceMultiplier: 0.5
   health: 100
+  onDied:
+    m_PersistentCalls:
+      m_Calls: []
+  testSelectedBlock: {fileID: 11400000, guid: e38162cfb560fd54e9419983b08e233a, type: 2}
   minimalHorizontalRotation: -80
   maximalHorizontalRotation: 80
-  gravityMagnitude: 9.81
-  groundCheckOffset: {x: 0, y: 0.34375, z: 0}
-  groundCheckRadius: 0.375
+  gravityMagnitude: 24.525
   movementSpeed: 8
   jumpHeight: 1.5
   eyesTransform: {fileID: 1122510067}
---- !u!143 &1029148658
-CharacterController:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1029148655}
-  m_Material: {fileID: 0}
-  m_IsTrigger: 0
-  m_Enabled: 1
-  serializedVersion: 2
-  m_Height: 1.8
-  m_Radius: 0.375
-  m_SlopeLimit: 45
-  m_StepOffset: 0.3
-  m_SkinWidth: 0.08
-  m_MinMoveDistance: 0.001
-  m_Center: {x: 0, y: 0.9, z: 0}
 --- !u!4 &1029148659
 Transform:
   m_ObjectHideFlags: 0
@@ -1041,7 +1028,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1029148655}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalPosition: {x: 8, y: 3, z: 8}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 1122510067}
@@ -1062,7 +1049,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   chunkID:
     x: 0
-    y: 5
+    y: 2
     z: 0
 --- !u!1 &1115249863
 GameObject:
@@ -1366,7 +1353,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1297650280}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 1.5625, z: 0}
+  m_LocalPosition: {x: 8, y: 4.5625, z: 8}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
@@ -1997,8 +1984,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 433acbda7c212404db8b926e3277d22d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  bounds:
+    m_Center: {x: 0, y: 0, z: 0}
+    m_Extent: {x: 0.5, y: 0.5, z: 0.5}
+  maximalSampleCollisionCount: 16
+  sampleCollisionDistanceMultiplier: 0.75
   health: 100
-  onDestroyed:
+  onDied:
     m_PersistentCalls:
       m_Calls: []
   movementSpeed: 8

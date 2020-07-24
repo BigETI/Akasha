@@ -120,6 +120,7 @@ namespace Akasha
             {
                 try
                 {
+                    chunk_block_types_task.Wait();
                     chunk_block_types_task.Dispose();
                 }
                 catch (Exception e)

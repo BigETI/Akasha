@@ -24,9 +24,14 @@ namespace Akasha
         Vector3Int ChunkSize { get; set; }
 
         /// <summary>
+        /// Render distances
+        /// </summary>
+        Vector3Int RenderDistances { get; set; }
+
+        /// <summary>
         /// Chunk grid size
         /// </summary>
-        Vector3Int GridSize { get; set; }
+        Vector3Int GridSize { get; }
 
         /// <summary>
         /// Force chunk refresh grid distance
@@ -39,9 +44,9 @@ namespace Akasha
         float ClipViewAngle { get; set; }
 
         /// <summary>
-        /// Game camera world transform controller
+        /// Follow transform controller
         /// </summary>
-        WorldTransformControllerScript GameCameraWorldTransformController { get; set; }
+        WorldTransformControllerScript FollowTransformController { get; set; }
 
         /// <summary>
         /// Noise layers

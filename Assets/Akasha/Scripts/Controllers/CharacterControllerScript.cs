@@ -10,29 +10,13 @@ namespace Akasha.Controllers
     /// <summary>
     /// Character controller script class
     /// </summary>
-    [RequireComponent(typeof(CharacterController))]
-    public class CharacterControllerScript : MonoBehaviour, ICharacterController
+    public class CharacterControllerScript : LivingEntityControllerScript, ICharacterController
     {
-        private static readonly Rect isOnGroundGUILabelRectangle = new Rect(32.0f, 32.0f, 240.0f, 240.0f);
-
         /// <summary>
         /// Selected block
         /// </summary>
         [SerializeField]
         private BlockObjectScript testSelectedBlock = default;
-
-        /// <summary>
-        /// Health
-        /// </summary>
-        [SerializeField]
-        [Range(0.0f, float.PositiveInfinity)]
-        private float health = 100.0f;
-
-        /// <summary>
-        /// Maximal health
-        /// </summary>
-        [Range(0.0f, float.PositiveInfinity)]
-        private float maximalHealth = 100.0f;
 
         /// <summary>
         /// Minimal horizontal rotation
@@ -53,19 +37,6 @@ namespace Akasha.Controllers
         /// </summary>
         [SerializeField]
         private float gravityMagnitude = 9.81f;
-
-        /// <summary>
-        /// Ground check offset
-        /// </summary>
-        [SerializeField]
-        private Vector3 groundCheckOffset = new Vector3(0.0f, 0.34375f, 0.0f);
-
-        /// <summary>
-        /// Ground check offset
-        /// </summary>
-        [SerializeField]
-        [Range(0.0f, 1000.0f)]
-        private float groundCheckRadius = 0.375f;
 
         /// <summary>
         /// Movement speed
@@ -103,24 +74,6 @@ namespace Akasha.Controllers
         private RaycastHit[] raycastHits = Array.Empty<RaycastHit>();
 
         /// <summary>
-        /// Health
-        /// </summary>
-        public float Health
-        {
-            get => Mathf.Clamp(health, 0.0f, MaximalHealth);
-            set => health = Mathf.Clamp(value, 0.0f, MaximalHealth);
-        }
-
-        /// <summary>
-        /// Maximal health
-        /// </summary>
-        public float MaximalHealth
-        {
-            get => Mathf.Max(maximalHealth, 0.0f);
-            set => maximalHealth = Mathf.Max(value, 0.0f);
-        }
-
-        /// <summary>
         /// Minimal horizontal rotation
         /// </summary>
         public float MinimalHorizontalRotation
@@ -148,24 +101,6 @@ namespace Akasha.Controllers
         }
 
         /// <summary>
-        /// Ground check offset
-        /// </summary>
-        public Vector3 GroundCheckOffset
-        {
-            get => groundCheckOffset;
-            set => groundCheckOffset = value;
-        }
-
-        /// <summary>
-        /// Ground check offset
-        /// </summary>
-        public float GroundCheckRadius
-        {
-            get => Mathf.Max(groundCheckRadius, 0.0f);
-            set => groundCheckRadius = Mathf.Max(value, 0.0f);
-        }
-
-        /// <summary>
         /// Movement speed
         /// </summary>
         public float MovementSpeed
@@ -182,11 +117,6 @@ namespace Akasha.Controllers
             get => Mathf.Max(jumpHeight, 0.0f);
             set => jumpHeight = Mathf.Max(value, 0.0f);
         }
-
-        /// <summary>
-        /// Is alive
-        /// </summary>
-        public bool IsAlive => Health > float.Epsilon;
 
         /// <summary>
         /// Eyes transform
@@ -229,11 +159,6 @@ namespace Akasha.Controllers
         /// Running mode
         /// </summary>
         public ERunningMode RunningMode { get; set; }
-
-        /// <summary>
-        /// Character controller
-        /// </summary>
-        public CharacterController CharacterController { get; private set; }
 
         /// <summary>
         /// Place block
@@ -445,56 +370,45 @@ namespace Akasha.Controllers
         }
 
         /// <summary>
-        /// Start
-        /// </summary>
-        private void Start()
-        {
-            CharacterController = GetComponent<CharacterController>();
-        }
-
-        /// <summary>
         /// Update
         /// </summary>
-        private void Update()
+        protected override void Update()
         {
-            if (CharacterController)
+            base.Update();
+            float delta_time = Time.deltaTime;
+            transform.localRotation = Quaternion.AngleAxis(rotation.y, Vector3.up);
+            if (eyesTransform)
             {
-                float delta_time = Time.deltaTime;
-                transform.localRotation = Quaternion.AngleAxis(rotation.y, Vector3.up);
-                if (eyesTransform)
-                {
-                    eyesTransform.localRotation = Quaternion.AngleAxis(rotation.x, Vector3.right);
-                }
-                VerticalVelocityMagnitude -= GravityMagnitude * delta_time;
-                CollisionFlags collision_flags = CollisionFlags.None;
-                if (IsAlive)
-                {
-                    collision_flags |= CharacterController.Move(((transform.right * movement.x) + (transform.forward * movement.y)) * (movementSpeed * delta_time));
-                }
-                collision_flags |= CharacterController.Move(Vector3.up * (VerticalVelocityMagnitude * delta_time));
-                IsOnGround = ((collision_flags & CollisionFlags.Below) == CollisionFlags.Below);
-                if (IsOnGround)
-                {
-                    VerticalVelocityMagnitude = 0.0f;
-                }
+                eyesTransform.localRotation = Quaternion.AngleAxis(rotation.x, Vector3.right);
             }
-        }
+            VerticalVelocityMagnitude -= GravityMagnitude * delta_time;
+            if (IsAlive)
+            {
+                Move(((transform.right * movement.x) + (transform.forward * movement.y)) * (movementSpeed * delta_time));
+            }
+            IsOnGround = Move(Vector3.up * (VerticalVelocityMagnitude * delta_time)) || TestCollision(transform.position + (Vector3.down * 0.0625f));
+            if (IsOnGround)
+            {
+                VerticalVelocityMagnitude = 0.0f;
+            }
 
-        /// <summary>
-        /// On GUI
-        /// </summary>
-        //private void OnGUI()
-        //{
-        //    GUI.Label(isOnGroundGUILabelRectangle, "Is on ground: " + IsOnGround);
-        //}
 
-        /// <summary>
-        /// On draw gizmos selected
-        /// </summary>
-        private void OnDrawGizmosSelected()
-        {
-            Gizmos.color = Color.green;
-            Gizmos.DrawWireSphere(transform.TransformPoint(groundCheckOffset), GroundCheckRadius);
+            //if (CharacterController)
+            //{
+
+            //    VerticalVelocityMagnitude -= GravityMagnitude * delta_time;
+            //    CollisionFlags collision_flags = CollisionFlags.None;
+            //    if (IsAlive)
+            //    {
+            //        collision_flags |= CharacterController.Move(((transform.right * movement.x) + (transform.forward * movement.y)) * (movementSpeed * delta_time));
+            //    }
+            //    collision_flags |= CharacterController.Move(Vector3.up * (VerticalVelocityMagnitude * delta_time));
+            //    IsOnGround = ((collision_flags & CollisionFlags.Below) == CollisionFlags.Below);
+            //    if (IsOnGround)
+            //    {
+            //        VerticalVelocityMagnitude = 0.0f;
+            //    }
+            //}
         }
     }
 }
