@@ -18,7 +18,7 @@ namespace Akasha.Controllers
         /// <summary>
         /// Default weight text format
         /// </summary>
-        private static readonly string defaultWeightTextFormat = "<b>{0}:</b> {1} units";
+        private static readonly string defaultWeightTextFormat = "<b>{0}:</b> {1} kg";
 
         /// <summary>
         /// Default description text format

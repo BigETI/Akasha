@@ -19,12 +19,12 @@ namespace Akasha.Controllers
         /// <summary>
         /// Default crafting recipes weight text format
         /// </summary>
-        private static readonly string defaultCraftingRecipesWeightTextFormat = "<b>{0}:</b> {1} units";
+        private static readonly string defaultCraftingRecipesWeightTextFormat = "<b>{0}:</b> {1} kg";
 
         /// <summary>
         /// Default crafting results weight text format
         /// </summary>
-        private static readonly string defaultCraftingResultsWeightTextFormat = "<b>{0}:</b> {1} units";
+        private static readonly string defaultCraftingResultsWeightTextFormat = "<b>{0}:</b> {1} kg";
 
         /// <summary>
         /// Crafting recipes weight string translation
