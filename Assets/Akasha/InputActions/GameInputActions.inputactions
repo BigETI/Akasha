@@ -6,6 +6,22 @@
             "id": "c3282cce-54e9-49a1-a2b9-484c088bfb74",
             "actions": [
                 {
+                    "name": "Aim",
+                    "type": "Button",
+                    "id": "e3ca3e2b-c430-4181-ab5c-ad3f1bfe2f20",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": ""
+                },
+                {
+                    "name": "Datapad",
+                    "type": "Button",
+                    "id": "62156231-5956-43be-82d5-5b358f55bcfd",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": ""
+                },
+                {
                     "name": "Interact",
                     "type": "Button",
                     "id": "ceffb010-a107-4de2-a99f-2f783ca27f1d",
@@ -38,6 +54,14 @@
                     "interactions": ""
                 },
                 {
+                    "name": "Pause",
+                    "type": "Button",
+                    "id": "6af2dab6-16af-44d8-b5ec-55fa02eb2542",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": ""
+                },
+                {
                     "name": "Reload",
                     "type": "Button",
                     "id": "d83ca07b-2996-49ed-bc4f-6d848190e1ca",
@@ -65,14 +89,6 @@
                     "name": "Shoot",
                     "type": "Button",
                     "id": "342278cb-ea47-42b2-b766-3e5e20815531",
-                    "expectedControlType": "Button",
-                    "processors": "",
-                    "interactions": ""
-                },
-                {
-                    "name": "Aim",
-                    "type": "Button",
-                    "id": "e3ca3e2b-c430-4181-ab5c-ad3f1bfe2f20",
                     "expectedControlType": "Button",
                     "processors": "",
                     "interactions": ""
@@ -419,6 +435,50 @@
                     "processors": "",
                     "groups": "Keyboard and mouse",
                     "action": "Aim",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "4131b796-8b77-4235-890c-3bfac51ff5e4",
+                    "path": "<Gamepad>/start",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "Gamepad",
+                    "action": "Pause",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "36e0762d-0b11-4660-ad0c-303212b61e3c",
+                    "path": "<Keyboard>/escape",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "Keyboard and mouse",
+                    "action": "Pause",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "4b5f5959-f4a8-4dfe-9c9a-729b462fa4f7",
+                    "path": "<Gamepad>/select",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "Gamepad",
+                    "action": "Datapad",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "f502f1da-263d-4219-9bf1-9d8d95d6f292",
+                    "path": "<Keyboard>/tab",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "Keyboard and mouse",
+                    "action": "Datapad",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }

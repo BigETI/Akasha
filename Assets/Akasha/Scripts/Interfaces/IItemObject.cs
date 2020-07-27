@@ -16,6 +16,11 @@ namespace Akasha
         string ItemName { get; }
 
         /// <summary>
+        /// Description
+        /// </summary>
+        string Description { get; }
+
+        /// <summary>
         /// Icon sprite
         /// </summary>
         Sprite IconSprite { get; }

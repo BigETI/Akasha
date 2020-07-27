@@ -117,12 +117,12 @@ namespace Akasha.Objects
         /// <summary>
         /// Weapon name string
         /// </summary>
-        public string WeaponName => ((weaponNameStringTranslation == null) ? string.Empty : weaponNameStringTranslation.ToString());
+        public string WeaponName => (weaponNameStringTranslation ? weaponNameStringTranslation.ToString() : string.Empty);
 
         /// <summary>
         /// Weapon icon sprite
         /// </summary>
-        public Sprite WeaponIconSprite => ((weaponIconSpriteTranslation == null) ? null : weaponIconSpriteTranslation.Sprite);
+        public Sprite WeaponIconSprite => (weaponIconSpriteTranslation ? weaponIconSpriteTranslation.Sprite : null);
 
         /// <summary>
         /// Bullet hole asset

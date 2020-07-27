@@ -191,8 +191,6 @@ namespace Akasha.Controllers
         private void OnEnable()
         {
             GameInputActions?.Enable();
-            Cursor.visible = false;
-            Cursor.lockState = CursorLockMode.Locked;
             playerControllers.Add(this);
         }
 
@@ -202,35 +200,33 @@ namespace Akasha.Controllers
         private void OnDisable()
         {
             GameInputActions?.Disable();
-            Cursor.visible = true;
-            Cursor.lockState = CursorLockMode.None;
             playerControllers.Remove(this);
         }
 
         /// <summary>
         /// Start
         /// </summary>
-        private void Start()
-        {
-            CharacterController = GetComponent<CharacterControllerScript>();
-        }
+        private void Start() => CharacterController = GetComponent<CharacterControllerScript>();
 
         /// <summary>
         /// Update
         /// </summary>
         private void Update()
         {
-            if (CharacterController != null)
+            if (GameManager.GameState == EGameState.Playing)
             {
-                CharacterController.Rotation += DeltaCharacterRotation * GameManager.SaveGameData.Sensitivity * Time.deltaTime;
-            }
-            if (firstPersonViewVirtualCameraGameObject != null)
-            {
-                firstPersonViewVirtualCameraGameObject.SetActive(viewMode == EViewMode.FirstPerson);
-            }
-            if (thirdPersonViewVirtualCameraGameObject != null)
-            {
-                thirdPersonViewVirtualCameraGameObject.SetActive(viewMode == EViewMode.ThirdPerson);
+                if (CharacterController != null)
+                {
+                    CharacterController.Rotation += DeltaCharacterRotation * GameManager.SaveGameData.Sensitivity * Time.deltaTime;
+                }
+                if (firstPersonViewVirtualCameraGameObject != null)
+                {
+                    firstPersonViewVirtualCameraGameObject.SetActive(viewMode == EViewMode.FirstPerson);
+                }
+                if (thirdPersonViewVirtualCameraGameObject != null)
+                {
+                    thirdPersonViewVirtualCameraGameObject.SetActive(viewMode == EViewMode.ThirdPerson);
+                }
             }
         }
     }

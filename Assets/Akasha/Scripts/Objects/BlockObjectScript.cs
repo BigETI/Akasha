@@ -1,12 +1,11 @@
-﻿using Akasha.Objects;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using UnityEngine;
 
 /// <summary>
-/// Akasha namespace
+/// Akasha objects namespace
 /// </summary>
-namespace Akasha
+namespace Akasha.Objects
 {
     /// <summary>
     /// Block object script class

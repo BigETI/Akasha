@@ -1,6 +1,7 @@
 ﻿using Akasha.Data;
 using Akasha.Managers;
 using System;
+using System.Collections.Generic;
 using UnityEngine;
 
 /// <summary>
@@ -73,6 +74,11 @@ namespace Akasha.Controllers
         /// Rotation
         /// </summary>
         private Vector2 rotation;
+
+        /// <summary>
+        /// Known crafting recipes lookup
+        /// </summary>
+        private readonly Dictionary<string, ICraftingRecipesObject> knownCraftingRecipesLookup = new Dictionary<string, ICraftingRecipesObject>();
 
         /// <summary>
         /// Raycast hits
@@ -164,6 +170,11 @@ namespace Akasha.Controllers
             get => rotation;
             set => rotation = new Vector2(Mathf.Clamp(value.x, MinimalHorizontalRotation, MaximalHorizontalRotation), Mathf.Repeat(value.y, 360.0f - float.Epsilon));
         }
+
+        /// <summary>
+        /// Known crafting recipes lookup
+        /// </summary>
+        public IReadOnlyDictionary<string, ICraftingRecipesObject> KnownCraftingRecipesLookup => knownCraftingRecipesLookup;
 
         /// <summary>
         /// Vertical velocity magnitude
@@ -482,6 +493,26 @@ namespace Akasha.Controllers
             {
                 SelectedInventoryItemSlotIndex = Mathf.Min(0, Inventory.Items.Count - 1);
             }
+        }
+
+        /// <summary>
+        /// Learn crafting recipes
+        /// </summary>
+        /// <param name="craftingRecipes">Crafting recipes</param>
+        /// <returns>"true" if successful, otherwise "false"</returns>
+        public bool LearnCraftingRecipes(ICraftingRecipesObject craftingRecipes)
+        {
+            if (craftingRecipes == null)
+            {
+                throw new ArgumentNullException(nameof(craftingRecipes));
+            }
+            bool ret = false;
+            if (!(knownCraftingRecipesLookup.ContainsKey(craftingRecipes.name)))
+            {
+                knownCraftingRecipesLookup.Add(craftingRecipes.name, craftingRecipes);
+                ret = true;
+            }
+            return ret;
         }
 
         /// <summary>

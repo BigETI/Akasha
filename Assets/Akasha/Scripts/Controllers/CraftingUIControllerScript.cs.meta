@@ -1,0 +1,15 @@
+fileFormatVersion: 2
+guid: 1fb8e2b96b6d80f4690759971408f3b4
+MonoImporter:
+  externalObjects: {}
+  serializedVersion: 2
+  defaultReferences:
+  - craftingRecipesButtonAsset: {fileID: 5020373732362990115, guid: d5f5f22805a75af48a87ebec736941ff,
+      type: 3}
+  - craftingPanelRectangleTransform: {instanceID: 0}
+  - craftingRecipesUIController: {instanceID: 0}
+  executionOrder: 0
+  icon: {instanceID: 0}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

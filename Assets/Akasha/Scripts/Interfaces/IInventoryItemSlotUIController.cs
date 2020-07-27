@@ -1,5 +1,6 @@
 ﻿using TMPro;
 using UnityEngine.UI;
+using UnityTranslator.Objects;
 
 /// <summary>
 /// Akasha namespace
@@ -12,6 +13,31 @@ namespace Akasha
     public interface IInventoryItemSlotUIController : IBehaviour
     {
         /// <summary>
+        /// Weight string translation
+        /// </summary>
+        StringTranslationObjectScript WeightStringTranslation { get; set; }
+
+        /// <summary>
+        /// Description string translation
+        /// </summary>
+        StringTranslationObjectScript DescriptionStringTranslation { get; set; }
+
+        /// <summary>
+        /// Weight text format
+        /// </summary>
+        string WeightTextFormat { get; set; }
+
+        /// <summary>
+        /// Description text format
+        /// </summary>
+        string DescriptionTextFormat { get; set; }
+
+        /// <summary>
+        /// Item name text
+        /// </summary>
+        TextMeshProUGUI ItemNameText { get; set; }
+
+        /// <summary>
         /// Icon image
         /// </summary>
         Image IconImage { get; set; }
@@ -20,6 +46,16 @@ namespace Akasha
         /// Icon image
         /// </summary>
         TextMeshProUGUI QuantityText { get; set; }
+
+        /// <summary>
+        /// Weight text
+        /// </summary>
+        TextMeshProUGUI WeightText { get; set; }
+
+        /// <summary>
+        /// Description text
+        /// </summary>
+        TextMeshProUGUI DescriptionText { get; set; }
 
         /// <summary>
         /// Selectable
@@ -35,6 +71,12 @@ namespace Akasha
         /// Set values
         /// </summary>
         /// <param name="inventoryItemData">Inventory item data</param>
-        void SetValues(IInventoryItemData inventoryItemData);
+        /// <param name="parent">Parent</param>
+        void SetValues(IInventoryItemData inventoryItemData, IInventoryUIController parent);
+
+        /// <summary>
+        /// Click
+        /// </summary>
+        void Click();
     }
 }

@@ -14,21 +14,60 @@ namespace Akasha.Controllers
     public class InventoryUIControllerScript : MonoBehaviour, IInventoryUIController
     {
         /// <summary>
+        /// Inventory item slot button asset
+        /// </summary>
+        [SerializeField]
+        private GameObject inventoryItemSlotButtonAsset = default;
+
+        /// <summary>
+        /// Inventory panel rectangle transform
+        /// </summary>
+        [SerializeField]
+        private RectTransform inventoryPanelRectangleTransform = default;
+
+        /// <summary>
+        /// Inventory item slot description
+        /// </summary>
+        [SerializeField]
+        private InventoryItemSlotUIControllerScript inventoryItemSlotDescription = default;
+
+        /// <summary>
         /// Inventory item slot controllers
         /// </summary>
         [SerializeField]
         private InventoryItemSlotUIControllerScript[] inventoryItemSlotControllers = Array.Empty<InventoryItemSlotUIControllerScript>();
 
         /// <summary>
-        /// Inventory item slot asset
-        /// </summary>
-        [SerializeField]
-        private GameObject inventoryItemSlotAsset = default;
-
-        /// <summary>
         /// Last items
         /// </summary>
-        private List<(InventoryItemSlotUIControllerScript, IInventoryItemData)> itemSlots = new List<(InventoryItemSlotUIControllerScript, IInventoryItemData)>();
+        private readonly List<(InventoryItemSlotUIControllerScript, IInventoryItemData)> itemSlots = new List<(InventoryItemSlotUIControllerScript, IInventoryItemData)>();
+
+        /// <summary>
+        /// Inventory item slot button asset
+        /// </summary>
+        public GameObject InventoryItemSlotButtonAsset
+        {
+            get => inventoryItemSlotButtonAsset;
+            set => inventoryItemSlotButtonAsset = value;
+        }
+
+        /// <summary>
+        /// Inventory panel rectangle transform
+        /// </summary>
+        public RectTransform InventoryPanelRectangleTransform
+        {
+            get => inventoryPanelRectangleTransform;
+            set => inventoryPanelRectangleTransform = value;
+        }
+
+        /// <summary>
+        /// Inventory item slot description
+        /// </summary>
+        public InventoryItemSlotUIControllerScript InventoryItemSlotDescription
+        {
+            get => inventoryItemSlotDescription;
+            set => inventoryItemSlotDescription = value;
+        }
 
         /// <summary>
         /// Inventory item slot controllers
@@ -45,27 +84,32 @@ namespace Akasha.Controllers
             }
             set
             {
-                if (value == null)
-                {
-                    throw new ArgumentNullException(nameof(value));
-                }
-                inventoryItemSlotControllers = value;
+                inventoryItemSlotControllers = value ?? throw new ArgumentNullException(nameof(value));
             }
-        }
-
-        /// <summary>
-        /// Inventory item slot asset
-        /// </summary>
-        public GameObject InventoryItemSlotAsset
-        {
-            get => inventoryItemSlotAsset;
-            set => inventoryItemSlotAsset = value;
         }
 
         /// <summary>
         /// Character controller
         /// </summary>
         public ICharacterController CharacterController { get; set; }
+
+        /// <summary>
+        /// Select inventory item slot
+        /// </summary>
+        /// <param name="inventoryItem">Inventory item</param>
+        public void SelectInventoryItemSlot(IInventoryItemData inventoryItem)
+        {
+            if (inventoryItemSlotDescription)
+            {
+                inventoryItemSlotDescription.gameObject.SetActive(inventoryItem != null);
+                inventoryItemSlotDescription.SetValues(inventoryItem, this);
+            }
+        }
+
+        /// <summary>
+        /// Deselect inventory item slot
+        /// </summary>
+        public void DeselectInventoryItemSlot() => SelectInventoryItemSlot(null);
 
         /// <summary>
         /// Start
@@ -86,6 +130,7 @@ namespace Akasha.Controllers
         {
             IReadOnlyList<InventoryItemData> inventory_items = ((CharacterController == null) ? Array.Empty<InventoryItemData>() : CharacterController.Inventory.Items);
             InventoryItemSlotUIControllerScript[] inventory_item_slot_controllers = InventoryItemSlotControllers;
+            EGameState game_state = GameManager.GameState;
             if (itemSlots.Count > inventory_items.Count)
             {
                 for (int index = inventory_items.Count; index < itemSlots.Count; index++)
@@ -104,15 +149,15 @@ namespace Akasha.Controllers
                 {
                     InventoryItemSlotUIControllerScript inventory_item_slot_ui_controller = null;
                     IInventoryItemData inventory_item = inventory_items[index];
-                    if (inventoryItemSlotAsset)
+                    if (inventoryItemSlotButtonAsset)
                     {
-                        GameObject game_object = Instantiate(inventoryItemSlotAsset);
+                        GameObject game_object = Instantiate(inventoryItemSlotButtonAsset);
                         if (game_object != null)
                         {
                             if (game_object.TryGetComponent(out inventory_item_slot_ui_controller) && game_object.TryGetComponent(out RectTransform rectangle_transform))
                             {
-                                inventory_item_slot_ui_controller.SetValues(inventory_item);
-                                rectangle_transform.SetParent(transform, false);
+                                rectangle_transform.SetParent(inventoryPanelRectangleTransform, false);
+                                inventory_item_slot_ui_controller.SetValues(inventory_item, this);
                             }
                             else
                             {
@@ -127,9 +172,9 @@ namespace Akasha.Controllers
                         InventoryItemSlotUIControllerScript inventory_item_slot_controller = inventory_item_slot_controllers[index];
                         if (inventory_item_slot_controller)
                         {
-                            inventory_item_slot_controller.SetValues(inventory_item);
+                            inventory_item_slot_controller.SetValues(inventory_item, this);
                             inventory_item_slot_controller.gameObject.SetActive(true);
-                            if ((CharacterController != null) && (CharacterController.SelectedInventoryItemSlotIndex == index) && inventory_item_slot_controller.Selectable)
+                            if ((game_state == EGameState.Playing) && (CharacterController != null) && (CharacterController.SelectedInventoryItemSlotIndex == index) && inventory_item_slot_controller.Selectable)
                             {
                                 inventory_item_slot_controller.Selectable.Select();
                             }
@@ -145,19 +190,19 @@ namespace Akasha.Controllers
                 {
                     if (item_slot.Item1)
                     {
-                        item_slot.Item1.SetValues(inventory_item);
+                        item_slot.Item1.SetValues(inventory_item, this);
                     }
                     if (index < inventory_item_slot_controllers.Length)
                     {
                         InventoryItemSlotUIControllerScript inventory_item_slot_controller = inventory_item_slot_controllers[index];
                         if (inventory_item_slot_controller)
                         {
-                            inventory_item_slot_controller.SetValues(inventory_item);
+                            inventory_item_slot_controller.SetValues(inventory_item, this);
                             inventory_item_slot_controller.gameObject.SetActive(true);
                         }
                     }
                 }
-                if ((index < inventory_item_slot_controllers.Length) && (CharacterController != null) && (CharacterController.SelectedInventoryItemSlotIndex == index) && inventory_item_slot_controllers[index].Selectable)
+                if ((game_state == EGameState.Playing) && (index < inventory_item_slot_controllers.Length) && (CharacterController != null) && (CharacterController.SelectedInventoryItemSlotIndex == index) && inventory_item_slot_controllers[index].Selectable)
                 {
                     inventory_item_slot_controllers[index].Selectable.Select();
                 }
@@ -167,7 +212,7 @@ namespace Akasha.Controllers
                 InventoryItemSlotUIControllerScript inventory_item_slot_controller = inventory_item_slot_controllers[index];
                 if (inventory_item_slot_controller)
                 {
-                    inventory_item_slot_controller.SetValues(null);
+                    inventory_item_slot_controller.SetValues(null, this);
                     inventory_item_slot_controller.gameObject.SetActive(false);
                 }
             }

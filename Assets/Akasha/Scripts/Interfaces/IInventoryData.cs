@@ -44,5 +44,13 @@ namespace Akasha
         /// <param name="quantity">Quantity</param>
         /// <returns>Number of items removed</returns>
         uint RemoveItems(IItemObject item, uint quantity);
+
+        /// <summary>
+        /// Craft items
+        /// </summary>
+        /// <param name="craftingRecipies">Crafting recipies</param>
+        /// <param name="quantity">Quantity</param>
+        /// <returns>Number of crafting results</returns>
+        uint CraftItems(ICraftingRecipesObject craftingRecipies, uint quantity);
     }
 }

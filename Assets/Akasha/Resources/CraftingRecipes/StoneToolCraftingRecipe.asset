@@ -1,0 +1,24 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8e2850b3cf0305849a87ebc9b1b08c5f, type: 3}
+  m_Name: StoneToolCraftingRecipe
+  m_EditorClassIdentifier: 
+  craftingRecipesNameStringTranslation: {fileID: 11400000, guid: 1ce8cbcc24a74b244ab13f3ac6137b39,
+    type: 2}
+  iconSpriteTranslation: {fileID: 11400000, guid: 289f5c5c7b691344da232b908b0e9f94,
+    type: 2}
+  craftingRecipes:
+  - item: {fileID: 11400000, guid: 854ee07c4e77893498d0e8cc799c177c, type: 2}
+    quantity: 2
+  craftingResults:
+  - item: {fileID: 11400000, guid: 9df54bf309aec714aba50b121b959ed6, type: 2}
+    quantity: 1

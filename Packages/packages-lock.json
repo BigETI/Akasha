@@ -7,6 +7,13 @@
       "dependencies": {},
       "hash": "a85dd2868471b53f9b3ab3645c2c39d8f4fce1c8"
     },
+    "com.bigeti.scene-loader-manager": {
+      "version": "https://github.com/BigETI/UnitySceneLoaderManager.git",
+      "depth": 0,
+      "source": "git",
+      "dependencies": {},
+      "hash": "ae9c2279be14b55511daacd4c0f6dc248ed0a5df"
+    },
     "com.bigeti.selection-cursor-ui": {
       "version": "https://github.com/BigETI/SelectionCursorUI.git",
       "depth": 0,

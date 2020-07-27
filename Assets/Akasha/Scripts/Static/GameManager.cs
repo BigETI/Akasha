@@ -1,4 +1,5 @@
 ﻿using Akasha.Data;
+using Akasha.Managers;
 using UnityEngine;
 using UnitySaveGame;
 
@@ -12,6 +13,21 @@ namespace Akasha
     /// </summary>
     public static class GameManager
     {
+        /// <summary>
+        /// Game state
+        /// </summary>
+        public static EGameState GameState
+        {
+            get => (GameManagerScript.Instance ? GameManagerScript.Instance.GameState : EGameState.Nothing);
+            set
+            {
+                if (GameManagerScript.Instance)
+                {
+                    GameManagerScript.Instance.GameState = value;
+                }
+            }
+        }
+
         /// <summary>
         /// Save game data
         /// </summary>

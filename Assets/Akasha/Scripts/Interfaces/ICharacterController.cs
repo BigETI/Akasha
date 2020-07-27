@@ -1,4 +1,5 @@
 ﻿using Akasha.Data;
+using System.Collections.Generic;
 using UnityEngine;
 
 /// <summary>
@@ -50,6 +51,11 @@ namespace Akasha
         /// Rotation
         /// </summary>
         Vector2 Rotation { get; set; }
+
+        /// <summary>
+        /// Known crafting recipes lookup
+        /// </summary>
+        IReadOnlyDictionary<string, ICraftingRecipesObject> KnownCraftingRecipesLookup { get; }
 
         /// <summary>
         /// Vertical velocity magnitude
@@ -115,5 +121,12 @@ namespace Akasha
         /// Select next inventory item slot
         /// </summary>
         void SelectNextInventoryItemSlot();
+
+        /// <summary>
+        /// Learn crafting recipes
+        /// </summary>
+        /// <param name="craftingRecipes">Crafting recipes</param>
+        /// <returns>"true" if successful, otherwise "false"</returns>
+        bool LearnCraftingRecipes(ICraftingRecipesObject craftingRecipes);
     }
 }

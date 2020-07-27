@@ -3,7 +3,10 @@ guid: c31c8b433aa3c174f85adeef26611ff1
 MonoImporter:
   externalObjects: {}
   serializedVersion: 2
-  defaultReferences: []
+  defaultReferences:
+  - inventoryItemSlotButtonAsset: {fileID: 7984564524662426751, guid: dc681ed26caa81f43bd62b5aa84b6634,
+      type: 3}
+  - inventoryPanelRectangleTransform: {instanceID: 0}
   executionOrder: 0
   icon: {instanceID: 0}
   userData: 

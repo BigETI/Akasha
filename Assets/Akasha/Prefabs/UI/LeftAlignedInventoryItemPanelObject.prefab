@@ -49,8 +49,19 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9fd3d3141e9ed6b4b88f1b0a2ce0ab48, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  weightStringTranslation: {fileID: 11400000, guid: dc3be31c3af60d74b9b3f18d7111c157,
+    type: 2}
+  descriptionStringTranslation: {fileID: 11400000, guid: dc45c95e066d6e14fb7b1b2372e55db0,
+    type: 2}
+  weightTextFormat: '<b>{0}</b>: {1} units'
+  descriptionTextFormat: '<b>{0}</b>:
+
+    {1}'
+  itemNameText: {fileID: 0}
   iconImage: {fileID: 1792657036303701601}
   quantityText: {fileID: 3543323613268480390}
+  weightText: {fileID: 0}
+  descriptionText: {fileID: 0}
 --- !u!1 &1792657036303701603
 GameObject:
   m_ObjectHideFlags: 0
@@ -111,7 +122,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 1, g: 1, b: 1, a: 0.24705882}
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_RaycastTarget: 1
   m_Maskable: 1
   m_OnCullStateChanged:
@@ -145,9 +156,9 @@ MonoBehaviour:
     m_SelectOnDown: {fileID: 0}
     m_SelectOnLeft: {fileID: 0}
     m_SelectOnRight: {fileID: 0}
-  m_Transition: 0
+  m_Transition: 1
   m_Colors:
-    m_NormalColor: {r: 1, g: 1, b: 1, a: 1}
+    m_NormalColor: {r: 1, g: 1, b: 1, a: 0.24705882}
     m_HighlightedColor: {r: 0.9607843, g: 0.9607843, b: 0.9607843, a: 1}
     m_PressedColor: {r: 0.78431374, g: 0.78431374, b: 0.78431374, a: 1}
     m_SelectedColor: {r: 0.9607843, g: 0.9607843, b: 0.9607843, a: 1}

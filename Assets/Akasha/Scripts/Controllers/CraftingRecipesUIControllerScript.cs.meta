@@ -1,0 +1,23 @@
+fileFormatVersion: 2
+guid: 83acdea65280ec848ae90a0f60e58cf4
+MonoImporter:
+  externalObjects: {}
+  serializedVersion: 2
+  defaultReferences:
+  - craftingRecipesWeightStringTranslation: {fileID: 11400000, guid: bc83cfc1184cabc4c9afddd5b62eff62,
+      type: 2}
+  - craftingResultsWeightStringTranslation: {fileID: 11400000, guid: f754bcf3518ff0447bef803c0af487f5,
+      type: 2}
+  - craftingRecipeAsset: {fileID: 2459586193562839058, guid: ec3878ebb443d2d4f89ad1e00c22d054,
+      type: 3}
+  - craftingResultsText: {instanceID: 0}
+  - iconImage: {instanceID: 0}
+  - craftingRecipesWeightText: {instanceID: 0}
+  - craftingResultsWeightText: {instanceID: 0}
+  - quantitySelection: {instanceID: 0}
+  - craftingRecipesScrollViewContentRectangleTransform: {instanceID: 0}
+  executionOrder: 0
+  icon: {instanceID: 0}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

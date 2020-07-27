@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Akasha.Objects;
+using System;
 using UnityEngine;
 
 /// <summary>
@@ -61,14 +62,7 @@ namespace Akasha.Data
                 }
                 return noiseGenerators;
             }
-            set
-            {
-                if (value == null)
-                {
-                    throw new ArgumentNullException(nameof(value));
-                }
-                noiseGenerators = value;
-            }
+            set => noiseGenerators = value ?? throw new ArgumentNullException(nameof(value));
         }
     }
 }

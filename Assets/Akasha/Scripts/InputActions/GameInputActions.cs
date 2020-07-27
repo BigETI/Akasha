@@ -21,6 +21,22 @@ namespace Akasha.InputActions
             ""id"": ""c3282cce-54e9-49a1-a2b9-484c088bfb74"",
             ""actions"": [
                 {
+                    ""name"": ""Aim"",
+                    ""type"": ""Button"",
+                    ""id"": ""e3ca3e2b-c430-4181-ab5c-ad3f1bfe2f20"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """"
+                },
+                {
+                    ""name"": ""Datapad"",
+                    ""type"": ""Button"",
+                    ""id"": ""62156231-5956-43be-82d5-5b358f55bcfd"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """"
+                },
+                {
                     ""name"": ""Interact"",
                     ""type"": ""Button"",
                     ""id"": ""ceffb010-a107-4de2-a99f-2f783ca27f1d"",
@@ -53,6 +69,14 @@ namespace Akasha.InputActions
                     ""interactions"": """"
                 },
                 {
+                    ""name"": ""Pause"",
+                    ""type"": ""Button"",
+                    ""id"": ""6af2dab6-16af-44d8-b5ec-55fa02eb2542"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """"
+                },
+                {
                     ""name"": ""Reload"",
                     ""type"": ""Button"",
                     ""id"": ""d83ca07b-2996-49ed-bc4f-6d848190e1ca"",
@@ -80,14 +104,6 @@ namespace Akasha.InputActions
                     ""name"": ""Shoot"",
                     ""type"": ""Button"",
                     ""id"": ""342278cb-ea47-42b2-b766-3e5e20815531"",
-                    ""expectedControlType"": ""Button"",
-                    ""processors"": """",
-                    ""interactions"": """"
-                },
-                {
-                    ""name"": ""Aim"",
-                    ""type"": ""Button"",
-                    ""id"": ""e3ca3e2b-c430-4181-ab5c-ad3f1bfe2f20"",
                     ""expectedControlType"": ""Button"",
                     ""processors"": """",
                     ""interactions"": """"
@@ -436,6 +452,50 @@ namespace Akasha.InputActions
                     ""action"": ""Aim"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""4131b796-8b77-4235-890c-3bfac51ff5e4"",
+                    ""path"": ""<Gamepad>/start"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Gamepad"",
+                    ""action"": ""Pause"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""36e0762d-0b11-4660-ad0c-303212b61e3c"",
+                    ""path"": ""<Keyboard>/escape"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Keyboard and mouse"",
+                    ""action"": ""Pause"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""4b5f5959-f4a8-4dfe-9c9a-729b462fa4f7"",
+                    ""path"": ""<Gamepad>/select"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Gamepad"",
+                    ""action"": ""Datapad"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""f502f1da-263d-4219-9bf1-9d8d95d6f292"",
+                    ""path"": ""<Keyboard>/tab"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Keyboard and mouse"",
+                    ""action"": ""Datapad"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
                 }
             ]
         }
@@ -472,15 +532,17 @@ namespace Akasha.InputActions
 }");
             // GameActionMap
             m_GameActionMap = asset.FindActionMap("GameActionMap", throwIfNotFound: true);
+            m_GameActionMap_Aim = m_GameActionMap.FindAction("Aim", throwIfNotFound: true);
+            m_GameActionMap_Datapad = m_GameActionMap.FindAction("Datapad", throwIfNotFound: true);
             m_GameActionMap_Interact = m_GameActionMap.FindAction("Interact", throwIfNotFound: true);
             m_GameActionMap_Jump = m_GameActionMap.FindAction("Jump", throwIfNotFound: true);
             m_GameActionMap_Look = m_GameActionMap.FindAction("Look", throwIfNotFound: true);
             m_GameActionMap_Move = m_GameActionMap.FindAction("Move", throwIfNotFound: true);
+            m_GameActionMap_Pause = m_GameActionMap.FindAction("Pause", throwIfNotFound: true);
             m_GameActionMap_Reload = m_GameActionMap.FindAction("Reload", throwIfNotFound: true);
             m_GameActionMap_SelectLastWeapon = m_GameActionMap.FindAction("SelectLastWeapon", throwIfNotFound: true);
             m_GameActionMap_SelectWeapon = m_GameActionMap.FindAction("SelectWeapon", throwIfNotFound: true);
             m_GameActionMap_Shoot = m_GameActionMap.FindAction("Shoot", throwIfNotFound: true);
-            m_GameActionMap_Aim = m_GameActionMap.FindAction("Aim", throwIfNotFound: true);
             m_GameActionMap_Sneak = m_GameActionMap.FindAction("Sneak", throwIfNotFound: true);
             m_GameActionMap_Sprint = m_GameActionMap.FindAction("Sprint", throwIfNotFound: true);
             m_GameActionMap_SwitchView = m_GameActionMap.FindAction("SwitchView", throwIfNotFound: true);
@@ -533,15 +595,17 @@ namespace Akasha.InputActions
         // GameActionMap
         private readonly InputActionMap m_GameActionMap;
         private IGameActionMapActions m_GameActionMapActionsCallbackInterface;
+        private readonly InputAction m_GameActionMap_Aim;
+        private readonly InputAction m_GameActionMap_Datapad;
         private readonly InputAction m_GameActionMap_Interact;
         private readonly InputAction m_GameActionMap_Jump;
         private readonly InputAction m_GameActionMap_Look;
         private readonly InputAction m_GameActionMap_Move;
+        private readonly InputAction m_GameActionMap_Pause;
         private readonly InputAction m_GameActionMap_Reload;
         private readonly InputAction m_GameActionMap_SelectLastWeapon;
         private readonly InputAction m_GameActionMap_SelectWeapon;
         private readonly InputAction m_GameActionMap_Shoot;
-        private readonly InputAction m_GameActionMap_Aim;
         private readonly InputAction m_GameActionMap_Sneak;
         private readonly InputAction m_GameActionMap_Sprint;
         private readonly InputAction m_GameActionMap_SwitchView;
@@ -549,15 +613,17 @@ namespace Akasha.InputActions
         {
             private @GameInputActions m_Wrapper;
             public GameActionMapActions(@GameInputActions wrapper) { m_Wrapper = wrapper; }
+            public InputAction @Aim => m_Wrapper.m_GameActionMap_Aim;
+            public InputAction @Datapad => m_Wrapper.m_GameActionMap_Datapad;
             public InputAction @Interact => m_Wrapper.m_GameActionMap_Interact;
             public InputAction @Jump => m_Wrapper.m_GameActionMap_Jump;
             public InputAction @Look => m_Wrapper.m_GameActionMap_Look;
             public InputAction @Move => m_Wrapper.m_GameActionMap_Move;
+            public InputAction @Pause => m_Wrapper.m_GameActionMap_Pause;
             public InputAction @Reload => m_Wrapper.m_GameActionMap_Reload;
             public InputAction @SelectLastWeapon => m_Wrapper.m_GameActionMap_SelectLastWeapon;
             public InputAction @SelectWeapon => m_Wrapper.m_GameActionMap_SelectWeapon;
             public InputAction @Shoot => m_Wrapper.m_GameActionMap_Shoot;
-            public InputAction @Aim => m_Wrapper.m_GameActionMap_Aim;
             public InputAction @Sneak => m_Wrapper.m_GameActionMap_Sneak;
             public InputAction @Sprint => m_Wrapper.m_GameActionMap_Sprint;
             public InputAction @SwitchView => m_Wrapper.m_GameActionMap_SwitchView;
@@ -570,6 +636,12 @@ namespace Akasha.InputActions
             {
                 if (m_Wrapper.m_GameActionMapActionsCallbackInterface != null)
                 {
+                    @Aim.started -= m_Wrapper.m_GameActionMapActionsCallbackInterface.OnAim;
+                    @Aim.performed -= m_Wrapper.m_GameActionMapActionsCallbackInterface.OnAim;
+                    @Aim.canceled -= m_Wrapper.m_GameActionMapActionsCallbackInterface.OnAim;
+                    @Datapad.started -= m_Wrapper.m_GameActionMapActionsCallbackInterface.OnDatapad;
+                    @Datapad.performed -= m_Wrapper.m_GameActionMapActionsCallbackInterface.OnDatapad;
+                    @Datapad.canceled -= m_Wrapper.m_GameActionMapActionsCallbackInterface.OnDatapad;
                     @Interact.started -= m_Wrapper.m_GameActionMapActionsCallbackInterface.OnInteract;
                     @Interact.performed -= m_Wrapper.m_GameActionMapActionsCallbackInterface.OnInteract;
                     @Interact.canceled -= m_Wrapper.m_GameActionMapActionsCallbackInterface.OnInteract;
@@ -582,6 +654,9 @@ namespace Akasha.InputActions
                     @Move.started -= m_Wrapper.m_GameActionMapActionsCallbackInterface.OnMove;
                     @Move.performed -= m_Wrapper.m_GameActionMapActionsCallbackInterface.OnMove;
                     @Move.canceled -= m_Wrapper.m_GameActionMapActionsCallbackInterface.OnMove;
+                    @Pause.started -= m_Wrapper.m_GameActionMapActionsCallbackInterface.OnPause;
+                    @Pause.performed -= m_Wrapper.m_GameActionMapActionsCallbackInterface.OnPause;
+                    @Pause.canceled -= m_Wrapper.m_GameActionMapActionsCallbackInterface.OnPause;
                     @Reload.started -= m_Wrapper.m_GameActionMapActionsCallbackInterface.OnReload;
                     @Reload.performed -= m_Wrapper.m_GameActionMapActionsCallbackInterface.OnReload;
                     @Reload.canceled -= m_Wrapper.m_GameActionMapActionsCallbackInterface.OnReload;
@@ -594,9 +669,6 @@ namespace Akasha.InputActions
                     @Shoot.started -= m_Wrapper.m_GameActionMapActionsCallbackInterface.OnShoot;
                     @Shoot.performed -= m_Wrapper.m_GameActionMapActionsCallbackInterface.OnShoot;
                     @Shoot.canceled -= m_Wrapper.m_GameActionMapActionsCallbackInterface.OnShoot;
-                    @Aim.started -= m_Wrapper.m_GameActionMapActionsCallbackInterface.OnAim;
-                    @Aim.performed -= m_Wrapper.m_GameActionMapActionsCallbackInterface.OnAim;
-                    @Aim.canceled -= m_Wrapper.m_GameActionMapActionsCallbackInterface.OnAim;
                     @Sneak.started -= m_Wrapper.m_GameActionMapActionsCallbackInterface.OnSneak;
                     @Sneak.performed -= m_Wrapper.m_GameActionMapActionsCallbackInterface.OnSneak;
                     @Sneak.canceled -= m_Wrapper.m_GameActionMapActionsCallbackInterface.OnSneak;
@@ -610,6 +682,12 @@ namespace Akasha.InputActions
                 m_Wrapper.m_GameActionMapActionsCallbackInterface = instance;
                 if (instance != null)
                 {
+                    @Aim.started += instance.OnAim;
+                    @Aim.performed += instance.OnAim;
+                    @Aim.canceled += instance.OnAim;
+                    @Datapad.started += instance.OnDatapad;
+                    @Datapad.performed += instance.OnDatapad;
+                    @Datapad.canceled += instance.OnDatapad;
                     @Interact.started += instance.OnInteract;
                     @Interact.performed += instance.OnInteract;
                     @Interact.canceled += instance.OnInteract;
@@ -622,6 +700,9 @@ namespace Akasha.InputActions
                     @Move.started += instance.OnMove;
                     @Move.performed += instance.OnMove;
                     @Move.canceled += instance.OnMove;
+                    @Pause.started += instance.OnPause;
+                    @Pause.performed += instance.OnPause;
+                    @Pause.canceled += instance.OnPause;
                     @Reload.started += instance.OnReload;
                     @Reload.performed += instance.OnReload;
                     @Reload.canceled += instance.OnReload;
@@ -634,9 +715,6 @@ namespace Akasha.InputActions
                     @Shoot.started += instance.OnShoot;
                     @Shoot.performed += instance.OnShoot;
                     @Shoot.canceled += instance.OnShoot;
-                    @Aim.started += instance.OnAim;
-                    @Aim.performed += instance.OnAim;
-                    @Aim.canceled += instance.OnAim;
                     @Sneak.started += instance.OnSneak;
                     @Sneak.performed += instance.OnSneak;
                     @Sneak.canceled += instance.OnSneak;
@@ -670,15 +748,17 @@ namespace Akasha.InputActions
         }
         public interface IGameActionMapActions
         {
+            void OnAim(InputAction.CallbackContext context);
+            void OnDatapad(InputAction.CallbackContext context);
             void OnInteract(InputAction.CallbackContext context);
             void OnJump(InputAction.CallbackContext context);
             void OnLook(InputAction.CallbackContext context);
             void OnMove(InputAction.CallbackContext context);
+            void OnPause(InputAction.CallbackContext context);
             void OnReload(InputAction.CallbackContext context);
             void OnSelectLastWeapon(InputAction.CallbackContext context);
             void OnSelectWeapon(InputAction.CallbackContext context);
             void OnShoot(InputAction.CallbackContext context);
-            void OnAim(InputAction.CallbackContext context);
             void OnSneak(InputAction.CallbackContext context);
             void OnSprint(InputAction.CallbackContext context);
             void OnSwitchView(InputAction.CallbackContext context);

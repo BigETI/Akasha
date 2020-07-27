@@ -12,5 +12,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 753a99c5c8d5469419e0a2f1b6c81c69, type: 3}
   m_Name: DirtBlock
   m_EditorClassIdentifier: 
+  itemNameStringTranslation: {fileID: 11400000, guid: 35d4cde7020225a45910e2e055e8e63a,
+    type: 2}
+  iconSpriteTranslation: {fileID: 11400000, guid: 83a3526846b9e99409d6ce5cd8ed0746,
+    type: 2}
+  descriptionSpriteTranslation: {fileID: 11400000, guid: 36c046f987d2535478210b1997970e40,
+    type: 2}
+  weight: 1024
   material: {fileID: 2100000, guid: 42d1e32cd62be724db8456c309fbccd0, type: 2}
   meshVariants: {fileID: 11400000, guid: 0101db93846edd54a8f83f7f63cf92e3, type: 2}
+  collisionBounds:
+  - m_Center: {x: 0, y: 0, z: 0}
+    m_Extent: {x: 0.5, y: 0.5, z: 0.5}

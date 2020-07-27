@@ -12,5 +12,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 753a99c5c8d5469419e0a2f1b6c81c69, type: 3}
   m_Name: LOLBlock
   m_EditorClassIdentifier: 
+  itemNameStringTranslation: {fileID: 11400000, guid: d3fc52ac7458dde4bac7e80c451280f6,
+    type: 2}
+  iconSpriteTranslation: {fileID: 11400000, guid: a4870eaa5bb06474d832c5a37904c470,
+    type: 2}
+  descriptionSpriteTranslation: {fileID: 11400000, guid: 6b7891f32c2e6724794b3a30d2150d5c,
+    type: 2}
+  weight: 1024
   material: {fileID: 2100000, guid: fe8025a15a1a18548a64f20014b08031, type: 2}
   meshVariants: {fileID: 11400000, guid: 0101db93846edd54a8f83f7f63cf92e3, type: 2}
+  collisionBounds:
+  - m_Center: {x: 0, y: 0, z: 0}
+    m_Extent: {x: 0.5, y: 0.5, z: 0.5}

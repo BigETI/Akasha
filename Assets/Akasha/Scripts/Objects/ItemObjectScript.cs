@@ -25,6 +25,12 @@ namespace Akasha.Objects
         private SpriteTranslationObjectScript iconSpriteTranslation = default;
 
         /// <summary>
+        /// Description sprite translation
+        /// </summary>
+        [SerializeField]
+        private StringTranslationObjectScript descriptionSpriteTranslation = default;
+
+        /// <summary>
         /// Weight
         /// </summary>
         [SerializeField]
@@ -34,6 +40,11 @@ namespace Akasha.Objects
         /// Item name
         /// </summary>
         public string ItemName => (itemNameStringTranslation ? itemNameStringTranslation.ToString() : string.Empty);
+
+        /// <summary>
+        /// Description
+        /// </summary>
+        public string Description => (descriptionSpriteTranslation ? descriptionSpriteTranslation.ToString() : string.Empty);
 
         /// <summary>
         /// Icon sprite

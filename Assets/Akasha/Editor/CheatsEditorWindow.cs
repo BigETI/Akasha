@@ -1,5 +1,6 @@
 ﻿using Akasha;
 using Akasha.Controllers;
+using Akasha.Objects;
 using UnityEditor;
 using UnityEngine;
 
@@ -14,9 +15,14 @@ namespace AkashaEditor
     public class CheatsEditorWindow : EditorWindow
     {
         /// <summary>
-        /// Item object
+        /// Item
         /// </summary>
-        private BlockObjectScript itemObject;
+        private ItemObjectScript item;
+
+        /// <summary>
+        /// Crafting recipes
+        /// </summary>
+        private CraftingRecipesObjectScript craftingRecipes;
 
         /// <summary>
         /// Item quantity
@@ -54,11 +60,17 @@ namespace AkashaEditor
                 }
                 if (characterController)
                 {
-                    itemObject = EditorGUILayout.ObjectField("Item", itemObject, typeof(BlockObjectScript), false) as BlockObjectScript;
+                    item = EditorGUILayout.ObjectField("Item", item, typeof(ItemObjectScript), false) as ItemObjectScript;
                     itemQuantity = EditorGUILayout.IntSlider(itemQuantity, 1, 1000);
-                    if (itemObject && (itemQuantity > 0) && GUILayout.Button("Spawn items"))
+                    if (item && (itemQuantity > 0) && GUILayout.Button("Spawn items"))
                     {
-                        characterController.Inventory.AddItems(itemObject, (uint)itemQuantity);
+                        characterController.Inventory.AddItems(item, (uint)itemQuantity);
+                    }
+                    GUILayout.Space(32.0f);
+                    craftingRecipes = EditorGUILayout.ObjectField("Crafting Recipe", craftingRecipes, typeof(CraftingRecipesObjectScript), false) as CraftingRecipesObjectScript;
+                    if (craftingRecipes && GUILayout.Button("Learn crafting recipes"))
+                    {
+                        characterController.LearnCraftingRecipes(craftingRecipes);
                     }
                 }
             }

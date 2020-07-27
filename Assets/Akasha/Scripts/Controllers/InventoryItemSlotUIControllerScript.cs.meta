@@ -3,7 +3,16 @@ guid: 9fd3d3141e9ed6b4b88f1b0a2ce0ab48
 MonoImporter:
   externalObjects: {}
   serializedVersion: 2
-  defaultReferences: []
+  defaultReferences:
+  - weightStringTranslation: {fileID: 11400000, guid: dc3be31c3af60d74b9b3f18d7111c157,
+      type: 2}
+  - descriptionStringTranslation: {fileID: 11400000, guid: dc45c95e066d6e14fb7b1b2372e55db0,
+      type: 2}
+  - inventoryItemNameText: {instanceID: 0}
+  - iconImage: {instanceID: 0}
+  - quantityText: {instanceID: 0}
+  - weightText: {instanceID: 0}
+  - descriptionText: {instanceID: 0}
   executionOrder: 0
   icon: {instanceID: 0}
   userData: 
