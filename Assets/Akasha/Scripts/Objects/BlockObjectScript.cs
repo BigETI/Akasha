@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Akasha.Data;
+using System;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -13,6 +14,12 @@ namespace Akasha.Objects
     [CreateAssetMenu(fileName = "Block", menuName = "Akasha/Block")]
     public class BlockObjectScript : ItemObjectScript, IBlockObject
     {
+        /// <summary>
+        /// Initial health
+        /// </summary>
+        [SerializeField]
+        private ushort initialHealth = 1024;
+
         /// <summary>
         /// Block material
         /// </summary>
@@ -33,6 +40,22 @@ namespace Akasha.Objects
         {
             new Bounds(Vector3.zero, Vector3.one)
         };
+
+        /// <summary>
+        /// Farming tools
+        /// </summary>
+        [SerializeField]
+        private FarmingToolData[] farmingTools = Array.Empty<FarmingToolData>();
+
+        /// <summary>
+        /// Farming tool lookup
+        /// </summary>
+        private Dictionary<string, IFarmingToolData> farmingToolLookup;
+
+        /// <summary>
+        /// Initial health
+        /// </summary>
+        public ushort InitialHealth => initialHealth;
 
         /// <summary>
         /// Block material
@@ -57,6 +80,63 @@ namespace Akasha.Objects
                 }
                 return collisionBounds;
             }
+        }
+
+        /// <summary>
+        /// Farming tools
+        /// </summary>
+        public IReadOnlyList<FarmingToolData> FarmingTools
+        {
+            get
+            {
+                if (farmingTools == null)
+                {
+                    farmingTools = Array.Empty<FarmingToolData>();
+                }
+                return farmingTools;
+            }
+        }
+
+        /// <summary>
+        /// Farming tool lookup
+        /// </summary>
+        public IReadOnlyDictionary<string, IFarmingToolData> FarmingToolLookup
+        {
+            get
+            {
+                if (farmingToolLookup == null)
+                {
+                    farmingToolLookup = new Dictionary<string, IFarmingToolData>();
+                    foreach (IFarmingToolData farming_tool in FarmingTools)
+                    {
+                        string key = (farming_tool.FarmingToolItem ? farming_tool.FarmingToolItem.name : string.Empty);
+                        if (farmingToolLookup.ContainsKey(key))
+                        {
+                            Debug.LogError("Skipping duplicate farming tool entry \"" + key + "\" in block \"" + name + "\".");
+                        }
+                        else
+                        {
+                            farmingToolLookup.Add(key, farming_tool);
+                        }
+                    }
+                }
+                return farmingToolLookup;
+            }
+        }
+
+        /// <summary>
+        /// Get farming tool data from farming tool
+        /// </summary>
+        /// <param name="item">Item</param>
+        /// <returns>Farming tool data if successful, otherwise "null"</returns>
+        public IFarmingToolData GetFarmingToolDataFromFarmingToolItem(IItemObject item)
+        {
+            string key = ((item == null) ? string.Empty : item.name);
+            if (!(FarmingToolLookup.ContainsKey(key)))
+            {
+                key = string.Empty;
+            }
+            return (FarmingToolLookup.ContainsKey(key) ? FarmingToolLookup[key] : null);
         }
     }
 }

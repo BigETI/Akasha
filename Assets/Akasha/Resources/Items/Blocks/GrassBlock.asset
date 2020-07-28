@@ -19,8 +19,11 @@ MonoBehaviour:
   descriptionSpriteTranslation: {fileID: 11400000, guid: 3bb9447c5bfdf4647b23c9d87ae11bad,
     type: 2}
   weight: 1024
+  maximalHitCooldownTime: 0.5
+  initialHealth: 1024
   material: {fileID: 2100000, guid: e85b7eb66bc101c488598ab986a4ef5b, type: 2}
   meshVariants: {fileID: 11400000, guid: c42a9e0b6591e914d8ff7edbe89b25fd, type: 2}
   collisionBounds:
   - m_Center: {x: 0, y: 0, z: 0}
     m_Extent: {x: 0.5, y: 0.5, z: 0.5}
+  farmingTools: []

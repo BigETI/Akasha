@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using Akasha.Data;
+using UnityEngine;
 
 /// <summary>
 /// Akasha namespace
@@ -6,14 +7,14 @@
 namespace Akasha
 {
     /// <summary>
-    /// Instantiated game object structure
+    /// Instantiated block structure
     /// </summary>
-    public readonly struct InstantiatedGameObject
+    public readonly struct InstantiatedBlock : IInstantiatedBlock
     {
         /// <summary>
-        /// Block type
+        /// Block
         /// </summary>
-        public IBlockObject Block { get; }
+        public BlockData Block { get; }
 
         /// <summary>
         /// Direction flags
@@ -31,7 +32,7 @@ namespace Akasha
         /// <param name="block">Block</param>
         /// <param name="directionFlags">Direction flags</param>
         /// <param name="instance">Instance</param>
-        public InstantiatedGameObject(IBlockObject block, EDirectionFlags directionFlags, GameObject instance)
+        public InstantiatedBlock(BlockData block, EDirectionFlags directionFlags, GameObject instance)
         {
             Block = block;
             DirectionFlags = directionFlags;

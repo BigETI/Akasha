@@ -62,11 +62,11 @@ namespace Akasha
         ChunkID GetChunkIDFDromBlockID(BlockID blockID);
 
         /// <summary>
-        /// Get generated block type
+        /// Get generated block
         /// </summary>
         /// <param name="blockID">Block ID</param>
-        /// <returns>Block or "null"</returns>
-        IBlockObject GetGeneratedBlockType(BlockID blockID);
+        /// <returns>Block</returns>
+        BlockData GetGeneratedBlock(BlockID blockID);
 
         /// <summary>
         /// Refresh chunk controller
@@ -86,14 +86,21 @@ namespace Akasha
         /// </summary>
         /// <param name="chunkID">Chunk ID</param>
         /// <returns>Blocks task</returns>
-        Task<IBlockObject[]> GetChunkBlocksTask(ChunkID chunkID);
+        Task<BlockData[]> GetChunkBlocksTask(ChunkID chunkID);
 
         /// <summary>
-        /// Set block type
+        /// Get block
         /// </summary>
         /// <param name="blockID">Block ID</param>
-        /// <param name="blockType">Block type</param>
-        void SetBlockType(BlockID blockID, IBlockObject blockType);
+        /// <returns>Block</returns>
+        BlockData GetBlock(BlockID blockID);
+
+        /// <summary>
+        /// Set block
+        /// </summary>
+        /// <param name="blockID">Block ID</param>
+        /// <param name="block">Block</param>
+        void SetBlock(BlockID blockID, BlockData block);
 
         /// <summary>
         /// Reset

@@ -29,5 +29,10 @@ namespace Akasha
         /// Weight
         /// </summary>
         uint Weight { get; }
+
+        /// <summary>
+        /// Maximal hit cooldown time
+        /// </summary>
+        float MaximalHitCooldownTime { get; }
     }
 }

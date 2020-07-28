@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 2035111234}
-  m_IndirectSpecularColor: {r: 131.1594, g: 162.49646, b: 215.04776, a: 1}
+  m_IndirectSpecularColor: {r: 131.17673, g: 162.47339, b: 214.93546, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -5592,6 +5592,7 @@ MonoBehaviour:
   gravityMagnitude: 24.525
   movementSpeed: 8
   jumpHeight: 1.5
+  defaultHitCooldownTime: 0.5
   inventory:
     items: []
   eyesTransform: {fileID: 1122510067}

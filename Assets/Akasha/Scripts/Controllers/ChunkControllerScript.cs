@@ -1,5 +1,5 @@
-﻿using Akasha.Managers;
-using Akasha.Objects;
+﻿using Akasha.Data;
+using Akasha.Managers;
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
@@ -28,12 +28,12 @@ namespace Akasha.Controllers
         /// <summary>
         /// Chunk blocks task
         /// </summary>
-        private Task<IBlockObject[]> chunkBlocksTask = null;
+        private Task<BlockData[]> chunkBlocksTask = null;
 
         /// <summary>
         /// Instantiated blocks
         /// </summary>
-        private InstantiatedGameObject[] instantiatedBlocks = Array.Empty<InstantiatedGameObject>();
+        private InstantiatedBlock[] instantiatedBlocks = Array.Empty<InstantiatedBlock>();
 
         /// <summary>
         /// Change blocks
@@ -91,9 +91,9 @@ namespace Akasha.Controllers
         /// <param name="targetChunkID">Target chunk ID</param>
         /// <param name="worldManager">World manager</param>
         /// <returns>Chunk block types</returns>
-        private Task<IBlockObject[]> GetChunkBlocksTaskFromChunk(ChunkControllerScript targetChunkController, ChunkID targetChunkID, WorldManagerScript worldManager)
+        private Task<BlockData[]> GetChunkBlocksTaskFromChunk(ChunkControllerScript targetChunkController, ChunkID targetChunkID, WorldManagerScript worldManager)
         {
-            Task<IBlockObject[]> ret = ((targetChunkController == null) ? null : targetChunkController.chunkBlocksTask);
+            Task<BlockData[]> ret = ((targetChunkController == null) ? null : targetChunkController.chunkBlocksTask);
             if (ret == null)
             {
                 ret = worldManager.GetChunkBlocksTask(targetChunkID);
@@ -114,15 +114,15 @@ namespace Akasha.Controllers
                 if (refreshOnUpdate)
                 {
                     int block_count = chunk_size.x * chunk_size.y * chunk_size.z;
-                    Task<IBlockObject[]> top_chunk_blocks_task = GetChunkBlocksTaskFromChunk(TopChunkController, chunkID + ChunkID.Up, world_manager);
-                    Task<IBlockObject[]> bottom_chunk_blocks_task = GetChunkBlocksTaskFromChunk(BottomChunkController, chunkID + ChunkID.Down, world_manager);
-                    Task<IBlockObject[]> left_chunk_blocks_task = GetChunkBlocksTaskFromChunk(LeftChunkController, chunkID + ChunkID.Left, world_manager);
-                    Task<IBlockObject[]> right_chunk_blocks_task = GetChunkBlocksTaskFromChunk(RightChunkController, chunkID + ChunkID.Right, world_manager);
-                    Task<IBlockObject[]> front_chunk_blocks_task = GetChunkBlocksTaskFromChunk(FrontChunkController, chunkID + ChunkID.Forward, world_manager);
-                    Task<IBlockObject[]> behind_chunk_blocks_task = GetChunkBlocksTaskFromChunk(BehindChunkController, chunkID + ChunkID.Back, world_manager);
+                    Task<BlockData[]> top_chunk_blocks_task = GetChunkBlocksTaskFromChunk(TopChunkController, chunkID + ChunkID.Up, world_manager);
+                    Task<BlockData[]> bottom_chunk_blocks_task = GetChunkBlocksTaskFromChunk(BottomChunkController, chunkID + ChunkID.Down, world_manager);
+                    Task<BlockData[]> left_chunk_blocks_task = GetChunkBlocksTaskFromChunk(LeftChunkController, chunkID + ChunkID.Left, world_manager);
+                    Task<BlockData[]> right_chunk_blocks_task = GetChunkBlocksTaskFromChunk(RightChunkController, chunkID + ChunkID.Right, world_manager);
+                    Task<BlockData[]> front_chunk_blocks_task = GetChunkBlocksTaskFromChunk(FrontChunkController, chunkID + ChunkID.Forward, world_manager);
+                    Task<BlockData[]> behind_chunk_blocks_task = GetChunkBlocksTaskFromChunk(BehindChunkController, chunkID + ChunkID.Back, world_manager);
                     if (instantiatedBlocks.Length != block_count)
                     {
-                        foreach (InstantiatedGameObject instantiated_block in instantiatedBlocks)
+                        foreach (InstantiatedBlock instantiated_block in instantiatedBlocks)
                         {
                             if (instantiated_block.Instance != null)
                             {
@@ -130,7 +130,7 @@ namespace Akasha.Controllers
                             }
                         }
                         chunkBlocksTask = null;
-                        instantiatedBlocks = new InstantiatedGameObject[block_count];
+                        instantiatedBlocks = new InstantiatedBlock[block_count];
                     }
                     chunkBlocksTask = world_manager.GetChunkBlocksTask(chunk_id);
                     if
@@ -144,13 +144,13 @@ namespace Akasha.Controllers
                         (behind_chunk_blocks_task.Status == TaskStatus.RanToCompletion)
                     )
                     {
-                        IBlockObject[] chunk_blocks = chunkBlocksTask.Result;
-                        IBlockObject[] top_chunk_blocks = top_chunk_blocks_task.Result;
-                        IBlockObject[] bottom_chunk_blocks = bottom_chunk_blocks_task.Result;
-                        IBlockObject[] left_chunk_blocks = left_chunk_blocks_task.Result;
-                        IBlockObject[] right_chunk_blocks = right_chunk_blocks_task.Result;
-                        IBlockObject[] front_chunk_blocks = front_chunk_blocks_task.Result;
-                        IBlockObject[] behind_chunk_blocks = behind_chunk_blocks_task.Result;
+                        BlockData[] chunk_blocks = chunkBlocksTask.Result;
+                        BlockData[] top_chunk_blocks = top_chunk_blocks_task.Result;
+                        BlockData[] bottom_chunk_blocks = bottom_chunk_blocks_task.Result;
+                        BlockData[] left_chunk_blocks = left_chunk_blocks_task.Result;
+                        BlockData[] right_chunk_blocks = right_chunk_blocks_task.Result;
+                        BlockData[] front_chunk_blocks = front_chunk_blocks_task.Result;
+                        BlockData[] behind_chunk_blocks = behind_chunk_blocks_task.Result;
                         if
                         (
                             (chunk_blocks.Length == block_count) &&
@@ -167,20 +167,20 @@ namespace Akasha.Controllers
                             {
                                 Vector3Int chunk_position = new Vector3Int(index % chunk_size.x, (index / chunk_size.x) % chunk_size.y, index / (chunk_size.x * chunk_size.y));
                                 BlockID block_position = new BlockID(chunk_position.x + (chunk_id.X * chunk_size.x), chunk_position.y + (chunk_id.Y * chunk_size.y), chunk_position.z + (chunk_id.Z * chunk_size.z));
-                                IBlockObject block = chunk_blocks[index];
-                                IBlockObject top_block = ((chunk_position.y + 1) < chunk_size.y) ? chunk_blocks[chunk_position.x + ((chunk_position.y + 1) * chunk_size.x) + (chunk_position.z * chunk_size.x * chunk_size.y)] : ((top_chunk_blocks == null) ? null : top_chunk_blocks[chunk_position.x + (chunk_position.z * chunk_size.x * chunk_size.y)]);
-                                IBlockObject bottom_block = ((chunk_position.y - 1) >= 0) ? chunk_blocks[chunk_position.x + ((chunk_position.y - 1) * chunk_size.x) + (chunk_position.z * chunk_size.x * chunk_size.y)] : ((bottom_chunk_blocks == null) ? null : bottom_chunk_blocks[chunk_position.x + ((chunk_size.y - 1) * chunk_size.x) + (chunk_position.z * chunk_size.x * chunk_size.y)]);
-                                IBlockObject left_block = (((chunk_position.x - 1) >= 0) ? chunk_blocks[(chunk_position.x - 1) + (chunk_position.y * chunk_size.x) + (chunk_position.z * chunk_size.x * chunk_size.y)] : ((left_chunk_blocks == null) ? null : left_chunk_blocks[(chunk_size.x - 1) + (chunk_position.y * chunk_size.x) + (chunk_position.z * chunk_size.x * chunk_size.y)]));
-                                IBlockObject right_block = (((chunk_position.x + 1) < chunk_size.x) ? chunk_blocks[(chunk_position.x + 1) + (chunk_position.y * chunk_size.x) + (chunk_position.z * chunk_size.x * chunk_size.y)] : ((right_chunk_blocks == null) ? null : right_chunk_blocks[(chunk_position.y * chunk_size.x) + (chunk_position.z * chunk_size.x * chunk_size.y)]));
-                                IBlockObject front_block = (((chunk_position.z + 1) < chunk_size.z) ? chunk_blocks[chunk_position.x + (chunk_position.y * chunk_size.x) + ((chunk_position.z + 1) * chunk_size.x * chunk_size.y)] : ((front_chunk_blocks == null) ? null : front_chunk_blocks[chunk_position.x + (chunk_position.y * chunk_size.x)]));
-                                IBlockObject behind_block = (((chunk_position.z - 1) >= 0) ? chunk_blocks[chunk_position.x + (chunk_position.y * chunk_size.x) + ((chunk_position.z - 1) * chunk_size.x * chunk_size.y)] : ((behind_chunk_blocks == null) ? null : behind_chunk_blocks[chunk_position.x + (chunk_position.y * chunk_size.x) + ((chunk_size.z - 1) * chunk_size.x * chunk_size.y)]));
-                                IBlockMeshVariantsObject block_mesh_variants = ((block == null) ? null : block.MeshVariants);
-                                IBlockMeshVariantsObject top_block_mesh_variants = ((top_block == null) ? null : top_block.MeshVariants);
-                                IBlockMeshVariantsObject bottom_block_mesh_variants = ((bottom_block == null) ? null : bottom_block.MeshVariants);
-                                IBlockMeshVariantsObject left_block_mesh_variants = ((left_block == null) ? null : left_block.MeshVariants);
-                                IBlockMeshVariantsObject right_block_mesh_variants = ((right_block == null) ? null : right_block.MeshVariants);
-                                IBlockMeshVariantsObject front_block_mesh_variants = ((front_block == null) ? null : front_block.MeshVariants);
-                                IBlockMeshVariantsObject behind_block_mesh_variants = ((behind_block == null) ? null : behind_block.MeshVariants);
+                                BlockData block = chunk_blocks[index];
+                                BlockData top_block = ((chunk_position.y + 1) < chunk_size.y) ? chunk_blocks[chunk_position.x + ((chunk_position.y + 1) * chunk_size.x) + (chunk_position.z * chunk_size.x * chunk_size.y)] : ((top_chunk_blocks == null) ? default : top_chunk_blocks[chunk_position.x + (chunk_position.z * chunk_size.x * chunk_size.y)]);
+                                BlockData bottom_block = ((chunk_position.y - 1) >= 0) ? chunk_blocks[chunk_position.x + ((chunk_position.y - 1) * chunk_size.x) + (chunk_position.z * chunk_size.x * chunk_size.y)] : ((bottom_chunk_blocks == null) ? default : bottom_chunk_blocks[chunk_position.x + ((chunk_size.y - 1) * chunk_size.x) + (chunk_position.z * chunk_size.x * chunk_size.y)]);
+                                BlockData left_block = (((chunk_position.x - 1) >= 0) ? chunk_blocks[(chunk_position.x - 1) + (chunk_position.y * chunk_size.x) + (chunk_position.z * chunk_size.x * chunk_size.y)] : ((left_chunk_blocks == null) ? default : left_chunk_blocks[(chunk_size.x - 1) + (chunk_position.y * chunk_size.x) + (chunk_position.z * chunk_size.x * chunk_size.y)]));
+                                BlockData right_block = (((chunk_position.x + 1) < chunk_size.x) ? chunk_blocks[(chunk_position.x + 1) + (chunk_position.y * chunk_size.x) + (chunk_position.z * chunk_size.x * chunk_size.y)] : ((right_chunk_blocks == null) ? default : right_chunk_blocks[(chunk_position.y * chunk_size.x) + (chunk_position.z * chunk_size.x * chunk_size.y)]));
+                                BlockData front_block = (((chunk_position.z + 1) < chunk_size.z) ? chunk_blocks[chunk_position.x + (chunk_position.y * chunk_size.x) + ((chunk_position.z + 1) * chunk_size.x * chunk_size.y)] : ((front_chunk_blocks == null) ? default : front_chunk_blocks[chunk_position.x + (chunk_position.y * chunk_size.x)]));
+                                BlockData behind_block = (((chunk_position.z - 1) >= 0) ? chunk_blocks[chunk_position.x + (chunk_position.y * chunk_size.x) + ((chunk_position.z - 1) * chunk_size.x * chunk_size.y)] : ((behind_chunk_blocks == null) ? default : behind_chunk_blocks[chunk_position.x + (chunk_position.y * chunk_size.x) + ((chunk_size.z - 1) * chunk_size.x * chunk_size.y)]));
+                                IBlockMeshVariantsObject block_mesh_variants = (block.IsABlock ? block.Block.MeshVariants : null);
+                                IBlockMeshVariantsObject top_block_mesh_variants = (top_block.IsABlock ? top_block.Block.MeshVariants : null);
+                                IBlockMeshVariantsObject bottom_block_mesh_variants = (bottom_block.IsABlock ? bottom_block.Block.MeshVariants : null);
+                                IBlockMeshVariantsObject left_block_mesh_variants = (left_block.IsABlock ? left_block.Block.MeshVariants : null);
+                                IBlockMeshVariantsObject right_block_mesh_variants = (right_block.IsABlock ? right_block.Block.MeshVariants : null);
+                                IBlockMeshVariantsObject front_block_mesh_variants = (front_block.IsABlock ? front_block.Block.MeshVariants : null);
+                                IBlockMeshVariantsObject behind_block_mesh_variants = (behind_block.IsABlock ? behind_block.Block.MeshVariants : null);
                                 EDirectionFlags direction_flags = EDirectionFlags.Nothing;
                                 if ((block_mesh_variants != null) && (block_mesh_variants.CloseToMeshVariants != null))
                                 {
@@ -200,7 +200,7 @@ namespace Akasha.Controllers
                                         }
                                     }
                                 }
-                                InstantiatedGameObject instantiated_block = instantiatedBlocks[index];
+                                InstantiatedBlock instantiated_block = instantiatedBlocks[index];
                                 if ((instantiated_block.Block != block) || (instantiated_block.DirectionFlags != direction_flags))
                                 {
                                     lock (changeBlocks)
@@ -223,7 +223,7 @@ namespace Akasha.Controllers
                 IReadOnlyDictionary<string, IBlockObject> block_lookup = world_manager.BlockLookup;
                 foreach (KeyValuePair<int, BlockChange> change_block in changeBlocks)
                 {
-                    ref InstantiatedGameObject instantiated_block = ref instantiatedBlocks[change_block.Key];
+                    ref InstantiatedBlock instantiated_block = ref instantiatedBlocks[change_block.Key];
                     if (instantiated_block.Instance != null)
                     {
                         Destroy(instantiated_block.Instance);
@@ -232,10 +232,10 @@ namespace Akasha.Controllers
                     GameObject game_object = null;
                     Material material = null;
                     Vector3Int chunk_position = new Vector3Int(change_block.Key % chunk_size.x, (change_block.Key / chunk_size.x) % chunk_size.y, change_block.Key / (chunk_size.x * chunk_size.y));
-                    if ((change_block.Value.Block != null) && (change_block.Value.Block.MeshVariants != null))
+                    if (change_block.Value.Block.IsABlock && (change_block.Value.Block.Block.MeshVariants != null))
                     {
-                        asset = change_block.Value.Block.MeshVariants.BlockAssets[(int)(change_block.Value.DirectionFlags)];
-                        material = change_block.Value.Block.Material;
+                        asset = change_block.Value.Block.Block.MeshVariants.BlockAssets[(int)(change_block.Value.DirectionFlags)];
+                        material = change_block.Value.Block.Block.Material;
                     }
                     if (asset != null)
                     {
@@ -251,7 +251,7 @@ namespace Akasha.Controllers
                             game_object.name = "Block " + block_id;
                         }
                     }
-                    instantiated_block = new InstantiatedGameObject(change_block.Value.Block, change_block.Value.DirectionFlags, game_object);
+                    instantiated_block = new InstantiatedBlock(change_block.Value.Block, change_block.Value.DirectionFlags, game_object);
                 }
                 changeBlocks.Clear();
             }

@@ -1,4 +1,6 @@
-﻿/// <summary>
+﻿using Akasha.Data;
+
+/// <summary>
 /// Akasha namespace
 /// </summary>
 namespace Akasha
@@ -6,12 +8,12 @@ namespace Akasha
     /// <summary>
     /// Block change structure
     /// </summary>
-    public readonly struct BlockChange
+    public readonly struct BlockChange : IBlockChange
     {
         /// <summary>
         /// Block
         /// </summary>
-        public IBlockObject Block { get; }
+        public BlockData Block { get; }
 
         /// <summary>
         /// Direction flags
@@ -23,7 +25,7 @@ namespace Akasha
         /// </summary>
         /// <param name="block">Block</param>
         /// <param name="directionFlags">Direction flags</param>
-        public BlockChange(IBlockObject block, EDirectionFlags directionFlags)
+        public BlockChange(BlockData block, EDirectionFlags directionFlags)
         {
             Block = block;
             DirectionFlags = directionFlags;

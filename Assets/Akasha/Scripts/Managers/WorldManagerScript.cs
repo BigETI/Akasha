@@ -32,7 +32,7 @@ namespace Akasha.Managers
         /// <summary>
         /// Chunk block types tasks lookup
         /// </summary>
-        private readonly Dictionary<ChunkID, Task<IBlockObject[]>> chunkBlocksTasksLookup = new Dictionary<ChunkID, Task<IBlockObject[]>>();
+        private readonly Dictionary<ChunkID, Task<BlockData[]>> chunkBlocksTasksLookup = new Dictionary<ChunkID, Task<BlockData[]>>();
 
         /// <summary>
         /// Chunk size
@@ -249,16 +249,16 @@ namespace Akasha.Managers
         }
 
         /// <summary>
-        /// Get generated block type
+        /// Get generated block
         /// </summary>
         /// <param name="blockID">Block ID</param>
         /// <returns>Block or "null"</returns>
-        public IBlockObject GetGeneratedBlockType(BlockID blockID)
+        public BlockData GetGeneratedBlock(BlockID blockID)
         {
-            IBlockObject ret = null;
+            BlockData ret = default;
             foreach ((INoiseLayerData, List<(INoiseGeneratorData, ModuleBase)>) computed_noise_layer in computedNoiseLayers)
             {
-                if (((computed_noise_layer.Item1.Filter == ENoiseLayerFilter.FillEmpty) && (ret != null)) || ((computed_noise_layer.Item1.Filter == ENoiseLayerFilter.ReplaceFull) && (ret == null)))
+                if (((computed_noise_layer.Item1.Filter == ENoiseLayerFilter.FillEmpty) && ret.IsABlock) || ((computed_noise_layer.Item1.Filter == ENoiseLayerFilter.ReplaceFull) && ret.IsNothing))
                 {
                     break;
                 }
@@ -278,7 +278,7 @@ namespace Akasha.Managers
                 }
                 if (final_result >= 0.0)
                 {
-                    ret = computed_noise_layer.Item1.Block;
+                    ret = (computed_noise_layer.Item1.Block ? new BlockData(computed_noise_layer.Item1.Block, computed_noise_layer.Item1.Block.InitialHealth) : default);
                 }
             }
             return ret;
@@ -389,11 +389,11 @@ namespace Akasha.Managers
         /// </summary>
         /// <param name="chunkID">Chunk ID</param>
         /// <returns>Generated block types</returns>
-        private IBlockObject[] GetGeneratedBlockTypes(ChunkID chunkID)
+        private BlockData[] GetGeneratedBlocks(ChunkID chunkID)
         {
             Vector3Int chunk_size = ChunkSize;
-            IBlockObject[] ret = new IBlockObject[chunk_size.x * chunk_size.y * chunk_size.z];
-            Parallel.For(0, ret.Length, (index) => ret[index] = GetGeneratedBlockType(new BlockID((index % chunk_size.x) + (chunkID.X * chunk_size.x), ((index / chunk_size.x) % chunk_size.y) + (chunkID.Y * chunk_size.y), (index / (chunk_size.x * chunk_size.y)) + (chunkID.Z * chunk_size.z))));
+            BlockData[] ret = new BlockData[chunk_size.x * chunk_size.y * chunk_size.z];
+            Parallel.For(0, ret.Length, (index) => ret[index] = GetGeneratedBlock(new BlockID((index % chunk_size.x) + (chunkID.X * chunk_size.x), ((index / chunk_size.x) % chunk_size.y) + (chunkID.Y * chunk_size.y), (index / (chunk_size.x * chunk_size.y)) + (chunkID.Z * chunk_size.z))));
             return ret;
         }
 
@@ -402,9 +402,9 @@ namespace Akasha.Managers
         /// </summary>
         /// <param name="chunkID">Chunk ID</param>
         /// <returns>Blocks task</returns>
-        public Task<IBlockObject[]> GetChunkBlocksTask(ChunkID chunkID)
+        public Task<BlockData[]> GetChunkBlocksTask(ChunkID chunkID)
         {
-            Task<IBlockObject[]> ret = Task.FromResult(Array.Empty<IBlockObject>());
+            Task<BlockData[]> ret = Task.FromResult(Array.Empty<BlockData>());
             int block_count = ChunkSize.x * ChunkSize.y * ChunkSize.z;
             lock (chunkBlocksTasksLookup)
             {
@@ -415,9 +415,30 @@ namespace Akasha.Managers
                 else
                 {
                     ChunkID chunk_id = chunkID;
-                    ret = Task.Run(() => GetGeneratedBlockTypes(chunk_id));
+                    ret = Task.Run(() => GetGeneratedBlocks(chunk_id));
                     chunkBlocksTasksLookup.Add(chunkID, ret);
                 }
+            }
+            return ret;
+        }
+
+        /// <summary>
+        /// Get block
+        /// </summary>
+        /// <param name="blockID">Block ID</param>
+        /// <returns>Block</returns>
+        public BlockData GetBlock(BlockID blockID)
+        {
+            BlockData ret = default;
+            Vector3Int chunk_size = ChunkSize;
+            ChunkID chunk_id = GetChunkIDFDromBlockID(blockID);
+            int block_count = chunk_size.x * chunk_size.y * chunk_size.z;
+            BlockData[] blocks = GetChunkBlocksTask(chunk_id).Result;
+            if (blocks.Length == block_count)
+            {
+                Vector3Int chunk_position = new Vector3Int((int)(blockID.X - ((long)(chunk_id.X) * chunk_size.x)), (int)(blockID.Y - ((long)(chunk_id.Y) * chunk_size.y)), (int)(blockID.Z - ((long)(chunk_id.Z) * chunk_size.z)));
+                int index = chunk_position.x + (chunk_position.y * chunk_size.x) + (chunk_position.z * chunk_size.x * chunk_size.y);
+                ret = blocks[index];
             }
             return ret;
         }
@@ -426,19 +447,18 @@ namespace Akasha.Managers
         /// Set block type
         /// </summary>
         /// <param name="blockID">Block ID</param>
-        /// <param name="blockType">Block type</param>
-        public void SetBlockType(BlockID blockID, IBlockObject blockType)
+        /// <param name="block">Block</param>
+        public void SetBlock(BlockID blockID, BlockData block)
         {
             Vector3Int chunk_size = ChunkSize;
             ChunkID chunk_id = GetChunkIDFDromBlockID(blockID);
             int block_count = chunk_size.x * chunk_size.y * chunk_size.z;
-            // Test if blocks are noticable
-            IBlockObject[] block_types = GetChunkBlocksTask(chunk_id).Result;
-            if (block_types.Length == block_count)
+            BlockData[] blocks = GetChunkBlocksTask(chunk_id).Result;
+            if (blocks.Length == block_count)
             {
                 Vector3Int chunk_position = new Vector3Int((int)(blockID.X - ((long)(chunk_id.X) * chunk_size.x)), (int)(blockID.Y - ((long)(chunk_id.Y) * chunk_size.y)), (int)(blockID.Z - ((long)(chunk_id.Z) * chunk_size.z)));
                 int index = chunk_position.x + (chunk_position.y * chunk_size.x) + (chunk_position.z * chunk_size.x * chunk_size.y);
-                block_types[index] = blockType;
+                blocks[index] = block;
                 RefreshChunkController(chunk_id);
                 if ((chunk_position.y + 1) >= chunk_size.y)
                 {
@@ -472,7 +492,7 @@ namespace Akasha.Managers
         /// </summary>
         public void ResetChunks()
         {
-            foreach (Task<IBlockObject[]> chunk_block_types_task in chunkBlocksTasksLookup.Values)
+            foreach (Task<BlockData[]> chunk_block_types_task in chunkBlocksTasksLookup.Values)
             {
                 try
                 {

@@ -38,6 +38,11 @@ namespace Akasha
         float JumpHeight { get; set; }
 
         /// <summary>
+        /// Default hit cooldown time
+        /// </summary>
+        float DefaultHitCooldownTime { get; set; }
+
+        /// <summary>
         /// Inventory
         /// </summary>
         InventoryData Inventory { get; set; }
@@ -90,7 +95,7 @@ namespace Akasha
         /// <summary>
         /// Destroy block
         /// </summary>
-        void DestroyBlock();
+        void HitBlock();
 
         /// <summary>
         /// Interact

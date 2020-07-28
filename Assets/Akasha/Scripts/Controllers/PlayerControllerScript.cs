@@ -133,7 +133,7 @@ namespace Akasha.Controllers
                 if (CharacterController != null)
                 {
                     //CharacterController.Shoot();
-                    CharacterController.DestroyBlock();
+                    CharacterController.HitBlock();
                 }
             };
             GameInputActions.GameActionMap.Aim.performed += (context) =>

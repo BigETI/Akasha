@@ -37,6 +37,13 @@ namespace Akasha.Objects
         private uint weight = default;
 
         /// <summary>
+        /// Maximal hit cooldown time
+        /// </summary>
+        [SerializeField]
+        [Range(0.0f, 100.0f)]
+        private float maximalHitCooldownTime = 0.5f;
+
+        /// <summary>
         /// Item name
         /// </summary>
         public string ItemName => (itemNameStringTranslation ? itemNameStringTranslation.ToString() : string.Empty);
@@ -55,5 +62,10 @@ namespace Akasha.Objects
         /// Weight
         /// </summary>
         public uint Weight => weight;
+
+        /// <summary>
+        /// Maximal hit cooldown time
+        /// </summary>
+        public float MaximalHitCooldownTime => Mathf.Max(maximalHitCooldownTime, 0.0f);
     }
 }

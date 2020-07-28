@@ -1,5 +1,6 @@
 ﻿using Akasha.Data;
 using Akasha.Managers;
+using Akasha.Objects;
 using System;
 using System.Collections.Generic;
 using UnityEngine;
@@ -47,6 +48,13 @@ namespace Akasha.Controllers
         [SerializeField]
         [Range(0.0f, 100.0f)]
         private float jumpHeight = 1.5f;
+
+        /// <summary>
+        /// Default hit cooldown time
+        /// </summary>
+        [SerializeField]
+        [Range(0.0f, 100.0f)]
+        private float defaultHitCooldownTime = 0.5f;
 
         /// <summary>
         /// Inventory
@@ -131,6 +139,15 @@ namespace Akasha.Controllers
         }
 
         /// <summary>
+        /// Default hit cooldown time
+        /// </summary>
+        public float DefaultHitCooldownTime
+        {
+            get => Mathf.Max(defaultHitCooldownTime, 0.0f);
+            set => defaultHitCooldownTime = Mathf.Max(value, 0.0f);
+        }
+
+        /// <summary>
         /// Inventory
         /// </summary>
         public InventoryData Inventory
@@ -211,20 +228,26 @@ namespace Akasha.Controllers
                 if (selectedInventoryItemSlotIndex >= item_count)
                 {
                     selectedInventoryItemSlotIndex = item_count - 1;
+                    ElapsedHitCooldownTime = 0.0f;
                 }
                 return selectedInventoryItemSlotIndex;
             }
             set
             {
                 int item_count = Inventory.Items.Count;
-                selectedInventoryItemSlotIndex = value;
-                if (selectedInventoryItemSlotIndex >= item_count)
+                int selected_inventory_item_slot_index = value;
+                if (selected_inventory_item_slot_index >= item_count)
                 {
-                    selectedInventoryItemSlotIndex = item_count - 1;
+                    selected_inventory_item_slot_index = item_count - 1;
                 }
-                else if (selectedInventoryItemSlotIndex < -1)
+                else if (selected_inventory_item_slot_index < -1)
                 {
-                    selectedInventoryItemSlotIndex = -1;
+                    selected_inventory_item_slot_index = -1;
+                }
+                if (selectedInventoryItemSlotIndex != selected_inventory_item_slot_index)
+                {
+                    selectedInventoryItemSlotIndex = selected_inventory_item_slot_index;
+                    ElapsedHitCooldownTime = 0.0f;
                 }
             }
         }
@@ -247,6 +270,23 @@ namespace Akasha.Controllers
         }
 
         /// <summary>
+        /// Maximal hit cooldown time
+        /// </summary>
+        public float MaximalHitCooldownTime
+        {
+            get
+            {
+                IInventoryItemData selected_item = SelectedInventoryItem;
+                return ((selected_item == null) ? DefaultHitCooldownTime : selected_item.Item.MaximalHitCooldownTime);
+            }
+        }
+
+        /// <summary>
+        /// Elapsed hit cooldown time
+        /// </summary>
+        public float ElapsedHitCooldownTime { get; private set; }
+
+        /// <summary>
         /// Place block
         /// </summary>
         public void PlaceBlock()
@@ -254,7 +294,7 @@ namespace Akasha.Controllers
             IInventoryItemData item = SelectedInventoryItem;
             if (item != null)
             {
-                if ((item.Item is IBlockObject block) && (item.Quantity > 0U) && SetSelectedBlock(block, 1.0f))
+                if ((item.Item is BlockObjectScript block) && (item.Quantity > 0U) && SetTargetedBlock(new BlockData(block, block.InitialHealth), 1.0f))
                 {
                     Inventory.RemoveItems(item.Item, 1U);
                 }
@@ -262,18 +302,43 @@ namespace Akasha.Controllers
         }
 
         /// <summary>
-        /// Destroy block
+        /// Hit block
         /// </summary>
-        public void DestroyBlock() => SetSelectedBlock(null, 0.0f);
+        public void HitBlock()
+        {
+            if (ElapsedHitCooldownTime >= MaximalHitCooldownTime)
+            {
+                WorldManagerScript world_manager = WorldManagerScript.Instance;
+                if (world_manager)
+                {
+                    IInventoryItemData item = SelectedInventoryItem;
+                    ITargetedBlock targeted_block = GetTargetedBlock(0.0f);
+                    if ((targeted_block != null) && targeted_block.IsABlock)
+                    {
+                        IFarmingToolData farming_tool = targeted_block.Block.Block.GetFarmingToolDataFromFarmingToolItem((item == null) ? null : item.Item);
+                        if (farming_tool != null)
+                        {
+                            FarmableItemData farmable_item = farming_tool.RandomFarmableItem;
+                            world_manager.SetBlock(targeted_block.ID, ((targeted_block.Block.Health < farming_tool.Damage) ? default : (new BlockData(targeted_block.Block.Block, (ushort)(targeted_block.Block.Health - farming_tool.Damage)))));
+                            if (farmable_item.FarmableItem && (farmable_item.Quantity > 0U))
+                            {
+                                Inventory.AddItems(farmable_item.FarmableItem, farmable_item.Quantity);
+                            }
+                            ElapsedHitCooldownTime = 0.0f;
+                        }
+                    }
+                }
+            }
+        }
 
         /// <summary>
-        /// Set selected block type
+        /// Get targeted block
         /// </summary>
-        /// <param name="distanceCollisionNormal">Collision normal distance</param>
-        /// <returns>"true" if successful, otherwise "false"</returns>
-        private bool SetSelectedBlock(IBlockObject block, float collisionNormalDistance)
+        /// <param name="collisionNormalDistance">Collision normal distance</param>
+        /// <returns>Targeted block</returns>
+        private ITargetedBlock GetTargetedBlock(float collisionNormalDistance)
         {
-            bool ret = false;
+            ITargetedBlock ret = null;
             WorldManagerScript world_manager = WorldManagerScript.Instance;
             if (world_manager != null)
             {
@@ -300,9 +365,30 @@ namespace Akasha.Controllers
                     }
                     if (block_id != null)
                     {
-                        world_manager.SetBlockType(block_id.Value, block);
-                        ret = true;
+                        ret = new TargetedBlock(world_manager.GetBlock(block_id.Value), block_id.Value);
                     }
+                }
+            }
+            return ret;
+        }
+
+        /// <summary>
+        /// Set targeted block
+        /// </summary>
+        /// <param name="block">Block</param>
+        /// <param name="distanceCollisionNormal">Collision normal distance</param>
+        /// <returns>"true" if successful, otherwise "false"</returns>
+        private bool SetTargetedBlock(BlockData block, float collisionNormalDistance)
+        {
+            bool ret = false;
+            WorldManagerScript world_manager = WorldManagerScript.Instance;
+            if (world_manager)
+            {
+                ITargetedBlock targeted_block = GetTargetedBlock(collisionNormalDistance);
+                if (targeted_block != null)
+                {
+                    world_manager.SetBlock(targeted_block.ID, block);
+                    ret = true;
                 }
             }
             return ret;
@@ -537,7 +623,7 @@ namespace Akasha.Controllers
             {
                 VerticalVelocityMagnitude = 0.0f;
             }
-
+            ElapsedHitCooldownTime = Mathf.Min(ElapsedHitCooldownTime + delta_time, MaximalHitCooldownTime);
 
             //if (CharacterController)
             //{

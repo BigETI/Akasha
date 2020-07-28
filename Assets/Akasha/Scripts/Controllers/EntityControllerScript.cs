@@ -1,4 +1,5 @@
-﻿using Akasha.Managers;
+﻿using Akasha.Data;
+using Akasha.Managers;
 using System.Threading.Tasks;
 using UnityEngine;
 
@@ -35,12 +36,12 @@ namespace Akasha.Controllers
         /// <summary>
         /// Chunk blocks tasks
         /// </summary>
-        private Task<IBlockObject[]>[] chunkBlocksTasks;
+        private Task<BlockData[]>[] chunkBlocksTasks;
 
         /// <summary>
         /// Chunk blocks
         /// </summary>
-        private IBlockObject[][] chunkBlocks = null;
+        private BlockData[][] chunkBlocks = null;
 
         /// <summary>
         /// Initialize chunk blocks tasks
@@ -120,11 +121,11 @@ namespace Akasha.Controllers
             int bounds_chunk_blocks_count = boundsChunkBlocksSize.x * boundsChunkBlocksSize.y * boundsChunkBlocksSize.z;
             if ((chunkBlocks == null) || (chunkBlocks.Length != bounds_chunk_blocks_count))
             {
-                chunkBlocks = new IBlockObject[bounds_chunk_blocks_count][];
+                chunkBlocks = new BlockData[bounds_chunk_blocks_count][];
             }
             if ((chunkBlocksTasks == null) || (chunkBlocksTasks.Length != chunkBlocks.Length))
             {
-                chunkBlocksTasks = new Task<IBlockObject[]>[chunkBlocks.Length];
+                chunkBlocksTasks = new Task<BlockData[]>[chunkBlocks.Length];
             }
             Parallel.For(0, chunkBlocksTasks.Length, (index) => chunkBlocksTasks[index] = worldManager.GetChunkBlocksTask(new ChunkID(boundsChunkID.X + (index % boundsChunkBlocksSize.x) - ((boundsChunkBlocksSize.x - 1) / 2), boundsChunkID.Y + ((index / 3) % 3) - ((boundsChunkBlocksSize.y - 1) / 2), boundsChunkID.Z + (index / 9) - ((boundsChunkBlocksSize.z - 1) / 2))));
             initializeChunkBlocksTasks = true;
@@ -174,7 +175,7 @@ namespace Akasha.Controllers
                         initializeChunkBlocksTasks = false;
                         for (int index = 0; index < chunkBlocksTasks.Length; index++)
                         {
-                            Task<IBlockObject[]> chunk_blocks_task = chunkBlocksTasks[index];
+                            Task<BlockData[]> chunk_blocks_task = chunkBlocksTasks[index];
                             if (chunk_blocks_task.IsCompleted)
                             {
                                 chunkBlocks[index] = chunk_blocks_task.Result;
@@ -203,7 +204,7 @@ namespace Akasha.Controllers
                             BlockID local_space_block_id = new BlockID(check_space_block_position.x - (check_blocks_size.x / 2) + local_space_bounds_center_block_id.X, check_space_block_position.y - (check_blocks_size.y / 2) + local_space_bounds_center_block_id.Y, check_space_block_position.z - (check_blocks_size.z / 2) + local_space_bounds_center_block_id.Z);
                             ChunkID local_space_chunk_id = world_manager.GetChunkIDFDromBlockID(local_space_block_id);
                             Vector3Int block_chunk_position = new Vector3Int((int)(local_space_block_id.X % chunk_size.x), (int)(local_space_block_id.Y % chunk_size.y), (int)(local_space_block_id.Z % chunk_size.z));
-                            IBlockObject[] chunk_blocks = chunkBlocks[local_space_chunk_id.X + (local_space_chunk_id.Y * bounds_chunk_blocks_size.x) + (local_space_chunk_id.Z * bounds_chunk_blocks_size.x * bounds_chunk_blocks_size.y)];
+                            BlockData[] chunk_blocks = chunkBlocks[local_space_chunk_id.X + (local_space_chunk_id.Y * bounds_chunk_blocks_size.x) + (local_space_chunk_id.Z * bounds_chunk_blocks_size.x * bounds_chunk_blocks_size.y)];
                             if (chunk_blocks == null)
                             {
                                 ret = true;
@@ -211,10 +212,10 @@ namespace Akasha.Controllers
                             }
                             else
                             {
-                                IBlockObject block = chunk_blocks[block_chunk_position.x + (block_chunk_position.y * chunk_size.x) + (block_chunk_position.z * chunk_size.x * chunk_size.y)];
-                                if (block != null)
+                                BlockData block = chunk_blocks[block_chunk_position.x + (block_chunk_position.y * chunk_size.x) + (block_chunk_position.z * chunk_size.x * chunk_size.y)];
+                                if (block.IsABlock)
                                 {
-                                    foreach (Bounds collision_bounds in block.CollisionBounds)
+                                    foreach (Bounds collision_bounds in block.Block.CollisionBounds)
                                     {
                                         if (check_space_bounds.Intersects(new Bounds(check_space_block_position + collision_bounds.center, collision_bounds.size)))
                                         {
