@@ -1,0 +1,28 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5da52331d6851534d838c37a32bcb850, type: 3}
+  m_Name: ScytheWeapon
+  m_EditorClassIdentifier: 
+  itemNameStringTranslation: {fileID: 11400000, guid: 5965f0245dbc03f4fb327d7d4766174d,
+    type: 2}
+  iconSpriteTranslation: {fileID: 11400000, guid: b1a403ec615fe8f4cb2fe33e9867df5d,
+    type: 2}
+  descriptionStringTranslation: {fileID: 11400000, guid: 74d1df80fd083b94987217f4b6a702f1,
+    type: 2}
+  maximalHealth: 4096
+  maximalStackSize: 1
+  weight: 2
+  maximalHitCooldownTime: 0.5
+  itemAndHandsAsset: {fileID: 0}
+  damage: 25
+  knockbackImpulse: 25
+  distance: 0.5

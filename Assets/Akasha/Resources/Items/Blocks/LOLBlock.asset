@@ -16,10 +16,13 @@ MonoBehaviour:
     type: 2}
   iconSpriteTranslation: {fileID: 11400000, guid: a4870eaa5bb06474d832c5a37904c470,
     type: 2}
-  descriptionSpriteTranslation: {fileID: 11400000, guid: 6b7891f32c2e6724794b3a30d2150d5c,
+  descriptionStringTranslation: {fileID: 11400000, guid: 6b7891f32c2e6724794b3a30d2150d5c,
     type: 2}
+  maximalHealth: 0
+  maximalStackSize: 0
   weight: 1024
   maximalHitCooldownTime: 0.5
+  itemAndHandsAsset: {fileID: 0}
   initialHealth: 1024
   material: {fileID: 2100000, guid: fe8025a15a1a18548a64f20014b08031, type: 2}
   meshVariants: {fileID: 11400000, guid: 0101db93846edd54a8f83f7f63cf92e3, type: 2}

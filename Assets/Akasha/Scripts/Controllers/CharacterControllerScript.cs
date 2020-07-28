@@ -218,6 +218,11 @@ namespace Akasha.Controllers
         public ERunningMode RunningMode { get; set; }
 
         /// <summary>
+        /// Is hitting
+        /// </summary>
+        public bool IsHitting { get; set; }
+
+        /// <summary>
         /// Selected inventory item slot index
         /// </summary>
         public int SelectedInventoryItemSlotIndex
@@ -297,36 +302,6 @@ namespace Akasha.Controllers
                 if ((item.Item is BlockObjectScript block) && (item.Quantity > 0U) && SetTargetedBlock(new BlockData(block, block.InitialHealth), 1.0f))
                 {
                     Inventory.RemoveItems(item.Item, 1U);
-                }
-            }
-        }
-
-        /// <summary>
-        /// Hit block
-        /// </summary>
-        public void HitBlock()
-        {
-            if (ElapsedHitCooldownTime >= MaximalHitCooldownTime)
-            {
-                WorldManagerScript world_manager = WorldManagerScript.Instance;
-                if (world_manager)
-                {
-                    IInventoryItemData item = SelectedInventoryItem;
-                    ITargetedBlock targeted_block = GetTargetedBlock(0.0f);
-                    if ((targeted_block != null) && targeted_block.IsABlock)
-                    {
-                        IFarmingToolData farming_tool = targeted_block.Block.Block.GetFarmingToolDataFromFarmingToolItem((item == null) ? null : item.Item);
-                        if (farming_tool != null)
-                        {
-                            FarmableItemData farmable_item = farming_tool.RandomFarmableItem;
-                            world_manager.SetBlock(targeted_block.ID, ((targeted_block.Block.Health < farming_tool.Damage) ? default : (new BlockData(targeted_block.Block.Block, (ushort)(targeted_block.Block.Health - farming_tool.Damage)))));
-                            if (farmable_item.FarmableItem && (farmable_item.Quantity > 0U))
-                            {
-                                Inventory.AddItems(farmable_item.FarmableItem, farmable_item.Quantity);
-                            }
-                            ElapsedHitCooldownTime = 0.0f;
-                        }
-                    }
                 }
             }
         }
@@ -623,7 +598,63 @@ namespace Akasha.Controllers
             {
                 VerticalVelocityMagnitude = 0.0f;
             }
-            ElapsedHitCooldownTime = Mathf.Min(ElapsedHitCooldownTime + delta_time, MaximalHitCooldownTime);
+            ElapsedHitCooldownTime += delta_time;
+            if (IsHitting && (GameManager.GameState == EGameState.Playing))
+            {
+                WorldManagerScript world_manager = WorldManagerScript.Instance;
+                if (world_manager)
+                {
+                    IInventoryItemData item = SelectedInventoryItem;
+                    if ((item == null) || item.IsUsable)
+                    {
+                        ITargetedBlock targeted_block = GetTargetedBlock(0.0f);
+                        if ((targeted_block != null) && targeted_block.IsABlock)
+                        {
+                            IFarmingToolData farming_tool = targeted_block.Block.Block.GetFarmingToolDataFromFarmingToolItem((item == null) ? null : item.Item);
+                            if (farming_tool != null)
+                            {
+                                while ((((item == null) || item.IsUsable)) && (ElapsedHitCooldownTime >= MaximalHitCooldownTime))
+                                {
+                                    FarmableItemData farmable_item = farming_tool.RandomFarmableItem;
+                                    targeted_block = new TargetedBlock((targeted_block.Block.Health < farming_tool.Damage) ? default : (new BlockData(targeted_block.Block.Block, (ushort)(targeted_block.Block.Health - farming_tool.Damage))), targeted_block.ID);
+                                    world_manager.SetBlock(targeted_block.ID, targeted_block.Block);
+                                    if (farmable_item.FarmableItem && (farmable_item.Quantity > 0U))
+                                    {
+                                        Inventory.AddItems(farmable_item.FarmableItem, farmable_item.FarmableItem.MaximalHealth, farmable_item.Quantity);
+                                    }
+                                    ElapsedHitCooldownTime = 0.0f;
+                                    if ((item != null) && (item.Item != null) && (item.Item.MaximalHealth > 0U) && (item.Health > 0U))
+                                    {
+                                        item = new InventoryItemData(item.Item, item.Health - 1U, item.Quantity);
+                                        Inventory.SetInventoryItemHealth((uint)selectedInventoryItemSlotIndex, item.Health);
+                                    }
+                                    ElapsedHitCooldownTime -= MaximalHitCooldownTime;
+                                }
+                            }
+                            else
+                            {
+                                ElapsedHitCooldownTime = Mathf.Min(ElapsedHitCooldownTime, MaximalHitCooldownTime);
+                            }
+                        }
+                        else
+                        {
+                            ElapsedHitCooldownTime = Mathf.Min(ElapsedHitCooldownTime, MaximalHitCooldownTime);
+                        }
+                    }
+                    else
+                    {
+                        ElapsedHitCooldownTime = Mathf.Min(ElapsedHitCooldownTime, MaximalHitCooldownTime);
+                    }
+                }
+                else
+                {
+                    ElapsedHitCooldownTime = Mathf.Min(ElapsedHitCooldownTime, MaximalHitCooldownTime);
+                }
+            }
+            else
+            {
+                ElapsedHitCooldownTime = Mathf.Min(ElapsedHitCooldownTime, MaximalHitCooldownTime);
+            }
 
             //if (CharacterController)
             //{

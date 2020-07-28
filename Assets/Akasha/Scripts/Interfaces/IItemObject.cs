@@ -26,6 +26,16 @@ namespace Akasha
         Sprite IconSprite { get; }
 
         /// <summary>
+        /// Maximal health
+        /// </summary>
+        uint MaximalHealth { get; }
+
+        /// <summary>
+        /// Maximal stack size
+        /// </summary>
+        uint MaximalStackSize { get; }
+
+        /// <summary>
         /// Weight
         /// </summary>
         uint Weight { get; }
@@ -34,5 +44,15 @@ namespace Akasha
         /// Maximal hit cooldown time
         /// </summary>
         float MaximalHitCooldownTime { get; }
+
+        /// <summary>
+        /// Item and hands asset
+        /// </summary>
+        GameObject ItemAndHandsAsset { get; }
+
+        /// <summary>
+        /// Key
+        /// </summary>
+        string Key { get; }
     }
 }

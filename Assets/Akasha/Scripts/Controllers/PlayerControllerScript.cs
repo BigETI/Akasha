@@ -128,12 +128,11 @@ namespace Akasha.Controllers
                     CharacterController.Reload();
                 }
             };
-            GameInputActions.GameActionMap.Shoot.performed += (context) =>
+            GameInputActions.GameActionMap.Hit.performed += (context) =>
             {
                 if (CharacterController != null)
                 {
-                    //CharacterController.Shoot();
-                    CharacterController.HitBlock();
+                    CharacterController.IsHitting = context.ReadValueAsButton();
                 }
             };
             GameInputActions.GameActionMap.Aim.performed += (context) =>

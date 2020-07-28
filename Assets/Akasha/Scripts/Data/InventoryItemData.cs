@@ -20,6 +20,12 @@ namespace Akasha.Data
         private string name;
 
         /// <summary>
+        /// Health
+        /// </summary>
+        [SerializeField]
+        private uint health;
+
+        /// <summary>
         /// Quantity
         /// </summary>
         [SerializeField]
@@ -49,9 +55,18 @@ namespace Akasha.Data
                 {
                     throw new ArgumentNullException(nameof(value));
                 }
-                name = ((value is IBlockObject) ? "Blocks/" : "Entities/") + value.name;
+                name = value.Key;
                 item = value;
             }
+        }
+
+        /// <summary>
+        /// Health
+        /// </summary>
+        public uint Health
+        {
+            get => health;
+            set => health = value;
         }
 
         /// <summary>
@@ -64,18 +79,25 @@ namespace Akasha.Data
         }
 
         /// <summary>
+        /// Is usable
+        /// </summary>
+        public bool IsUsable => (Item != null) && (((Item.MaximalHealth > 0U) && (health > 0U)) || (Item.MaximalHealth <= 0U));
+
+        /// <summary>
         /// Constructor
         /// </summary>
         /// <param name="item">Item</param>
+        /// <param name="health">Health</param>
         /// <param name="quantity">Quantity</param>
-        public InventoryItemData(IItemObject item, uint quantity)
+        public InventoryItemData(IItemObject item, uint health, uint quantity)
         {
             if (item == null)
             {
                 throw new ArgumentNullException(nameof(item));
             }
-            name = ((item is IBlockObject) ? "Blocks/" : "Entities/") + item.name;
+            name = item.Key;
             this.item = item;
+            this.health = health;
             this.quantity = quantity;
         }
     }

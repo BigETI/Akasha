@@ -16,11 +16,47 @@ MonoBehaviour:
     type: 2}
   iconSpriteTranslation: {fileID: 11400000, guid: 83a3526846b9e99409d6ce5cd8ed0746,
     type: 2}
-  descriptionSpriteTranslation: {fileID: 11400000, guid: 36c046f987d2535478210b1997970e40,
+  descriptionStringTranslation: {fileID: 11400000, guid: 36c046f987d2535478210b1997970e40,
     type: 2}
+  maximalHealth: 0
+  maximalStackSize: 0
   weight: 1024
+  maximalHitCooldownTime: 0.5
+  itemAndHandsAsset: {fileID: 0}
+  initialHealth: 1024
   material: {fileID: 2100000, guid: 42d1e32cd62be724db8456c309fbccd0, type: 2}
   meshVariants: {fileID: 11400000, guid: 0101db93846edd54a8f83f7f63cf92e3, type: 2}
   collisionBounds:
   - m_Center: {x: 0, y: 0, z: 0}
     m_Extent: {x: 0.5, y: 0.5, z: 0.5}
+  farmingTools:
+  - farmingToolItem: {fileID: 11400000, guid: 96285bdb7275eec41a2962e53df26f13, type: 2}
+    damage: 1
+    farmableItems:
+    - farmableItem: {fileID: 11400000, guid: 6875cfd1c0b550143ad0450fcaeb5eaf, type: 2}
+      quantity: 1
+      bias: 1000
+  - farmingToolItem: {fileID: 11400000, guid: 015fddc362807054a96989579d3b9c13, type: 2}
+    damage: 8
+    farmableItems:
+    - farmableItem: {fileID: 11400000, guid: 6875cfd1c0b550143ad0450fcaeb5eaf, type: 2}
+      quantity: 8
+      bias: 1000
+  - farmingToolItem: {fileID: 11400000, guid: 5136918ce3497724ba1dc98d5ea2a833, type: 2}
+    damage: 64
+    farmableItems:
+    - farmableItem: {fileID: 11400000, guid: 6875cfd1c0b550143ad0450fcaeb5eaf, type: 2}
+      quantity: 64
+      bias: 1000
+  - farmingToolItem: {fileID: 11400000, guid: c594b1ac261d8134aaae1e9897e7aae9, type: 2}
+    damage: 64
+    farmableItems:
+    - farmableItem: {fileID: 11400000, guid: 6875cfd1c0b550143ad0450fcaeb5eaf, type: 2}
+      quantity: 64
+      bias: 1000
+  - farmingToolItem: {fileID: 11400000, guid: 9681c07b7b6a1af4eb54550196953b75, type: 2}
+    damage: 512
+    farmableItems:
+    - farmableItem: {fileID: 11400000, guid: 6875cfd1c0b550143ad0450fcaeb5eaf, type: 2}
+      quantity: 512
+      bias: 1000

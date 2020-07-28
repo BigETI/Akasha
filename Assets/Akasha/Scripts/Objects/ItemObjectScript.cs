@@ -25,10 +25,22 @@ namespace Akasha.Objects
         private SpriteTranslationObjectScript iconSpriteTranslation = default;
 
         /// <summary>
-        /// Description sprite translation
+        /// Description string translation
         /// </summary>
         [SerializeField]
-        private StringTranslationObjectScript descriptionSpriteTranslation = default;
+        private StringTranslationObjectScript descriptionStringTranslation = default;
+
+        /// <summary>
+        /// Maximal health
+        /// </summary>
+        [SerializeField]
+        private uint maximalHealth = default;
+
+        /// <summary>
+        /// Maximal stack size
+        /// </summary>
+        [SerializeField]
+        private uint maximalStackSize = default;
 
         /// <summary>
         /// Weight
@@ -44,6 +56,12 @@ namespace Akasha.Objects
         private float maximalHitCooldownTime = 0.5f;
 
         /// <summary>
+        /// Item and hands asset
+        /// </summary>
+        [SerializeField]
+        private GameObject itemAndHandsAsset = default;
+
+        /// <summary>
         /// Item name
         /// </summary>
         public string ItemName => (itemNameStringTranslation ? itemNameStringTranslation.ToString() : string.Empty);
@@ -51,12 +69,22 @@ namespace Akasha.Objects
         /// <summary>
         /// Description
         /// </summary>
-        public string Description => (descriptionSpriteTranslation ? descriptionSpriteTranslation.ToString() : string.Empty);
+        public string Description => (descriptionStringTranslation ? descriptionStringTranslation.ToString() : string.Empty);
 
         /// <summary>
         /// Icon sprite
         /// </summary>
         public Sprite IconSprite => (iconSpriteTranslation ? iconSpriteTranslation.Sprite : null);
+
+        /// <summary>
+        /// Maximal health
+        /// </summary>
+        public uint MaximalHealth => maximalHealth;
+
+        /// <summary>
+        /// Maximal stack size
+        /// </summary>
+        public uint MaximalStackSize => maximalStackSize;
 
         /// <summary>
         /// Weight
@@ -67,5 +95,15 @@ namespace Akasha.Objects
         /// Maximal hit cooldown time
         /// </summary>
         public float MaximalHitCooldownTime => Mathf.Max(maximalHitCooldownTime, 0.0f);
+
+        /// <summary>
+        /// Item and hands asset
+        /// </summary>
+        public GameObject ItemAndHandsAsset => itemAndHandsAsset;
+
+        /// <summary>
+        /// Key
+        /// </summary>
+        public virtual string Key => "Misc/" + name;
     }
 }

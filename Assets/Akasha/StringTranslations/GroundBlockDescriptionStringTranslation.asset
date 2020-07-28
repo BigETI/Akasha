@@ -14,8 +14,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   stringTranslation:
     strings:
-    - stringValue: <b>Ground blocks</b> are found around ruins and can be used to
-        create good walking paths.
+    - stringValue: <b>Ground blocks</b> can be found around ruins and can be used
+        to create good walking paths.
       language: 10
     - stringValue: "<b>Bodenbl\xF6cke</b> kann man an Ruinen finden, und dienen gut
         dazu Laufwege zu bauen."

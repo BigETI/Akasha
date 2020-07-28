@@ -524,90 +524,90 @@ namespace Akasha.Controllers
         /// </summary>
         public void Shoot()
         {
-            if (IsAlive && (weapon != null))
-            {
-                if (ShotsFired >= weapon.AmmoCapacity)
-                {
-                    Reload();
-                }
-                else if (elapsedShootTime >= weapon.ShootTime)
-                {
-                    elapsedShootTime = 0.0f;
-                    ++ShotsFired;
-                    if ((eyesTransform != null) && (weapon.Distance > float.Epsilon))
-                    {
-                        int raycast_hits_count = PhysicsUtils.Raycast(eyesTransform.position, eyesTransform.forward, weapon.Distance, ref raycastHits);
-                        RaycastHit? nearest_valid_raycast_hit = null;
-                        for (int raycast_hits_index = 0; raycast_hits_index < raycast_hits_count; raycast_hits_index++)
-                        {
-                            RaycastHit raycast_hit = raycastHits[raycast_hits_index];
-                            if ((nearest_valid_raycast_hit == null) || (nearest_valid_raycast_hit.Value.distance > raycast_hit.distance))
-                            {
-                                GameObject game_object = raycast_hit.collider.gameObject;
-                                bool success = true;
-                                while (game_object != null)
-                                {
-                                    if (game_object == gameObject)
-                                    {
-                                        success = false;
-                                        break;
-                                    }
-                                    if (game_object.transform.parent == null)
-                                    {
-                                        break;
-                                    }
-                                    game_object = game_object.transform.parent.gameObject;
-                                }
-                                if (success)
-                                {
-                                    nearest_valid_raycast_hit = raycast_hit;
-                                }
-                            }
-                        }
-                        if (nearest_valid_raycast_hit != null)
-                        {
-                            RaycastHit raycast_hit = nearest_valid_raycast_hit.Value;
-                            GameObject game_object = raycast_hit.collider.gameObject;
-                            while (game_object != null)
-                            {
-                                LivingEntityControllerScript descructible_controller = game_object.GetComponent<LivingEntityControllerScript>();
-                                if (descructible_controller != null)
-                                {
-                                    descructible_controller.Health -= Mathf.Lerp(weapon.Damage, 0.0f, Mathf.Sqrt(raycast_hit.distance / weapon.Distance));
-                                    break;
-                                }
-                                if (game_object.transform.parent == null)
-                                {
-                                    break;
-                                }
-                                game_object = game_object.transform.parent.gameObject;
-                            }
-                            game_object = raycast_hit.collider.gameObject;
-                            while (game_object != null)
-                            {
-                                Rigidbody rigidbody = game_object.GetComponent<Rigidbody>();
-                                if (rigidbody != null)
-                                {
-                                    rigidbody.AddForceAtPosition(eyesTransform.forward * weapon.KnockbackImpulse, raycast_hit.point, ForceMode.Impulse);
-                                }
-                                if (game_object.transform.parent == null)
-                                {
-                                    break;
-                                }
-                                game_object = game_object.transform.parent.gameObject;
-                            }
-                            if (weapon.BulletHoleAsset != null)
-                            {
-                                Instantiate(weapon.BulletHoleAsset, raycast_hit.point, Quaternion.FromToRotation(Vector3.forward, raycast_hit.collider.transform.InverseTransformDirection(-raycast_hit.normal)), raycast_hit.collider.transform);
-                            }
-                        }
-                    }
-                    if (ShotsFired >= weapon.AmmoCapacity)
-                    {
-                        Reload();
-                    }
-                }
-            }
+            //if (IsAlive && (weapon != null))
+            //{
+            //    if (ShotsFired >= weapon.AmmoCapacity)
+            //    {
+            //        Reload();
+            //    }
+            //    else if (elapsedShootTime >= weapon.ShootTime)
+            //    {
+            //        elapsedShootTime = 0.0f;
+            //        ++ShotsFired;
+            //        if ((eyesTransform != null) && (weapon.Distance > float.Epsilon))
+            //        {
+            //            int raycast_hits_count = PhysicsUtils.Raycast(eyesTransform.position, eyesTransform.forward, weapon.Distance, ref raycastHits);
+            //            RaycastHit? nearest_valid_raycast_hit = null;
+            //            for (int raycast_hits_index = 0; raycast_hits_index < raycast_hits_count; raycast_hits_index++)
+            //            {
+            //                RaycastHit raycast_hit = raycastHits[raycast_hits_index];
+            //                if ((nearest_valid_raycast_hit == null) || (nearest_valid_raycast_hit.Value.distance > raycast_hit.distance))
+            //                {
+            //                    GameObject game_object = raycast_hit.collider.gameObject;
+            //                    bool success = true;
+            //                    while (game_object != null)
+            //                    {
+            //                        if (game_object == gameObject)
+            //                        {
+            //                            success = false;
+            //                            break;
+            //                        }
+            //                        if (game_object.transform.parent == null)
+            //                        {
+            //                            break;
+            //                        }
+            //                        game_object = game_object.transform.parent.gameObject;
+            //                    }
+            //                    if (success)
+            //                    {
+            //                        nearest_valid_raycast_hit = raycast_hit;
+            //                    }
+            //                }
+            //            }
+            //            if (nearest_valid_raycast_hit != null)
+            //            {
+            //                RaycastHit raycast_hit = nearest_valid_raycast_hit.Value;
+            //                GameObject game_object = raycast_hit.collider.gameObject;
+            //                while (game_object != null)
+            //                {
+            //                    LivingEntityControllerScript descructible_controller = game_object.GetComponent<LivingEntityControllerScript>();
+            //                    if (descructible_controller != null)
+            //                    {
+            //                        descructible_controller.Health -= Mathf.Lerp(weapon.Damage, 0.0f, Mathf.Sqrt(raycast_hit.distance / weapon.Distance));
+            //                        break;
+            //                    }
+            //                    if (game_object.transform.parent == null)
+            //                    {
+            //                        break;
+            //                    }
+            //                    game_object = game_object.transform.parent.gameObject;
+            //                }
+            //                game_object = raycast_hit.collider.gameObject;
+            //                while (game_object != null)
+            //                {
+            //                    Rigidbody rigidbody = game_object.GetComponent<Rigidbody>();
+            //                    if (rigidbody != null)
+            //                    {
+            //                        rigidbody.AddForceAtPosition(eyesTransform.forward * weapon.KnockbackImpulse, raycast_hit.point, ForceMode.Impulse);
+            //                    }
+            //                    if (game_object.transform.parent == null)
+            //                    {
+            //                        break;
+            //                    }
+            //                    game_object = game_object.transform.parent.gameObject;
+            //                }
+            //                if (weapon.BulletHoleAsset != null)
+            //                {
+            //                    Instantiate(weapon.BulletHoleAsset, raycast_hit.point, Quaternion.FromToRotation(Vector3.forward, raycast_hit.collider.transform.InverseTransformDirection(-raycast_hit.normal)), raycast_hit.collider.transform);
+            //                }
+            //            }
+            //        }
+            //        if (ShotsFired >= weapon.AmmoCapacity)
+            //        {
+            //            Reload();
+            //        }
+            //    }
+            //}
         }
 
         /// <summary>
@@ -678,46 +678,46 @@ namespace Akasha.Controllers
         protected override void Update()
         {
             base.Update();
-            float delta_time = Time.deltaTime;
-            elapsedShootTime = ((weapon == null) ? 0.0f : Mathf.Min(elapsedShootTime + delta_time, weapon.ShootTime));
-            if (IsReloading)
-            {
-                elapsedReloadTime += delta_time;
-                if (elapsedReloadTime >= weapon.ReloadTime)
-                {
-                    elapsedReloadTime = 0.0f;
-                    ShotsFired = 0U;
-                    IsReloading = false;
-                }
-            }
-            if (lastWeapon != weapon)
-            {
-                lastWeapon = weapon;
-                if (WeaponAndHandsAnimator != null)
-                {
-                    Destroy(WeaponAndHandsAnimator.gameObject);
-                    WeaponAndHandsAnimator = null;
-                }
-                if (weapon != null)
-                {
-                    if (weapon.WeaponAndHandsAsset != null)
-                    {
-                        GameObject go = Instantiate(weapon.WeaponAndHandsAsset, transform);
-                        if (go != null)
-                        {
-                            Animator weapon_and_hands_animator = go.GetComponent<Animator>();
-                            if (weapon_and_hands_animator == null)
-                            {
-                                Destroy(go);
-                            }
-                            else
-                            {
-                                WeaponAndHandsAnimator = weapon_and_hands_animator;
-                            }
-                        }
-                    }
-                }
-            }
+            //float delta_time = Time.deltaTime;
+            //elapsedShootTime = ((weapon == null) ? 0.0f : Mathf.Min(elapsedShootTime + delta_time, weapon.ShootTime));
+            //if (IsReloading)
+            //{
+            //    elapsedReloadTime += delta_time;
+            //    if (elapsedReloadTime >= weapon.ReloadTime)
+            //    {
+            //        elapsedReloadTime = 0.0f;
+            //        ShotsFired = 0U;
+            //        IsReloading = false;
+            //    }
+            //}
+            //if (lastWeapon != weapon)
+            //{
+            //    lastWeapon = weapon;
+            //    if (WeaponAndHandsAnimator != null)
+            //    {
+            //        Destroy(WeaponAndHandsAnimator.gameObject);
+            //        WeaponAndHandsAnimator = null;
+            //    }
+            //    if (weapon != null)
+            //    {
+            //        if (weapon.WeaponAndHandsAsset != null)
+            //        {
+            //            GameObject go = Instantiate(weapon.WeaponAndHandsAsset, transform);
+            //            if (go != null)
+            //            {
+            //                Animator weapon_and_hands_animator = go.GetComponent<Animator>();
+            //                if (weapon_and_hands_animator == null)
+            //                {
+            //                    Destroy(go);
+            //                }
+            //                else
+            //                {
+            //                    WeaponAndHandsAnimator = weapon_and_hands_animator;
+            //                }
+            //            }
+            //        }
+            //    }
+            //}
         }
 
         /// <summary>

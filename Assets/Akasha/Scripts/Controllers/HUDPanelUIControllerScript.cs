@@ -162,10 +162,10 @@ namespace Akasha.Controllers
                 {
                     lastWeapon = PlayerCharacterController.Weapon;
                     lastShotsFired = PlayerCharacterController.ShotsFired;
-                    uint ammo_capacity = ((lastWeapon == null) ? 0U : lastWeapon.AmmoCapacity);
+                    uint ammo_capacity = ((lastWeapon is IReloadableWeaponObject last_reloadable_weapon) ? last_reloadable_weapon.AmmoCapacity : 0U);
                     if (weaponNameText != null)
                     {
-                        weaponNameText.text = ((lastWeapon == null) ? "-" : lastWeapon.WeaponName);
+                        weaponNameText.text = (lastWeapon ? lastWeapon.ItemName : "-");
                     }
                     if (weaponAmmoText != null)
                     {
@@ -173,7 +173,7 @@ namespace Akasha.Controllers
                     }
                     if (weaponImage != null)
                     {
-                        weaponImage.sprite = ((lastWeapon == null) ? noWeaponSprite : lastWeapon.WeaponIconSprite);
+                        weaponImage.sprite = (lastWeapon ? lastWeapon.IconSprite : noWeaponSprite);
                     }
                 }
             }

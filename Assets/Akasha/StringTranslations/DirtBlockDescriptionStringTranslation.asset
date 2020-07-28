@@ -14,10 +14,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   stringTranslation:
     strings:
-    - stringValue: <b>Dirt blocks</b> can be used to build farming grounds or dirt
+    - stringValue: A <b>Dirt block</b> can be used to build farming grounds or dirt
         huts.
       language: 10
-    - stringValue: "<b>Erdbl\xF6cke</b> k\xF6nnen genutzt werden um Felder oder Erdh\xFCtten
+    - stringValue: "Ein <b>Erdblock</b> kann genutzt werden um Felder oder Erdh\xFCtten
         zu bauen."
       language: 15
   comment: 

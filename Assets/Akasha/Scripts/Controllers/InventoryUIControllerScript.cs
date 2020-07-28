@@ -186,7 +186,7 @@ namespace Akasha.Controllers
             {
                 (InventoryItemSlotUIControllerScript, IInventoryItemData) item_slot = itemSlots[index];
                 IInventoryItemData inventory_item = inventory_items[index];
-                if ((item_slot.Item2.Item != inventory_item.Item) || (item_slot.Item2.Quantity != inventory_item.Quantity))
+                if ((item_slot.Item2.Item != inventory_item.Item) || (item_slot.Item2.Health != inventory_item.Health) || (item_slot.Item2.Quantity != inventory_item.Quantity))
                 {
                     if (item_slot.Item1)
                     {

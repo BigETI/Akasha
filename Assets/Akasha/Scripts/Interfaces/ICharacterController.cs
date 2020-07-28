@@ -78,6 +78,11 @@ namespace Akasha
         ERunningMode RunningMode { get; set; }
 
         /// <summary>
+        /// Is hitting
+        /// </summary>
+        bool IsHitting { get; set; }
+
+        /// <summary>
         /// Selected inventory item slot index
         /// </summary>
         int SelectedInventoryItemSlotIndex { get; set; }
@@ -91,11 +96,6 @@ namespace Akasha
         /// Place block
         /// </summary>
         void PlaceBlock();
-
-        /// <summary>
-        /// Destroy block
-        /// </summary>
-        void HitBlock();
 
         /// <summary>
         /// Interact

@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 2622149934251471525}
   - component: {fileID: 5335261512622508046}
   m_Layer: 0
-  m_Name: LeftRightBehindSimpleBlock
+  m_Name: LeftRightBehindSimpleFullBlockObject
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -93,7 +93,7 @@ MeshRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 3152918760858345518}
   m_Enabled: 1
-  m_CastShadows: 1
+  m_CastShadows: 2
   m_ReceiveShadows: 1
   m_DynamicOccludee: 1
   m_MotionVectors: 1

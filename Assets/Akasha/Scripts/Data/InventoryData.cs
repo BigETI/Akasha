@@ -58,8 +58,9 @@ namespace Akasha.Data
         /// Add items
         /// </summary>
         /// <param name="item">Item</param>
+        /// <param name="health">Health</param>
         /// <param name="quantity">Quantity</param>
-        public void AddItems(IItemObject item, uint quantity)
+        public void AddItems(IItemObject item, uint health, uint quantity)
         {
             if (item == null)
             {
@@ -67,7 +68,7 @@ namespace Akasha.Data
             }
             if (quantity > 0U)
             {
-                bool add_item = true;
+                uint remaining = quantity;
                 if (items == null)
                 {
                     items = new List<InventoryItemData>();
@@ -75,16 +76,54 @@ namespace Akasha.Data
                 for (int index = 0; index < items.Count; index++)
                 {
                     InventoryItemData item_data = items[index];
-                    if (item_data.Item == item)
+                    if ((item_data.Item == item) && (item_data.Health == health))
                     {
-                        items[index] = new InventoryItemData(item, item_data.Quantity + quantity);
-                        add_item = false;
-                        break;
+                        if (item.MaximalStackSize > 0U)
+                        {
+                            long capacity = (long)(item.MaximalStackSize) - item_data.Quantity;
+                            if (capacity > 0L)
+                            {
+                                if (capacity < remaining)
+                                {
+                                    items[index] = new InventoryItemData(item, health, item.MaximalStackSize);
+                                    remaining -= (uint)capacity;
+                                }
+                                else
+                                {
+                                    items[index] = new InventoryItemData(item, health, item_data.Quantity + remaining);
+                                    remaining = 0U;
+                                    break;
+                                }
+                            }
+                        }
+                        else
+                        {
+                            items[index] = new InventoryItemData(item, health, item_data.Quantity + remaining);
+                            remaining = 0U;
+                            break;
+                        }
                     }
                 }
-                if (add_item)
+                while (remaining > 0U)
                 {
-                    items.Add(new InventoryItemData(item, quantity));
+                    if (item.MaximalStackSize > 0U)
+                    {
+                        if (remaining > item.MaximalStackSize)
+                        {
+                            items.Add(new InventoryItemData(item, health, item.MaximalStackSize));
+                            remaining -= item.MaximalStackSize;
+                        }
+                        else
+                        {
+                            items.Add(new InventoryItemData(item, health, remaining));
+                            remaining = 0U;
+                        }
+                    }
+                    else
+                    {
+                        items.Add(new InventoryItemData(item, health, remaining));
+                        remaining = 0U;
+                    }
                 }
             }
         }
@@ -93,10 +132,11 @@ namespace Akasha.Data
         /// Add items with weight limit
         /// </summary>
         /// <param name="item">Item</param>
+        /// <param name="health">Health</param>
         /// <param name="quantity">Quantity</param>
         /// <param name="weightLimit">Weight limit</param>
         /// <returns>Number of items added</returns>
-        public uint AddItemsWithWeightLimit(IItemObject item, uint quantity, uint weightLimit)
+        public uint AddItemsWithWeightLimit(IItemObject item, uint health, uint quantity, uint weightLimit)
         {
             if (item == null)
             {
@@ -107,24 +147,62 @@ namespace Akasha.Data
             if (weight < weightLimit)
             {
                 uint remaining_capacity = weightLimit - weight;
-                bool add_item = true;
                 ret = remaining_capacity / item.Weight;
                 ret = ((ret < quantity) ? ret : quantity);
                 if (ret > 0U)
                 {
+                    uint remaining = ret;
                     for (int index = 0; index < items.Count; index++)
                     {
                         InventoryItemData item_data = items[index];
-                        if (item_data.Item == item)
+                        if ((item_data.Item == item) && (item_data.Health == health))
                         {
-                            items[index] = new InventoryItemData(item, item_data.Quantity + ret);
-                            add_item = false;
-                            break;
+                            if (item.MaximalStackSize > 0U)
+                            {
+                                long capacity = (long)(item.MaximalStackSize) - item_data.Quantity;
+                                if (capacity > 0L)
+                                {
+                                    if (capacity < remaining)
+                                    {
+                                        items[index] = new InventoryItemData(item, health, item.MaximalStackSize);
+                                        remaining -= (uint)capacity;
+                                    }
+                                    else
+                                    {
+                                        items[index] = new InventoryItemData(item, health, item_data.Quantity + remaining);
+                                        remaining = 0U;
+                                        break;
+                                    }
+                                }
+                            }
+                            else
+                            {
+                                items[index] = new InventoryItemData(item, health, item_data.Quantity + remaining);
+                                remaining = 0U;
+                                break;
+                            }
                         }
                     }
-                    if (add_item)
+                    while (remaining > 0U)
                     {
-                        items.Add(new InventoryItemData(item, ret));
+                        if (item.MaximalStackSize > 0U)
+                        {
+                            if (remaining > item.MaximalStackSize)
+                            {
+                                items.Add(new InventoryItemData(item, health, item.MaximalStackSize));
+                                remaining -= item.MaximalStackSize;
+                            }
+                            else
+                            {
+                                items.Add(new InventoryItemData(item, health, remaining));
+                                remaining = 0U;
+                            }
+                        }
+                        else
+                        {
+                            items.Add(new InventoryItemData(item, health, remaining));
+                            remaining = 0U;
+                        }
                     }
                 }
             }
@@ -152,7 +230,7 @@ namespace Akasha.Data
                 {
                     if (item_data.Quantity > remaining)
                     {
-                        items[index] = new InventoryItemData(item, item_data.Quantity - remaining);
+                        items[index] = new InventoryItemData(item, item_data.Health, item_data.Quantity - remaining);
                         ret += remaining;
                         break;
                     }
@@ -193,7 +271,7 @@ namespace Akasha.Data
                 {
                     if ((item.Item != null) && (item.Quantity > 0U))
                     {
-                        string key = ((item.Item is IBlockObject) ? "Blocks/" : "Entities/") + item.Item.name;
+                        string key = item.Item.Key;
                         if (capacity.ContainsKey(key))
                         {
                             capacity[key] = capacity[key] + item.Quantity;
@@ -208,7 +286,7 @@ namespace Akasha.Data
                 {
                     if (crafting_recipe.Item && (crafting_recipe.Quantity > 0U))
                     {
-                        string key = ((crafting_recipe.Item is IBlockObject) ? "Blocks/" : "Entities/") + crafting_recipe.Item.name;
+                        string key = crafting_recipe.Item.Key;
                         if (dependencies.ContainsKey(key))
                         {
                             dependencies[key] = (crafting_recipe.Item, dependencies[key].Item2 + crafting_recipe.Quantity);
@@ -244,12 +322,30 @@ namespace Akasha.Data
                     {
                         if (crafting_result.Item && (crafting_result.Quantity > 0U))
                         {
-                            AddItems(crafting_result.Item, crafting_result.Quantity * ret);
+                            AddItems(crafting_result.Item, crafting_result.Item.MaximalHealth, crafting_result.Quantity * ret);
                         }
                     }
                 }
                 capacity.Clear();
                 dependencies.Clear();
+            }
+            return ret;
+        }
+
+        /// <summary>
+        /// Set inventory item health
+        /// </summary>
+        /// <param name="inventoryItemSlotIndex">Inventory item slot index</param>
+        /// <param name="health">Health</param>
+        /// <returns>"true" if successful, otherwise "false"</returns>
+        public bool SetInventoryItemHealth(uint inventoryItemSlotIndex, uint health)
+        {
+            bool ret = false;
+            if ((items != null) && (inventoryItemSlotIndex < items.Count))
+            {
+                InventoryItemData inventory_item = items[(int)inventoryItemSlotIndex];
+                items[(int)inventoryItemSlotIndex] = new InventoryItemData(inventory_item.Item, health, inventory_item.Quantity);
+                ret = true;
             }
             return ret;
         }

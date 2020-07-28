@@ -14,9 +14,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   stringTranslation:
     strings:
-    - stringValue: <b>Grass blocks</b> are special types of dirt blocks containing
-        gras.
+    - stringValue: A <b>Grass block</b> is a special type of dirt block containing
+        grass.
       language: 10
-    - stringValue: "<b>Gra\xDFbl\xF6cke</b> sind spezielle Erdbl\xF6cke mit Gras."
+    - stringValue: "Ein <b>Gra\xDFblock</b> ist eine spezielles Erdblock mit Gra\xDF."
       language: 15
   comment: 

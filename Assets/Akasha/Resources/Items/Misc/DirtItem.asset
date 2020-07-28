@@ -10,12 +10,16 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 411e201c66b83ef4ca2ebd1336afa0c5, type: 3}
-  m_Name: StoneToolItem
+  m_Name: DirtItem
   m_EditorClassIdentifier: 
-  itemNameStringTranslation: {fileID: 11400000, guid: 1ce8cbcc24a74b244ab13f3ac6137b39,
+  itemNameStringTranslation: {fileID: 11400000, guid: 4e881ebf8f1390e4daaba5d28196c05b,
     type: 2}
-  iconSpriteTranslation: {fileID: 11400000, guid: 289f5c5c7b691344da232b908b0e9f94,
+  iconSpriteTranslation: {fileID: 11400000, guid: dea202e3a9be7204ca5f69ad2651d1ab,
     type: 2}
-  descriptionSpriteTranslation: {fileID: 11400000, guid: ae4bd9699a33c56408f09c98ee0366fa,
+  descriptionStringTranslation: {fileID: 11400000, guid: bb654177c0a38b14084b7fe284d12140,
     type: 2}
+  maximalHealth: 0
+  maximalStackSize: 0
   weight: 1
+  maximalHitCooldownTime: 0.5
+  itemAndHandsAsset: {fileID: 0}

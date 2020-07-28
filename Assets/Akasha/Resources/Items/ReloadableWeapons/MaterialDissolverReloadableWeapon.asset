@@ -1,0 +1,33 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 63756da6404bad4498bf799f482e5edf, type: 3}
+  m_Name: MaterialDissolverReloadableWeapon
+  m_EditorClassIdentifier: 
+  itemNameStringTranslation: {fileID: 11400000, guid: b2e6366cb25aadf43b8e65aa88ab72e8,
+    type: 2}
+  iconSpriteTranslation: {fileID: 11400000, guid: 2ca91e4c71cd20c4eafbdd12e34925ff,
+    type: 2}
+  descriptionStringTranslation: {fileID: 11400000, guid: ba97b8cf524106240af74c3e3563aae9,
+    type: 2}
+  maximalHealth: 65536
+  maximalStackSize: 1
+  weight: 32
+  maximalHitCooldownTime: 0.0078125
+  itemAndHandsAsset: {fileID: 0}
+  damage: 25
+  knockbackImpulse: 25
+  distance: 0.5
+  ammo: {fileID: 11400000, guid: d4eaf9ebcf463294d89940d0c28ef381, type: 2}
+  ammoCapacity: 1024
+  reloadTime: 1
+  bulletHoleAsset: {fileID: 0}
+  projectileAsset: {fileID: 0}

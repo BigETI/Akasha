@@ -14,10 +14,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   stringTranslation:
     strings:
-    - stringValue: Stone tools can be used to cut wood, bang stones, hit or throw
-        at enemies.
+    - stringValue: A Stone tool can be used to cut wood, bang stones, hit or throw
+        at enemies. Also can be used to craft better and spezialized stone tools.
       language: 10
-    - stringValue: "Steinwerkzeuge k\xF6nnen genutzt werden um Holz zu schneiden,
-        Steine zu hauen, Gegner hauen oder zu bewerfen."
+    - stringValue: Ein Steinwerkzeug kann genutzt werden um Holz zu schneiden, Steine
+        zu hauen, Gegner hauen oder zu bewerfen. Kann auch genutzt werden um bessere
+        und spezialisierte Steinwerkzeuge zu bauen.
       language: 15
   comment: 

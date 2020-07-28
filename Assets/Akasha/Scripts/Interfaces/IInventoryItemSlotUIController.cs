@@ -1,4 +1,5 @@
 ﻿using TMPro;
+using UnityEngine;
 using UnityEngine.UI;
 using UnityTranslator.Objects;
 
@@ -33,6 +34,16 @@ namespace Akasha
         string DescriptionTextFormat { get; set; }
 
         /// <summary>
+        /// Empty health color
+        /// </summary>
+        Color EmptyHealthColor { get; set; }
+
+        /// <summary>
+        /// Full health color
+        /// </summary>
+        Color FullHealthColor { get; set; }
+
+        /// <summary>
         /// Item name text
         /// </summary>
         TextMeshProUGUI ItemNameText { get; set; }
@@ -41,6 +52,11 @@ namespace Akasha
         /// Icon image
         /// </summary>
         Image IconImage { get; set; }
+
+        /// <summary>
+        /// Health indicator image
+        /// </summary>
+        Image HealthIndicatorImage { get; set; }
 
         /// <summary>
         /// Icon image

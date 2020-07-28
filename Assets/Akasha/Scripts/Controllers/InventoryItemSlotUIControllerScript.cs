@@ -51,6 +51,18 @@ namespace Akasha.Controllers
         private string descriptionTextFormat = defaultDescriptionTextFormat;
 
         /// <summary>
+        /// Empty health color
+        /// </summary>
+        [SerializeField]
+        private Color emptyHealthColor = new Color(0.5f, 0.0f, 0.0f);
+
+        /// <summary>
+        /// Full health color
+        /// </summary>
+        [SerializeField]
+        private Color fullHealthColor = new Color(0.0f, 0.5f, 0.0f);
+
+        /// <summary>
         /// Item name text
         /// </summary>
         [SerializeField]
@@ -61,6 +73,12 @@ namespace Akasha.Controllers
         /// </summary>
         [SerializeField]
         private Image iconImage = default;
+
+        /// <summary>
+        /// Health indicator image
+        /// </summary>
+        [SerializeField]
+        private Image healthIndicatorImage = default;
 
         /// <summary>
         /// Icon image
@@ -131,6 +149,24 @@ namespace Akasha.Controllers
         }
 
         /// <summary>
+        /// Empty health color
+        /// </summary>
+        public Color EmptyHealthColor
+        {
+            get => emptyHealthColor;
+            set => emptyHealthColor = value;
+        }
+
+        /// <summary>
+        /// Full health color
+        /// </summary>
+        public Color FullHealthColor
+        {
+            get => fullHealthColor;
+            set => fullHealthColor = value;
+        }
+
+        /// <summary>
         /// Item name text
         /// </summary>
         public TextMeshProUGUI ItemNameText
@@ -146,6 +182,15 @@ namespace Akasha.Controllers
         {
             get => iconImage;
             set => iconImage = value;
+        }
+
+        /// <summary>
+        /// Health indicator image
+        /// </summary>
+        public Image HealthIndicatorImage
+        {
+            get => healthIndicatorImage;
+            set => healthIndicatorImage = value;
         }
 
         /// <summary>
@@ -206,6 +251,13 @@ namespace Akasha.Controllers
             if (iconImage)
             {
                 iconImage.sprite = inventoryItemData?.Item.IconSprite;
+            }
+            if (healthIndicatorImage)
+            {
+                float fill_amount = (((inventoryItemData != null) && (inventoryItemData.Item != null) && (inventoryItemData.Item.MaximalHealth > 0U)) ? ((float)(inventoryItemData.Health) / inventoryItemData.Item.MaximalHealth) : 0.0f);
+                Vector3 new_color_vector = Vector3.Slerp(new Vector3(emptyHealthColor.r, emptyHealthColor.g, emptyHealthColor.b), new Vector3(fullHealthColor.r, fullHealthColor.g, fullHealthColor.b), fill_amount);
+                healthIndicatorImage.color = new Color(new_color_vector.x, new_color_vector.y, new_color_vector.z, Mathf.Lerp(emptyHealthColor.a, fullHealthColor.a, fill_amount));
+                healthIndicatorImage.fillAmount = fill_amount;
             }
             if (quantityText)
             {

@@ -14,8 +14,18 @@ namespace Akasha
         IItemObject Item { get; set; }
 
         /// <summary>
+        /// Health
+        /// </summary>
+        uint Health { get; set; }
+
+        /// <summary>
         /// Quantity
         /// </summary>
         uint Quantity { get; set; }
+
+        /// <summary>
+        /// Is usable
+        /// </summary>
+        bool IsUsable { get; }
     }
 }

@@ -1,5 +1,4 @@
-﻿using Akasha;
-using Akasha.Controllers;
+﻿using Akasha.Controllers;
 using Akasha.Objects;
 using UnityEditor;
 using UnityEngine;
@@ -64,7 +63,7 @@ namespace AkashaEditor
                     itemQuantity = EditorGUILayout.IntSlider(itemQuantity, 1, 1000);
                     if (item && (itemQuantity > 0) && GUILayout.Button("Spawn items"))
                     {
-                        characterController.Inventory.AddItems(item, (uint)itemQuantity);
+                        characterController.Inventory.AddItems(item, item.MaximalHealth, (uint)itemQuantity);
                     }
                     GUILayout.Space(32.0f);
                     craftingRecipes = EditorGUILayout.ObjectField("Crafting Recipe", craftingRecipes, typeof(CraftingRecipesObjectScript), false) as CraftingRecipesObjectScript;

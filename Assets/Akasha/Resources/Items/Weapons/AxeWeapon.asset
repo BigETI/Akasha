@@ -1,0 +1,28 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5da52331d6851534d838c37a32bcb850, type: 3}
+  m_Name: AxeWeapon
+  m_EditorClassIdentifier: 
+  itemNameStringTranslation: {fileID: 11400000, guid: 6d543f38916e4064b8a754da7e029f4f,
+    type: 2}
+  iconSpriteTranslation: {fileID: 11400000, guid: f5df391976e94d94fa33299c10bf7dba,
+    type: 2}
+  descriptionStringTranslation: {fileID: 11400000, guid: 32dfd4777265c7f43b62a0e6fe85719d,
+    type: 2}
+  maximalHealth: 4096
+  maximalStackSize: 1
+  weight: 2
+  maximalHitCooldownTime: 0.5
+  itemAndHandsAsset: {fileID: 0}
+  damage: 25
+  knockbackImpulse: 25
+  distance: 0.5

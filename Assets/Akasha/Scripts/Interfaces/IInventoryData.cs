@@ -25,17 +25,19 @@ namespace Akasha
         /// Add items
         /// </summary>
         /// <param name="item">Item</param>
+        /// <param name="health">Health</param>
         /// <param name="quantity">Quantity</param>
-        void AddItems(IItemObject item, uint quantity);
+        void AddItems(IItemObject item, uint health, uint quantity);
 
         /// <summary>
         /// Add items with weight limit
         /// </summary>
         /// <param name="item">Item</param>
+        /// <param name="health">Health</param>
         /// <param name="quantity">Quantity</param>
         /// <param name="weightLimit">Weight limit</param>
         /// <returns>Number of items added</returns>
-        uint AddItemsWithWeightLimit(IItemObject item, uint quantity, uint weightLimit);
+        uint AddItemsWithWeightLimit(IItemObject item, uint health, uint quantity, uint weightLimit);
 
         /// <summary>
         /// Remove items
@@ -52,5 +54,13 @@ namespace Akasha
         /// <param name="quantity">Quantity</param>
         /// <returns>Number of crafting results</returns>
         uint CraftItems(ICraftingRecipesObject craftingRecipies, uint quantity);
+
+        /// <summary>
+        /// Set inventory item health
+        /// </summary>
+        /// <param name="inventoryItemSlotIndex">Inventory item slot index</param>
+        /// <param name="health">Health</param>
+        /// <returns>"true" if successful, otherwise "false"</returns>
+        bool SetInventoryItemHealth(uint inventoryItemSlotIndex, uint health);
     }
 }

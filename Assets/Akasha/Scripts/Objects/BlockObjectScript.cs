@@ -125,6 +125,11 @@ namespace Akasha.Objects
         }
 
         /// <summary>
+        /// Key
+        /// </summary>
+        public override string Key => "Blocks/" + name;
+
+        /// <summary>
         /// Get farming tool data from farming tool
         /// </summary>
         /// <param name="item">Item</param>

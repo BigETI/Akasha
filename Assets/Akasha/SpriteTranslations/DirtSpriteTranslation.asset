@@ -14,6 +14,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   spriteTranslation:
     sprites:
-    - sprite: {fileID: 21300000, guid: 6b2a982401226e94eb0667fe4a4bdaf2, type: 3}
+    - sprite: {fileID: 0}
       language: 10
   comment: 
