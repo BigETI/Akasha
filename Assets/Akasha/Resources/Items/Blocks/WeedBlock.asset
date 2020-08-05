@@ -1,0 +1,60 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 753a99c5c8d5469419e0a2f1b6c81c69, type: 3}
+  m_Name: WeedBlock
+  m_EditorClassIdentifier: 
+  itemNameStringTranslation: {fileID: 11400000, guid: 949eaf496ab9e6b4a832a16e2b5a6088,
+    type: 2}
+  iconSpriteTranslation: {fileID: 11400000, guid: 530a6b351214691468a1489264b9c51f,
+    type: 2}
+  descriptionStringTranslation: {fileID: 11400000, guid: 9559f15eaa074b447bb1dcd941cbeff7,
+    type: 2}
+  maximalHealth: 0
+  maximalStackSize: 0
+  weight: 1
+  maximalHitCooldownTime: 0.5
+  itemAndHandsAsset: {fileID: 0}
+  initialHealth: 1
+  material: {fileID: 0}
+  meshVariants: {fileID: 11400000, guid: 655b07f28faf61249a851ee85d972ade, type: 2}
+  collisionBounds: []
+  farmingTools:
+  - farmingToolItem: {fileID: 11400000, guid: 96285bdb7275eec41a2962e53df26f13, type: 2}
+    damage: 1
+    farmableItems:
+    - farmableItem: {fileID: 11400000, guid: 61079af06d21d8243a8bfedf209b2751, type: 2}
+      quantity: 1
+      bias: 1000
+  - farmingToolItem: {fileID: 11400000, guid: 8fc5c6c0f7c935649a73481d035ecbac, type: 2}
+    damage: 1
+    farmableItems:
+    - farmableItem: {fileID: 11400000, guid: 61079af06d21d8243a8bfedf209b2751, type: 2}
+      quantity: 1
+      bias: 1000
+  - farmingToolItem: {fileID: 11400000, guid: 2c5400bd6576abf4287219b2e454da26, type: 2}
+    damage: 1
+    farmableItems:
+    - farmableItem: {fileID: 11400000, guid: 61079af06d21d8243a8bfedf209b2751, type: 2}
+      quantity: 1
+      bias: 1000
+  - farmingToolItem: {fileID: 11400000, guid: d7eee8283d3e45f46ba4d42cb270212e, type: 2}
+    damage: 1
+    farmableItems:
+    - farmableItem: {fileID: 11400000, guid: 61079af06d21d8243a8bfedf209b2751, type: 2}
+      quantity: 1
+      bias: 1000
+  - farmingToolItem: {fileID: 11400000, guid: 9681c07b7b6a1af4eb54550196953b75, type: 2}
+    damage: 1
+    farmableItems:
+    - farmableItem: {fileID: 11400000, guid: 61079af06d21d8243a8bfedf209b2751, type: 2}
+      quantity: 1
+      bias: 1000
