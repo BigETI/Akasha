@@ -229,7 +229,7 @@ namespace Akasha.Controllers
         {
             get
             {
-                int item_count = Inventory.Items.Count;
+                int item_count = Mathf.Min((InventoryUIController == null) ? 0 : InventoryUIController.InventoryItemSlotControllers.Length, Inventory.Items.Count);
                 if (selectedInventoryItemSlotIndex >= item_count)
                 {
                     selectedInventoryItemSlotIndex = item_count - 1;
@@ -239,7 +239,7 @@ namespace Akasha.Controllers
             }
             set
             {
-                int item_count = Inventory.Items.Count;
+                int item_count = Mathf.Min((InventoryUIController == null) ? 0 : InventoryUIController.InventoryItemSlotControllers.Length, Inventory.Items.Count);
                 int selected_inventory_item_slot_index = value;
                 if (selected_inventory_item_slot_index >= item_count)
                 {
@@ -290,6 +290,11 @@ namespace Akasha.Controllers
         /// Elapsed hit cooldown time
         /// </summary>
         public float ElapsedHitCooldownTime { get; private set; }
+
+        /// <summary>
+        /// Inventory UI controller
+        /// </summary>
+        public IInventoryUIController InventoryUIController { get; private set; }
 
         /// <summary>
         /// Place block
@@ -574,6 +579,15 @@ namespace Akasha.Controllers
                 ret = true;
             }
             return ret;
+        }
+
+        /// <summary>
+        /// Start
+        /// </summary>
+        protected override void Start()
+        {
+            base.Start();
+            InventoryUIController = FindObjectOfType<InventoryUIControllerScript>(true);
         }
 
         /// <summary>

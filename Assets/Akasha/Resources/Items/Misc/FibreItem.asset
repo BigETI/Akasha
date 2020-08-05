@@ -1,0 +1,25 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 411e201c66b83ef4ca2ebd1336afa0c5, type: 3}
+  m_Name: FibreItem
+  m_EditorClassIdentifier: 
+  itemNameStringTranslation: {fileID: 11400000, guid: 0ce4df8345c17954a97ee0ebb54574aa,
+    type: 2}
+  iconSpriteTranslation: {fileID: 11400000, guid: 465a76659a5116e4698f69f1b44f2497,
+    type: 2}
+  descriptionStringTranslation: {fileID: 11400000, guid: cb1975867a1d9e34ebecd84c077f5bf9,
+    type: 2}
+  maximalHealth: 0
+  maximalStackSize: 0
+  weight: 1
+  maximalHitCooldownTime: 0.5
+  itemAndHandsAsset: {fileID: 0}

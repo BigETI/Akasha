@@ -1,0 +1,22 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8e2850b3cf0305849a87ebc9b1b08c5f, type: 3}
+  m_Name: PickaxeCraftingRecipes
+  m_EditorClassIdentifier: 
+  craftingRecipesNameStringTranslation: {fileID: 11400000, guid: 639993c6efba1954cafa9c0686713ada,
+    type: 2}
+  iconSpriteTranslation: {fileID: 11400000, guid: 7cf40860477d0d2459f642b421637232,
+    type: 2}
+  craftingRecipes: []
+  craftingResults:
+  - item: {fileID: 11400000, guid: 68b33a6038645c948b2678ddf8684ce4, type: 2}
+    quantity: 1

@@ -12,7 +12,7 @@ namespace Akasha.Objects
     /// <summary>
     /// Crafting recipes object script class
     /// </summary>
-    [CreateAssetMenu(fileName = "CraftingRecipe", menuName = "Akasha/Crafting recipes")]
+    [CreateAssetMenu(fileName = "CraftingRecipes", menuName = "Akasha/Crafting recipes")]
     public class CraftingRecipesObjectScript : ScriptableObject, ICraftingRecipesObject
     {
         /// <summary>
