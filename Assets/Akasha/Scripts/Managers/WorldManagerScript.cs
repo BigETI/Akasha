@@ -1,8 +1,6 @@
 ﻿using Akasha.Controllers;
 using Akasha.Data;
 using Akasha.Objects;
-using LibNoise;
-using LibNoise.Generator;
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
@@ -18,22 +16,6 @@ namespace Akasha.Managers
     /// </summary>
     public class WorldManagerScript : AManagerScript<WorldManagerScript>, IWorldManager
     {
-        /// <summary>
-        /// Noise generator operators
-        /// </summary>
-        private static NoiseGeneratorOperatorDelegate[] noiseGeneratorOperators = new NoiseGeneratorOperatorDelegate[]
-        {
-            (left, right) => left + right,
-            (left, right) => left - right,
-            (left, right) => left * right,
-            (left, right) => left / right
-        };
-
-        /// <summary>
-        /// Chunk block types tasks lookup
-        /// </summary>
-        private readonly Dictionary<ChunkID, Task<BlockData[]>> chunkBlocksTasksLookup = new Dictionary<ChunkID, Task<BlockData[]>>();
-
         /// <summary>
         /// Chunk size
         /// </summary>
@@ -67,15 +49,18 @@ namespace Akasha.Managers
         private WorldTransformControllerScript followTransformController;
 
         /// <summary>
-        /// Noise layers
+        /// Biomes
         /// </summary>
         [SerializeField]
-        private NoiseLayerData[] noiseLayers = Array.Empty<NoiseLayerData>();
+        private BiomeData[] biomes = new BiomeData[]
+        {
+            new BiomeData()
+        };
 
         /// <summary>
-        /// Perlin
+        /// Chunk block types tasks lookup
         /// </summary>
-        private Perlin perlin = new Perlin(1.0, 2.0, 0.5, 6, 0, LibNoise.QualityMode.Medium);
+        private readonly Dictionary<ChunkID, Task<BlockData[]>> chunkBlocksTasksLookup = new Dictionary<ChunkID, Task<BlockData[]>>();
 
         /// <summary>
         /// Block lookup
@@ -95,12 +80,7 @@ namespace Akasha.Managers
         /// <summary>
         /// Refresh chunk controllers
         /// </summary>
-        private List<ChunkControllerScript> refreshChunkControllers = new List<ChunkControllerScript>();
-
-        /// <summary>
-        /// Noise layer modules
-        /// </summary>
-        private List<(INoiseLayerData, List<(INoiseGeneratorData, ModuleBase)>)> computedNoiseLayers = new List<(INoiseLayerData, List<(INoiseGeneratorData, ModuleBase)>)>();
+        private readonly List<ChunkControllerScript> refreshChunkControllers = new List<ChunkControllerScript>();
 
         /// <summary>
         /// Last chunk size
@@ -210,26 +190,19 @@ namespace Akasha.Managers
         }
 
         /// <summary>
-        /// Noise layers
+        /// Biomes
         /// </summary>
-        public NoiseLayerData[] NoiseLayers
+        public BiomeData[] Biomes
         {
             get
             {
-                if (noiseLayers == null)
+                if (biomes == null)
                 {
-                    noiseLayers = Array.Empty<NoiseLayerData>();
+                    biomes = Array.Empty<BiomeData>();
                 }
-                return noiseLayers;
+                return biomes;
             }
-            set
-            {
-                if (value == null)
-                {
-                    throw new ArgumentNullException(nameof(value));
-                }
-                noiseLayers = value;
-            }
+            set => biomes = value ?? throw new ArgumentNullException(nameof(value));
         }
 
         /// <summary>
@@ -255,33 +228,21 @@ namespace Akasha.Managers
         /// <returns>Block or "null"</returns>
         public BlockData GetGeneratedBlock(BlockID blockID)
         {
-            BlockData ret = default;
-            foreach ((INoiseLayerData, List<(INoiseGeneratorData, ModuleBase)>) computed_noise_layer in computedNoiseLayers)
+            IBiomeData selected_biome = null;
+            double selected_biome_weight = double.NegativeInfinity;
+            foreach (IBiomeData biome in biomes)
             {
-                if (((computed_noise_layer.Item1.Filter == ENoiseLayerFilter.FillEmpty) && ret.IsABlock) || ((computed_noise_layer.Item1.Filter == ENoiseLayerFilter.ReplaceFull) && ret.IsNothing))
+                if (biome != null)
                 {
-                    break;
-                }
-                double final_result = 0.0;
-                foreach ((INoiseGeneratorData, ModuleBase) noise_generator_module in computed_noise_layer.Item2)
-                {
-                    final_result = noiseGeneratorOperators[(int)(noise_generator_module.Item1.GeneratorOperator)]
-                    (
-                        final_result,
-                        (noise_generator_module.Item2.GetValue
-                        (
-                            ((((noise_generator_module.Item1.AxisFlags & ENoiseGeneratorAxisFlags.X) == ENoiseGeneratorAxisFlags.X) ? blockID.X : 0L) * noise_generator_module.Item1.InputScale.x) + noise_generator_module.Item1.InputOffset.x,
-                            ((((noise_generator_module.Item1.AxisFlags & ENoiseGeneratorAxisFlags.Y) == ENoiseGeneratorAxisFlags.Y) ? blockID.Y : 0L) * noise_generator_module.Item1.InputScale.y) + noise_generator_module.Item1.InputOffset.y,
-                            ((((noise_generator_module.Item1.AxisFlags & ENoiseGeneratorAxisFlags.Z) == ENoiseGeneratorAxisFlags.Z) ? blockID.Z : 0L) * noise_generator_module.Item1.InputScale.z) + noise_generator_module.Item1.InputOffset.z
-                        ) * noise_generator_module.Item1.OutputScale) + (((noise_generator_module.Item1.AxisFlags & ENoiseGeneratorAxisFlags.X) == ENoiseGeneratorAxisFlags.X) ? 0L : blockID.X) + (((noise_generator_module.Item1.AxisFlags & ENoiseGeneratorAxisFlags.Y) == ENoiseGeneratorAxisFlags.Y) ? 0L : blockID.Y) + (((noise_generator_module.Item1.AxisFlags & ENoiseGeneratorAxisFlags.Z) == ENoiseGeneratorAxisFlags.Z) ? 0L : blockID.Z) + noise_generator_module.Item1.OutputOffset
-                    );
-                }
-                if (final_result >= 0.0)
-                {
-                    ret = (computed_noise_layer.Item1.Block ? new BlockData(computed_noise_layer.Item1.Block, computed_noise_layer.Item1.Block.InitialHealth) : default);
+                    double biome_weight = biome.GetBiomeWeight(blockID);
+                    if (selected_biome_weight < biome_weight)
+                    {
+                        selected_biome = biome;
+                        selected_biome_weight = biome_weight;
+                    }
                 }
             }
-            return ret;
+            return ((selected_biome == null) ? default : selected_biome.GetGeneratedBlock(blockID));
         }
 
         /// <summary>
@@ -530,17 +491,9 @@ namespace Akasha.Managers
                     }
                 }
             }
-            foreach (INoiseLayerData noise_layer in NoiseLayers)
+            foreach (IBiomeData biome in Biomes)
             {
-                if (noise_layer != null)
-                {
-                    List<(INoiseGeneratorData, ModuleBase)> noise_generator_modules = new List<(INoiseGeneratorData, ModuleBase)>();
-                    foreach (INoiseGeneratorData noise_generator in noise_layer.NoiseGenerators)
-                    {
-                        noise_generator_modules.Add((noise_generator, noise_generator.NewNoiseModule));
-                    }
-                    computedNoiseLayers.Add((noise_layer, noise_generator_modules));
-                }
+                biome?.Initialize();
             }
         }
 

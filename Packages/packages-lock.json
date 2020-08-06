@@ -35,6 +35,20 @@
       "dependencies": {},
       "hash": "3177cc6038a32b3ab3448d553d48c6e3c90908bc"
     },
+    "com.garettbass.unityextensions.arraydrawer": {
+      "version": "https://github.com/garettbass/UnityExtensions.ArrayDrawer.git",
+      "depth": 0,
+      "source": "git",
+      "dependencies": {},
+      "hash": "612e27d3c536c8173ee5a1a6615a4f43fd084e53"
+    },
+    "com.ricardojmendez.libnoise.unity": {
+      "version": "https://github.com/BigETI/LibNoise.Unity.git",
+      "depth": 0,
+      "source": "git",
+      "dependencies": {},
+      "hash": "c57bb73a4e6e8e45e720a746dd4422550c334d1d"
+    },
     "com.unity.cinemachine": {
       "version": "2.6.0",
       "depth": 0,

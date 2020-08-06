@@ -50,9 +50,9 @@ namespace Akasha
         WorldTransformControllerScript FollowTransformController { get; set; }
 
         /// <summary>
-        /// Noise layers
+        /// Biomes
         /// </summary>
-        NoiseLayerData[] NoiseLayers { get; set; }
+        BiomeData[] Biomes { get; set; }
 
         /// <summary>
         /// Get chunk ID from block ID
