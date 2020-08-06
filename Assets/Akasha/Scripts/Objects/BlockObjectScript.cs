@@ -15,6 +15,12 @@ namespace Akasha.Objects
     public class BlockObjectScript : ItemObjectScript, IBlockObject
     {
         /// <summary>
+        /// Has random orientation
+        /// </summary>
+        [SerializeField]
+        private bool hasRandomOrientation = default;
+
+        /// <summary>
         /// Initial health
         /// </summary>
         [SerializeField]
@@ -51,6 +57,11 @@ namespace Akasha.Objects
         /// Farming tool lookup
         /// </summary>
         private Dictionary<string, IFarmingToolData> farmingToolLookup;
+
+        /// <summary>
+        /// Has random orientation
+        /// </summary>
+        public bool HasRandomOrientation => hasRandomOrientation;
 
         /// <summary>
         /// Initial health

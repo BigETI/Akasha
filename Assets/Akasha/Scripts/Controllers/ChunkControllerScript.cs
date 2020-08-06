@@ -232,14 +232,16 @@ namespace Akasha.Controllers
                     GameObject game_object = null;
                     Material material = null;
                     Vector3Int chunk_position = new Vector3Int(change_block.Key % chunk_size.x, (change_block.Key / chunk_size.x) % chunk_size.y, change_block.Key / (chunk_size.x * chunk_size.y));
+                    bool has_random_orientation = false;
                     if (change_block.Value.Block.IsABlock && (change_block.Value.Block.Block.MeshVariants != null))
                     {
                         asset = change_block.Value.Block.Block.MeshVariants.BlockAssets[(int)(change_block.Value.DirectionFlags)];
                         material = change_block.Value.Block.Block.Material;
+                        has_random_orientation = change_block.Value.Block.Block.HasRandomOrientation;
                     }
                     if (asset != null)
                     {
-                        game_object = Instantiate(asset, (new Vector3((change_block.Key % chunk_size.x) - (chunk_size.x * 0.5f) + 0.5f, ((change_block.Key / chunk_size.x) % chunk_size.y) - (chunk_size.y * 0.5f) + 0.5f, (change_block.Key / (chunk_size.x * chunk_size.y)) - (chunk_size.z * 0.5f) + 0.5f)) + transform.position, Quaternion.identity, transform);
+                        game_object = Instantiate(asset, (new Vector3((change_block.Key % chunk_size.x) - (chunk_size.x * 0.5f) + 0.5f, ((change_block.Key / chunk_size.x) % chunk_size.y) - (chunk_size.y * 0.5f) + 0.5f, (change_block.Key / (chunk_size.x * chunk_size.y)) - (chunk_size.z * 0.5f) + 0.5f)) + transform.position, has_random_orientation ? Quaternion.AngleAxis(Mathf.Repeat(((change_block.Key % chunk_size.x) * 6154.48562f).GetHashCode() + ((change_block.Key / (chunk_size.x * chunk_size.y)) * 895652.854712f).GetHashCode(), 360.0f - float.Epsilon), Vector3.up) : Quaternion.identity, transform);
                         if (game_object != null)
                         {
                             MeshRenderer mesh_renderer = game_object.GetComponentInChildren<MeshRenderer>();

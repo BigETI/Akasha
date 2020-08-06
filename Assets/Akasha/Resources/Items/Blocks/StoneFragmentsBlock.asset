@@ -23,6 +23,7 @@ MonoBehaviour:
   weight: 1
   maximalHitCooldownTime: 0.5
   itemAndHandsAsset: {fileID: 0}
+  hasRandomOrientation: 1
   initialHealth: 1
   material: {fileID: 2100000, guid: 7a61b063d4f64b649bab7f041590a74f, type: 2}
   meshVariants: {fileID: 11400000, guid: e76dcd8271d262a4db72d306a2edbf1a, type: 2}

@@ -13,6 +13,11 @@ namespace Akasha
     public interface IBlockObject : IItemObject
     {
         /// <summary>
+        /// Has random orientation
+        /// </summary>
+        bool HasRandomOrientation { get; }
+
+        /// <summary>
         /// Initial health
         /// </summary>
         ushort InitialHealth { get; }
