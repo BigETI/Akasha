@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 2035111234}
-  m_IndirectSpecularColor: {r: 131.15268, g: 162.57007, b: 215.2687, a: 1}
+  m_IndirectSpecularColor: {r: 131.19772, g: 162.48279, b: 214.93106, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -2909,6 +2909,21 @@ MonoBehaviour:
       - {fileID: 11400000, guid: 0aae937c1f772bb4a98fc9c3cdbb1d70, type: 2}
       - {fileID: 11400000, guid: 0dbc7e0021bd2824c9a935b61791e0b6, type: 2}
       - {fileID: 11400000, guid: 5ab421aa31d39dd4cbaf16583977e3b2, type: 2}
+    - noiseSeed: 3214
+      noiseFrequency: 100000
+      noiseLacunarity: 2
+      noisePersistence: 0.5
+      noiseOctaveCount: 6
+      noiseQuality: 1
+      inputNoiseOffset: {x: 0, y: 0, z: 0}
+      inputNoiseScale: {x: 0.001953125, y: 0.001953125, z: 0.001953125}
+      outputNoiseOffset: -0.1875
+      outputNoiseScale: 2
+      block:
+        block: {fileID: 11400000, guid: 04da36a6a3172ec47abc2f70c15bba2d, type: 2}
+        health: 1
+      surfaceBlocks:
+      - {fileID: 11400000, guid: 0aae937c1f772bb4a98fc9c3cdbb1d70, type: 2}
     - noiseSeed: 1234
       noiseFrequency: 10000
       noiseLacunarity: 2
