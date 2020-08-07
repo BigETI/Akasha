@@ -25,7 +25,7 @@ MonoBehaviour:
   itemAndHandsAsset: {fileID: 0}
   hasRandomOrientation: 1
   initialHealth: 1
-  material: {fileID: 0}
+  material: {fileID: 2100000, guid: 3300386f7d738e946a2721b560f0bc60, type: 2}
   meshVariants: {fileID: 11400000, guid: 655b07f28faf61249a851ee85d972ade, type: 2}
   collisionBounds: []
   farmingTools:

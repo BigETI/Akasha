@@ -241,15 +241,33 @@ namespace Akasha.Controllers
                     }
                     if (asset != null)
                     {
-                        game_object = Instantiate(asset, (new Vector3((change_block.Key % chunk_size.x) - (chunk_size.x * 0.5f) + 0.5f, ((change_block.Key / chunk_size.x) % chunk_size.y) - (chunk_size.y * 0.5f) + 0.5f, (change_block.Key / (chunk_size.x * chunk_size.y)) - (chunk_size.z * 0.5f) + 0.5f)) + transform.position, has_random_orientation ? Quaternion.AngleAxis(Mathf.Repeat(((change_block.Key % chunk_size.x) * 6154.48562f).GetHashCode() + ((change_block.Key / (chunk_size.x * chunk_size.y)) * 895652.854712f).GetHashCode(), 360.0f - float.Epsilon), Vector3.up) : Quaternion.identity, transform);
+                        game_object = Instantiate(asset, (new Vector3((change_block.Key % chunk_size.x) - (chunk_size.x * 0.5f) + 0.5f, ((change_block.Key / chunk_size.x) % chunk_size.y) - (chunk_size.y * 0.5f) + 0.5f, (change_block.Key / (chunk_size.x * chunk_size.y)) - (chunk_size.z * 0.5f) + 0.5f)) + transform.position, Quaternion.identity, transform);
                         if (game_object != null)
                         {
-                            MeshRenderer mesh_renderer = game_object.GetComponentInChildren<MeshRenderer>();
-                            if (mesh_renderer != null)
-                            {
-                                mesh_renderer.sharedMaterial = material;
-                            }
                             BlockID block_id = new BlockID((change_block.Key % chunk_size.x) + (chunk_id.X * chunk_size.x), ((change_block.Key / chunk_size.x) % chunk_size.y) + (chunk_id.Y * chunk_size.y), (change_block.Key / (chunk_size.x * chunk_size.y)) + (chunk_id.Z * chunk_size.z));
+                            if (has_random_orientation)
+                            {
+                                Quaternion rotation = Quaternion.AngleAxis(Mathf.Repeat((block_id.X * 6154.48562f).GetHashCode() + (block_id.Z * 895652.854712f).GetHashCode(), 360.0f - float.Epsilon), Vector3.up);
+                                for (int index = 0, child_count = game_object.transform.childCount; index < child_count; index++)
+                                {
+                                    Transform child_transform = game_object.transform.GetChild(index);
+                                    if (child_transform)
+                                    {
+                                        child_transform.localRotation = rotation;
+                                    }
+                                }
+                            }
+                            MeshRenderer[] mesh_renderers = game_object.GetComponentsInChildren<MeshRenderer>();
+                            if (mesh_renderers != null)
+                            {
+                                foreach (MeshRenderer mesh_renderer in mesh_renderers)
+                                {
+                                    if (mesh_renderer)
+                                    {
+                                        mesh_renderer.sharedMaterial = material;
+                                    }
+                                }
+                            }
                             game_object.name = "Block " + block_id;
                         }
                     }
