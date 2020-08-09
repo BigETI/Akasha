@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 2035111234}
-  m_IndirectSpecularColor: {r: 131.19772, g: 162.48279, b: 214.93106, a: 1}
+  m_IndirectSpecularColor: {r: 0, g: 0, b: 0, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -2838,6 +2838,24 @@ MonoBehaviour:
       maximalRequiredWindSpeed: 100
     noiseLayers:
     - filter: 0
+      block: {fileID: 11400000, guid: 79b965401ee36fc49a7d5a16d0783e9c, type: 2}
+      noiseGenerators:
+      - generatorOperator: 1
+        noiseLayerAlgorithm: 0
+        axisFlags: 5
+        seed: 1234
+        frequency: 1
+        lacunarity: 2
+        persistence: 0.5
+        displacement: 1
+        octaveCount: 6
+        distance: 0
+        quality: 1
+        inputOffset: {x: 0, y: -64, z: 0}
+        inputScale: {x: 0.001953125, y: 0.001953125, z: 0.001953125}
+        outputOffset: 5
+        outputScale: 50
+    - filter: 1
       block: {fileID: 11400000, guid: 0dbc7e0021bd2824c9a935b61791e0b6, type: 2}
       noiseGenerators:
       - generatorOperator: 1
@@ -2873,8 +2891,96 @@ MonoBehaviour:
         inputScale: {x: 0.001953125, y: 0.001953125, z: 0.001953125}
         outputOffset: -1
         outputScale: 50
-    - filter: 1
-      block: {fileID: 11400000, guid: 5ab421aa31d39dd4cbaf16583977e3b2, type: 2}
+    surfaceFeatures:
+    - noiseSeed: 32165
+      noiseFrequency: 10000
+      noiseLacunarity: 2
+      noisePersistence: 0.5
+      noiseOctaveCount: 6
+      noiseQuality: 1
+      inputNoiseOffset: {x: 0, y: 0, z: 0}
+      inputNoiseScale: {x: 0.00012207031, y: 0.0001220703, z: 0.0001220703}
+      outputNoiseOffset: -1.875
+      outputNoiseScale: 2
+      block:
+        block: {fileID: 11400000, guid: 7b52ab2b6c886914f879e80fb8c67c79, type: 2}
+        health: 1
+      surfaceBlocks:
+      - {fileID: 11400000, guid: 0dbc7e0021bd2824c9a935b61791e0b6, type: 2}
+      - {fileID: 11400000, guid: 0aae937c1f772bb4a98fc9c3cdbb1d70, type: 2}
+    - noiseSeed: 2345
+      noiseFrequency: 40000
+      noiseLacunarity: 2
+      noisePersistence: 0.5
+      noiseOctaveCount: 6
+      noiseQuality: 1
+      inputNoiseOffset: {x: 0, y: 0, z: 0}
+      inputNoiseScale: {x: 0.001953125, y: 0.001953125, z: 0.001953125}
+      outputNoiseOffset: -1
+      outputNoiseScale: 2
+      block:
+        block: {fileID: 11400000, guid: db0573731e0a41646bef7a12a0f1700c, type: 2}
+        health: 1
+      surfaceBlocks:
+      - {fileID: 11400000, guid: 0aae937c1f772bb4a98fc9c3cdbb1d70, type: 2}
+      - {fileID: 11400000, guid: 0dbc7e0021bd2824c9a935b61791e0b6, type: 2}
+      - {fileID: 11400000, guid: 79b965401ee36fc49a7d5a16d0783e9c, type: 2}
+    - noiseSeed: 3214
+      noiseFrequency: 100000
+      noiseLacunarity: 2
+      noisePersistence: 0.5
+      noiseOctaveCount: 6
+      noiseQuality: 1
+      inputNoiseOffset: {x: 0, y: 0, z: 0}
+      inputNoiseScale: {x: 0.001953125, y: 0.001953125, z: 0.001953125}
+      outputNoiseOffset: -0.1875
+      outputNoiseScale: 2
+      block:
+        block: {fileID: 11400000, guid: 04da36a6a3172ec47abc2f70c15bba2d, type: 2}
+        health: 1
+      surfaceBlocks:
+      - {fileID: 11400000, guid: 0aae937c1f772bb4a98fc9c3cdbb1d70, type: 2}
+    - noiseSeed: 1234
+      noiseFrequency: 10000
+      noiseLacunarity: 2
+      noisePersistence: 0.5
+      noiseOctaveCount: 6
+      noiseQuality: 1
+      inputNoiseOffset: {x: 0, y: 0, z: 0}
+      inputNoiseScale: {x: 0.001953125, y: 0.001953125, z: 0.001953125}
+      outputNoiseOffset: -0.1875
+      outputNoiseScale: 2
+      block:
+        block: {fileID: 11400000, guid: 2c31309ebf569dc4a95fb0add352191e, type: 2}
+        health: 1
+      surfaceBlocks:
+      - {fileID: 11400000, guid: 0aae937c1f772bb4a98fc9c3cdbb1d70, type: 2}
+  - noiseSeed: 96854
+    noiseFrequency: 1
+    noiseLacunarity: 2
+    noisePersistence: 0.5
+    noiseOctaveCount: 6
+    noiseQuality: 1
+    inputNoiseOffset: {x: 0, y: 0, z: 0}
+    inputNoiseScale: {x: 0.001953125, y: 0.001953125}
+    outputNoiseOffset: 0
+    outputNoiseScale: 1
+    minimalTemperature: 278.15
+    maximalTemperature: 288.15
+    minimalPressure: 0.9
+    maximalPressure: 1.1
+    minimalWindSpeed: 0
+    maximalWindSpeed: 5
+    possibleWeathers:
+    - minimalRequiredTemperature: 223.15
+      maximalRequiredTemperature: 323.15
+      minimalRequiredPressure: 0
+      maximalRequiredPressure: 2
+      minimalRequiredWindSpeed: 0
+      maximalRequiredWindSpeed: 100
+    noiseLayers:
+    - filter: 0
+      block: {fileID: 11400000, guid: 79b965401ee36fc49a7d5a16d0783e9c, type: 2}
       noiseGenerators:
       - generatorOperator: 1
         noiseLayerAlgorithm: 0
@@ -2887,9 +2993,9 @@ MonoBehaviour:
         octaveCount: 6
         distance: 0
         quality: 1
-        inputOffset: {x: 24, y: -64, z: 24}
+        inputOffset: {x: 0, y: -64, z: 0}
         inputScale: {x: 0.001953125, y: 0.001953125, z: 0.001953125}
-        outputOffset: 0
+        outputOffset: -1
         outputScale: 50
     surfaceFeatures:
     - noiseSeed: 2345
@@ -2908,7 +3014,7 @@ MonoBehaviour:
       surfaceBlocks:
       - {fileID: 11400000, guid: 0aae937c1f772bb4a98fc9c3cdbb1d70, type: 2}
       - {fileID: 11400000, guid: 0dbc7e0021bd2824c9a935b61791e0b6, type: 2}
-      - {fileID: 11400000, guid: 5ab421aa31d39dd4cbaf16583977e3b2, type: 2}
+      - {fileID: 11400000, guid: 79b965401ee36fc49a7d5a16d0783e9c, type: 2}
     - noiseSeed: 3214
       noiseFrequency: 100000
       noiseLacunarity: 2
@@ -5614,8 +5720,8 @@ MonoBehaviour:
   onDied:
     m_PersistentCalls:
       m_Calls: []
-  minimalHorizontalRotation: -80
-  maximalHorizontalRotation: 80
+  minimalHorizontalRotation: -90
+  maximalHorizontalRotation: 90
   gravityMagnitude: 24.525
   movementSpeed: 8
   jumpHeight: 1.5

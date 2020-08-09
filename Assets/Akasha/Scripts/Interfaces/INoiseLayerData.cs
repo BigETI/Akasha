@@ -14,7 +14,7 @@ namespace Akasha
         /// <summary>
         /// Filter
         /// </summary>
-        ENoiseLayerFilter Filter { get; set; }
+        ESetBlocksOperation Filter { get; set; }
 
         /// <summary>
         /// Block

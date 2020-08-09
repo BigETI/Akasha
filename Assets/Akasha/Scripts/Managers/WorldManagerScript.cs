@@ -206,6 +206,11 @@ namespace Akasha.Managers
         }
 
         /// <summary>
+        /// Showing blocks prefab
+        /// </summary>
+        public IBlocksPrefabObject ShowingBlocksPrefab { get; set; }
+
+        /// <summary>
         /// Get chunk ID from block ID
         /// </summary>
         /// <param name="blockID">Block ID</param>
@@ -222,26 +227,41 @@ namespace Akasha.Managers
         }
 
         /// <summary>
+        /// Get biome from block ID
+        /// </summary>
+        /// <param name="blockID">Block ID</param>
+        /// <returns>Biome if successful, otherwise "null"</returns>
+        public IBiomeData GetBiomeFromBlockID(BlockID blockID)
+        {
+            IBiomeData ret = null;
+            double selected_biome_weight = double.NegativeInfinity;
+            if (biomes != null)
+            {
+                for (int index = 0; index < biomes.Length; index++)
+                {
+                    IBiomeData biome = biomes[index];
+                    if (biome != null)
+                    {
+                        double biome_weight = biome.GetBiomeWeight(blockID);
+                        if (selected_biome_weight < biome_weight)
+                        {
+                            ret = biome;
+                            selected_biome_weight = biome_weight;
+                        }
+                    }
+                }
+            }
+            return ret;
+        }
+
+        /// <summary>
         /// Get generated block
         /// </summary>
         /// <param name="blockID">Block ID</param>
         /// <returns>Block or "null"</returns>
         public BlockData GetGeneratedBlock(BlockID blockID)
         {
-            IBiomeData selected_biome = null;
-            double selected_biome_weight = double.NegativeInfinity;
-            foreach (IBiomeData biome in biomes)
-            {
-                if (biome != null)
-                {
-                    double biome_weight = biome.GetBiomeWeight(blockID);
-                    if (selected_biome_weight < biome_weight)
-                    {
-                        selected_biome = biome;
-                        selected_biome_weight = biome_weight;
-                    }
-                }
-            }
+            IBiomeData selected_biome = GetBiomeFromBlockID(blockID);
             return ((selected_biome == null) ? default : selected_biome.GetGeneratedBlock(blockID));
         }
 
@@ -449,7 +469,46 @@ namespace Akasha.Managers
         }
 
         /// <summary>
-        /// Reset
+        /// Set blocks
+        /// </summary>
+        /// <param name="blockID">Block ID</param>
+        /// <param name="size">Size</param>
+        /// <param name="blocks">Blocks</param>
+        /// <param name="setBlocksOperation">Set blocks operation</param>
+        public void SetBlocks(BlockID blockID, Vector3Int size, IReadOnlyList<BlockData> blocks, ESetBlocksOperation setBlocksOperation)
+        {
+            int length = size.x * size.y * size.z;
+            if (blocks == null)
+            {
+                throw new ArgumentNullException(nameof(blocks));
+            }
+            if (blocks.Count != length)
+            {
+                throw new ArgumentException("Number of blocks does not equal length required by size.", nameof(blocks));
+            }
+            Parallel.For(0, length, (index) =>
+            {
+                BlockData block = blocks[index];
+                if (block.IsABlock)
+                {
+                    bool success = (setBlocksOperation == ESetBlocksOperation.OverrideAll);
+                    BlockID block_id = new BlockID(blockID.X + (index % size.x), blockID.Y + ((index / size.x) % size.y), blockID.Z + (index / (size.x * size.y)));
+                    if (!success)
+                    {
+                        BlockData current_block = GetBlock(block_id);
+                        bool is_a_block = current_block.IsABlock;
+                        success = (((setBlocksOperation == ESetBlocksOperation.ReplaceFull) && is_a_block) || ((setBlocksOperation == ESetBlocksOperation.FillEmpty) && !is_a_block));
+                    }
+                    if (success)
+                    {
+                        SetBlock(block_id, blocks[index]);
+                    }
+                }
+            });
+        }
+
+        /// <summary>
+        /// Reset chunks
         /// </summary>
         public void ResetChunks()
         {

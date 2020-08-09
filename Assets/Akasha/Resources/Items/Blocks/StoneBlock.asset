@@ -1,0 +1,33 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 753a99c5c8d5469419e0a2f1b6c81c69, type: 3}
+  m_Name: StoneBlock
+  m_EditorClassIdentifier: 
+  itemNameStringTranslation: {fileID: 11400000, guid: 124b52bdbc356b04eb8fd9ed33c67a6b,
+    type: 2}
+  iconSpriteTranslation: {fileID: 11400000, guid: cedf4d43a1d72704689d3e0f9ea15001,
+    type: 2}
+  descriptionStringTranslation: {fileID: 11400000, guid: e314f5050d5488f4fac85f2fed25a540,
+    type: 2}
+  maximalHealth: 0
+  maximalStackSize: 0
+  weight: 1024
+  maximalHitCooldownTime: 0.5
+  itemAndHandsAsset: {fileID: 0}
+  hasRandomOrientation: 0
+  initialHealth: 1024
+  material: {fileID: 2100000, guid: cbe4217fa5ded324ba74b19306e3bf67, type: 2}
+  meshVariants: {fileID: 11400000, guid: 0101db93846edd54a8f83f7f63cf92e3, type: 2}
+  collisionBounds:
+  - m_Center: {x: 0, y: 0, z: 0}
+    m_Extent: {x: 0.5, y: 0.5, z: 0.5}
+  farmingTools: []

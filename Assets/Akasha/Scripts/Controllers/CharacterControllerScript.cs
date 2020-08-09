@@ -20,14 +20,14 @@ namespace Akasha.Controllers
         /// </summary>
         [SerializeField]
         [Range(-90.0f, 0.0f)]
-        private float minimalHorizontalRotation = -80.0f;
+        private float minimalHorizontalRotation = -90.0f;
 
         /// <summary>
         /// Maximal horizontal rotation
         /// </summary>
         [SerializeField]
         [Range(0.0f, 90.0f)]
-        private float maximalHorizontalRotation = 80.0f;
+        private float maximalHorizontalRotation = 90.0f;
 
         /// <summary>
         /// Gravity magnitude

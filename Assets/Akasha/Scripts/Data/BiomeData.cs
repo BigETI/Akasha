@@ -455,36 +455,73 @@ namespace Akasha.Data
         public double GetBiomeWeight(BlockID blockID) => ((perlinNoise == null) ? 0.0 : ((perlinNoise.GetValue((blockID.X * inputNoiseScale.x) + inputNoiseOffset.x, inputNoiseOffset.y, (blockID.Z * inputNoiseScale.y) + inputNoiseOffset.z) * outputNoiseScale) + outputNoiseOffset));
 
         /// <summary>
+        /// Get noise layer result
+        /// </summary>
+        /// <param name="blockID">Block ID</param>
+        /// <param name="computedNoiseLayer">Computed noise layer</param>
+        /// <returns>Noise layer result</returns>
+        public double GetNoiseLayerResult(BlockID blockID, (INoiseLayerData, List<(INoiseGeneratorData, ModuleBase)>) computedNoiseLayer)
+        {
+            double ret = 0.0;
+            foreach ((INoiseGeneratorData, ModuleBase) noise_generator_module in computedNoiseLayer.Item2)
+            {
+                ret = noiseGeneratorOperators[(int)(noise_generator_module.Item1.GeneratorOperator)]
+                (
+                    ret,
+                    (noise_generator_module.Item2.GetValue
+                    (
+                        ((((noise_generator_module.Item1.AxisFlags & ENoiseGeneratorAxisFlags.X) == ENoiseGeneratorAxisFlags.X) ? blockID.X : 0L) * noise_generator_module.Item1.InputScale.x) + noise_generator_module.Item1.InputOffset.x,
+                        ((((noise_generator_module.Item1.AxisFlags & ENoiseGeneratorAxisFlags.Y) == ENoiseGeneratorAxisFlags.Y) ? blockID.Y : 0L) * noise_generator_module.Item1.InputScale.y) + noise_generator_module.Item1.InputOffset.y,
+                        ((((noise_generator_module.Item1.AxisFlags & ENoiseGeneratorAxisFlags.Z) == ENoiseGeneratorAxisFlags.Z) ? blockID.Z : 0L) * noise_generator_module.Item1.InputScale.z) + noise_generator_module.Item1.InputOffset.z
+                    ) * noise_generator_module.Item1.OutputScale) + (((noise_generator_module.Item1.AxisFlags & ENoiseGeneratorAxisFlags.X) == ENoiseGeneratorAxisFlags.X) ? 0L : blockID.X) + (((noise_generator_module.Item1.AxisFlags & ENoiseGeneratorAxisFlags.Y) == ENoiseGeneratorAxisFlags.Y) ? 0L : blockID.Y) + (((noise_generator_module.Item1.AxisFlags & ENoiseGeneratorAxisFlags.Z) == ENoiseGeneratorAxisFlags.Z) ? 0L : blockID.Z) + noise_generator_module.Item1.OutputOffset
+                );
+            }
+            return ret;
+        }
+
+        /// <summary>
+        /// Get biome noise result
+        /// </summary>
+        /// <param name="blockID">Block ID</param>
+        /// <returns>Biome noise result</returns>
+        public double GetBiomeNoiseResult(BlockID blockID)
+        {
+            double ret = 0.0;
+            if (computedNoiseLayers != null)
+            {
+                foreach ((INoiseLayerData, List<(INoiseGeneratorData, ModuleBase)>) computed_noise_layer in computedNoiseLayers)
+                {
+                    ret = computed_noise_layer.Item1.Block ? Math.Max(GetNoiseLayerResult(blockID, computed_noise_layer), ret) : ret;
+                }
+            }
+            return ret;
+        }
+
+        /// <summary>
         /// Get generated block without surface feature
         /// </summary>
         /// <param name="blockID">Block ID</param>
         /// <returns>Block</returns>
-        public BlockData GetGeneratedBlockWithoutSurfaceFeature(BlockID blockID)
+        public BlockData GetGeneratedBlockWithoutSurfaceFeature(BlockID blockID) => GetGeneratedBlockWithoutSurfaceFeature(blockID, 0.0);
+
+        /// <summary>
+        /// Get generated block without surface feature
+        /// </summary>
+        /// <param name="blockID">Block ID</param>
+        /// <param name="nouseOutputOffset">Noise output offset</param>
+        /// <returns>Block</returns>
+        public BlockData GetGeneratedBlockWithoutSurfaceFeature(BlockID blockID, double noiseOutputOffset)
         {
             BlockData ret = default;
             if (computedNoiseLayers != null)
             {
                 foreach ((INoiseLayerData, List<(INoiseGeneratorData, ModuleBase)>) computed_noise_layer in computedNoiseLayers)
                 {
-                    if (((computed_noise_layer.Item1.Filter == ENoiseLayerFilter.FillEmpty) && ret.IsABlock) || ((computed_noise_layer.Item1.Filter == ENoiseLayerFilter.ReplaceFull) && ret.IsNothing))
+                    if (((computed_noise_layer.Item1.Filter == ESetBlocksOperation.FillEmpty) && ret.IsABlock) || ((computed_noise_layer.Item1.Filter == ESetBlocksOperation.ReplaceFull) && ret.IsNothing))
                     {
                         break;
                     }
-                    double final_result = 0.0;
-                    foreach ((INoiseGeneratorData, ModuleBase) noise_generator_module in computed_noise_layer.Item2)
-                    {
-                        final_result = noiseGeneratorOperators[(int)(noise_generator_module.Item1.GeneratorOperator)]
-                        (
-                            final_result,
-                            (noise_generator_module.Item2.GetValue
-                            (
-                                ((((noise_generator_module.Item1.AxisFlags & ENoiseGeneratorAxisFlags.X) == ENoiseGeneratorAxisFlags.X) ? blockID.X : 0L) * noise_generator_module.Item1.InputScale.x) + noise_generator_module.Item1.InputOffset.x,
-                                ((((noise_generator_module.Item1.AxisFlags & ENoiseGeneratorAxisFlags.Y) == ENoiseGeneratorAxisFlags.Y) ? blockID.Y : 0L) * noise_generator_module.Item1.InputScale.y) + noise_generator_module.Item1.InputOffset.y,
-                                ((((noise_generator_module.Item1.AxisFlags & ENoiseGeneratorAxisFlags.Z) == ENoiseGeneratorAxisFlags.Z) ? blockID.Z : 0L) * noise_generator_module.Item1.InputScale.z) + noise_generator_module.Item1.InputOffset.z
-                            ) * noise_generator_module.Item1.OutputScale) + (((noise_generator_module.Item1.AxisFlags & ENoiseGeneratorAxisFlags.X) == ENoiseGeneratorAxisFlags.X) ? 0L : blockID.X) + (((noise_generator_module.Item1.AxisFlags & ENoiseGeneratorAxisFlags.Y) == ENoiseGeneratorAxisFlags.Y) ? 0L : blockID.Y) + (((noise_generator_module.Item1.AxisFlags & ENoiseGeneratorAxisFlags.Z) == ENoiseGeneratorAxisFlags.Z) ? 0L : blockID.Z) + noise_generator_module.Item1.OutputOffset
-                        );
-                    }
-                    if (final_result >= 0.0)
+                    if ((GetNoiseLayerResult(blockID, computed_noise_layer) + noiseOutputOffset) >= 0.0)
                     {
                         ret = (computed_noise_layer.Item1.Block ? new BlockData(computed_noise_layer.Item1.Block, computed_noise_layer.Item1.Block.InitialHealth) : default);
                     }
@@ -498,12 +535,20 @@ namespace Akasha.Data
         /// </summary>
         /// <param name="blockID">Block ID</param>
         /// <returns>Generated block</returns>
-        public BlockData GetGeneratedBlock(BlockID blockID)
+        public BlockData GetGeneratedBlock(BlockID blockID) => GetGeneratedBlock(blockID, 0.0);
+
+        /// <summary>
+        /// Get generated block
+        /// </summary>
+        /// <param name="blockID">Block ID</param>
+        /// <param name="nouseOutputOffset">Noise output offset</param>
+        /// <returns>Generated block</returns>
+        public BlockData GetGeneratedBlock(BlockID blockID, double noiseOutputOffset)
         {
-            BlockData ret = GetGeneratedBlockWithoutSurfaceFeature(blockID);
+            BlockData ret = GetGeneratedBlockWithoutSurfaceFeature(blockID, noiseOutputOffset);
             if ((surfaceFeatures != null) && (perlinNoise != null) && ret.IsNothing)
             {
-                BlockData surface_block = GetGeneratedBlockWithoutSurfaceFeature(blockID + BlockID.Down);
+                BlockData surface_block = GetGeneratedBlockWithoutSurfaceFeature(blockID + BlockID.Down, noiseOutputOffset);
                 if (surface_block.IsABlock)
                 {
                     BlockData selected_block = ret;

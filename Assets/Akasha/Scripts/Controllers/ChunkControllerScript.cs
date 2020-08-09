@@ -166,7 +166,6 @@ namespace Akasha.Controllers
                             Parallel.For(0, instantiatedBlocks.Length, (index) =>
                             {
                                 Vector3Int chunk_position = new Vector3Int(index % chunk_size.x, (index / chunk_size.x) % chunk_size.y, index / (chunk_size.x * chunk_size.y));
-                                BlockID block_position = new BlockID(chunk_position.x + (chunk_id.X * chunk_size.x), chunk_position.y + (chunk_id.Y * chunk_size.y), chunk_position.z + (chunk_id.Z * chunk_size.z));
                                 BlockData block = chunk_blocks[index];
                                 BlockData top_block = ((chunk_position.y + 1) < chunk_size.y) ? chunk_blocks[chunk_position.x + ((chunk_position.y + 1) * chunk_size.x) + (chunk_position.z * chunk_size.x * chunk_size.y)] : ((top_chunk_blocks == null) ? default : top_chunk_blocks[chunk_position.x + (chunk_position.z * chunk_size.x * chunk_size.y)]);
                                 BlockData bottom_block = ((chunk_position.y - 1) >= 0) ? chunk_blocks[chunk_position.x + ((chunk_position.y - 1) * chunk_size.x) + (chunk_position.z * chunk_size.x * chunk_size.y)] : ((bottom_chunk_blocks == null) ? default : bottom_chunk_blocks[chunk_position.x + ((chunk_size.y - 1) * chunk_size.x) + (chunk_position.z * chunk_size.x * chunk_size.y)]);
@@ -233,11 +232,23 @@ namespace Akasha.Controllers
                     Material material = null;
                     Vector3Int chunk_position = new Vector3Int(change_block.Key % chunk_size.x, (change_block.Key / chunk_size.x) % chunk_size.y, change_block.Key / (chunk_size.x * chunk_size.y));
                     bool has_random_orientation = false;
-                    if (change_block.Value.Block.IsABlock && (change_block.Value.Block.Block.MeshVariants != null))
+                    if (change_block.Value.Block.IsABlock)
                     {
-                        asset = change_block.Value.Block.Block.MeshVariants.BlockAssets[(int)(change_block.Value.DirectionFlags)];
-                        material = change_block.Value.Block.Block.Material;
-                        has_random_orientation = change_block.Value.Block.Block.HasRandomOrientation;
+                        if (change_block.Value.Block.Block is IBlocksPrefabObject blocks_prefab)
+                        {
+                            BlockID block_id = new BlockID((chunkID.X * chunk_size.x) + chunk_position.x, (chunkID.Y * chunk_size.y) + chunk_position.y, (chunkID.Z * chunk_size.z) + chunk_position.z);
+                            if (blocks_prefab.SetBlocksOperation != ESetBlocksOperation.ReplaceFull)
+                            {
+                                world_manager.SetBlock(block_id, default);
+                            }
+                            world_manager.SetBlocks(new BlockID(block_id.X + blocks_prefab.Offset.x, block_id.Y + blocks_prefab.Offset.y, block_id.Z + blocks_prefab.Offset.z), blocks_prefab.Size, blocks_prefab.Blocks, blocks_prefab.SetBlocksOperation);
+                        }
+                        else if (change_block.Value.Block.Block.MeshVariants != null)
+                        {
+                            asset = change_block.Value.Block.Block.MeshVariants.BlockAssets[(int)(change_block.Value.DirectionFlags)];
+                            material = change_block.Value.Block.Block.Material;
+                            has_random_orientation = change_block.Value.Block.Block.HasRandomOrientation;
+                        }
                     }
                     if (asset != null)
                     {

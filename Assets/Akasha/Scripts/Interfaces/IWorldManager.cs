@@ -55,11 +55,23 @@ namespace Akasha
         BiomeData[] Biomes { get; set; }
 
         /// <summary>
+        /// Showing blocks prefab
+        /// </summary>
+        IBlocksPrefabObject ShowingBlocksPrefab { get; set; }
+
+        /// <summary>
         /// Get chunk ID from block ID
         /// </summary>
         /// <param name="blockID">Block ID</param>
         /// <returns>Chunk ID</returns>
         ChunkID GetChunkIDFDromBlockID(BlockID blockID);
+
+        /// <summary>
+        /// Get biome from block ID
+        /// </summary>
+        /// <param name="blockID">Block ID</param>
+        /// <returns>Biome if successful, otherwise "null"</returns>
+        IBiomeData GetBiomeFromBlockID(BlockID blockID);
 
         /// <summary>
         /// Get generated block
@@ -103,7 +115,16 @@ namespace Akasha
         void SetBlock(BlockID blockID, BlockData block);
 
         /// <summary>
-        /// Reset
+        /// Set blocks
+        /// </summary>
+        /// <param name="blockID">Block ID</param>
+        /// <param name="size">Size</param>
+        /// <param name="blocks">Blocks</param>
+        /// <param name="setBlocksOperation">Set blocks operation</param>
+        void SetBlocks(BlockID blockID, Vector3Int size, IReadOnlyList<BlockData> blocks, ESetBlocksOperation setBlocksOperation);
+
+        /// <summary>
+        /// Reset chunks
         /// </summary>
         void ResetChunks();
     }

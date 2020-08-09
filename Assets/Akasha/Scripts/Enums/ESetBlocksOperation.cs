@@ -4,9 +4,9 @@
 namespace Akasha
 {
     /// <summary>
-    /// Noise layer filter
+    /// Set blocks operation
     /// </summary>
-    public enum ENoiseLayerFilter
+    public enum ESetBlocksOperation
     {
         /// <summary>
         /// Override all

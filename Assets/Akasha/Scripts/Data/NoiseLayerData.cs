@@ -17,7 +17,7 @@ namespace Akasha.Data
         /// Filter
         /// </summary>
         [SerializeField]
-        private ENoiseLayerFilter filter = ENoiseLayerFilter.OverrideAll;
+        private ESetBlocksOperation filter = ESetBlocksOperation.OverrideAll;
 
         /// <summary>
         /// Block
@@ -34,7 +34,7 @@ namespace Akasha.Data
         /// <summary>
         /// Filter
         /// </summary>
-        public ENoiseLayerFilter Filter
+        public ESetBlocksOperation Filter
         {
             get => filter;
             set => filter = value;

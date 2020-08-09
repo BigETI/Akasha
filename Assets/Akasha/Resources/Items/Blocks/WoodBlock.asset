@@ -1,0 +1,57 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 753a99c5c8d5469419e0a2f1b6c81c69, type: 3}
+  m_Name: WoodBlock
+  m_EditorClassIdentifier: 
+  itemNameStringTranslation: {fileID: 11400000, guid: 769aa96fbd7778148ae8ca7f8fb2a5f9,
+    type: 2}
+  iconSpriteTranslation: {fileID: 11400000, guid: 0aad7566c13260e48bfa38a3b15b82eb,
+    type: 2}
+  descriptionStringTranslation: {fileID: 11400000, guid: e2366fe4513519f4e836e3574716eba7,
+    type: 2}
+  maximalHealth: 0
+  maximalStackSize: 0
+  weight: 0
+  maximalHitCooldownTime: 0.5
+  itemAndHandsAsset: {fileID: 0}
+  hasRandomOrientation: 0
+  initialHealth: 64
+  material: {fileID: 2100000, guid: 7b055098e809b6e40942844a8fa22e91, type: 2}
+  meshVariants: {fileID: 11400000, guid: c42a9e0b6591e914d8ff7edbe89b25fd, type: 2}
+  collisionBounds:
+  - m_Center: {x: 0, y: 0, z: 0}
+    m_Extent: {x: 0.5, y: 0.5, z: 0.5}
+  farmingTools:
+  - farmingToolItem: {fileID: 11400000, guid: 39391a02cd9d891489c656a8f750a976, type: 2}
+    damage: 1
+    farmableItems:
+    - farmableItem: {fileID: 11400000, guid: d9de65dd99941f94f9c68ef1ddfcdf9f, type: 2}
+      quantity: 1
+      bias: 1000
+  - farmingToolItem: {fileID: 11400000, guid: e1aae1fb903ca6e45be68de38931e96a, type: 2}
+    damage: 1
+    farmableItems:
+    - farmableItem: {fileID: 11400000, guid: d9de65dd99941f94f9c68ef1ddfcdf9f, type: 2}
+      quantity: 1
+      bias: 1000
+  - farmingToolItem: {fileID: 11400000, guid: 21184d7ef1292d6429d9948e02c8918e, type: 2}
+    damage: 1
+    farmableItems:
+    - farmableItem: {fileID: 11400000, guid: d9de65dd99941f94f9c68ef1ddfcdf9f, type: 2}
+      quantity: 1
+      bias: 1000
+  - farmingToolItem: {fileID: 11400000, guid: 9681c07b7b6a1af4eb54550196953b75, type: 2}
+    damage: 1
+    farmableItems:
+    - farmableItem: {fileID: 11400000, guid: d9de65dd99941f94f9c68ef1ddfcdf9f, type: 2}
+      quantity: 1
+      bias: 1000

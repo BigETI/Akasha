@@ -126,6 +126,13 @@ namespace Akasha
         double GetBiomeWeight(BlockID blockID);
 
         /// <summary>
+        /// Get biome noise result
+        /// </summary>
+        /// <param name="blockID">Block ID</param>
+        /// <returns>Biome noise result</returns>
+        double GetBiomeNoiseResult(BlockID blockID);
+
+        /// <summary>
         /// Get generated block without surface feature
         /// </summary>
         /// <param name="blockID">Block ID</param>
@@ -133,10 +140,26 @@ namespace Akasha
         BlockData GetGeneratedBlockWithoutSurfaceFeature(BlockID blockID);
 
         /// <summary>
+        /// Get generated block without surface feature
+        /// </summary>
+        /// <param name="blockID">Block ID</param>
+        /// <param name="nouseOutputOffset">Noise output offset</param>
+        /// <returns>Block</returns>
+        BlockData GetGeneratedBlockWithoutSurfaceFeature(BlockID blockID, double noiseOutputOffset);
+
+        /// <summary>
         /// Get generated block
         /// </summary>
         /// <param name="blockID">Block ID</param>
         /// <returns>Generated block</returns>
         BlockData GetGeneratedBlock(BlockID blockID);
+
+        /// <summary>
+        /// Get generated block
+        /// </summary>
+        /// <param name="blockID">Block ID</param>
+        /// <param name="nouseOutputOffset">Noise output offset</param>
+        /// <returns>Generated block</returns>
+        BlockData GetGeneratedBlock(BlockID blockID, double noiseOutputOffset);
     }
 }
