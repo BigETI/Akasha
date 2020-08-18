@@ -94,6 +94,21 @@ namespace Akasha.Controllers
         private void Awake()
         {
             GameInputActions = new GameInputActions();
+            GameInputActions.GameActionMap.Aim.performed += (context) =>
+            {
+                if (CharacterController != null)
+                {
+                    //CharacterController.Shoot();
+                    CharacterController.PlaceBlock();
+                }
+            };
+            GameInputActions.GameActionMap.Hit.performed += (context) =>
+            {
+                if (CharacterController != null)
+                {
+                    CharacterController.IsHitting = context.ReadValueAsButton();
+                }
+            };
             GameInputActions.GameActionMap.Interact.performed += (context) =>
             {
                 if (CharacterController != null)
@@ -128,19 +143,16 @@ namespace Akasha.Controllers
                     CharacterController.Reload();
                 }
             };
-            GameInputActions.GameActionMap.Hit.performed += (context) =>
+            GameInputActions.GameActionMap.SelectWeapon.performed += (context) =>
             {
-                if (CharacterController != null)
+                float input = context.ReadValue<float>();
+                if (input <= -0.5f)
                 {
-                    CharacterController.IsHitting = context.ReadValueAsButton();
+                    CharacterController.SelectPreviousInventoryItemSlot();
                 }
-            };
-            GameInputActions.GameActionMap.Aim.performed += (context) =>
-            {
-                if (CharacterController != null)
+                else if (input >= 0.5f)
                 {
-                    //CharacterController.Shoot();
-                    CharacterController.PlaceBlock();
+                    CharacterController.SelectNextInventoryItemSlot();
                 }
             };
             GameInputActions.GameActionMap.Sneak.performed += (context) =>
@@ -167,18 +179,6 @@ namespace Akasha.Controllers
                     case EViewMode.ThirdPerson:
                         viewMode = EViewMode.FirstPerson;
                         break;
-                }
-            };
-            GameInputActions.GameActionMap.SelectWeapon.performed += (context) =>
-            {
-                float input = context.ReadValue<float>();
-                if (input <= -0.5f)
-                {
-                    CharacterController.SelectPreviousInventoryItemSlot();
-                }
-                else if (input >= 0.5f)
-                {
-                    CharacterController.SelectNextInventoryItemSlot();
                 }
             };
             // TODO

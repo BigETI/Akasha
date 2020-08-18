@@ -39,6 +39,6 @@ namespace Akasha
         /// <summary>
         /// Follow character controller
         /// </summary>
-        OldCharacterControllerScript FollowCharacterController { get; set; }
+        CharacterControllerScript FollowCharacterController { get; set; }
     }
 }

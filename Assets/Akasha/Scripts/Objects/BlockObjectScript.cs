@@ -120,7 +120,7 @@ namespace Akasha.Objects
                     farmingToolLookup = new Dictionary<string, IFarmingToolData>();
                     foreach (IFarmingToolData farming_tool in FarmingTools)
                     {
-                        string key = (farming_tool.FarmingToolItem ? farming_tool.FarmingToolItem.name : string.Empty);
+                        string key = (farming_tool.FarmingToolItem ? farming_tool.FarmingToolItem.Key : string.Empty);
                         if (farmingToolLookup.ContainsKey(key))
                         {
                             Debug.LogError("Skipping duplicate farming tool entry \"" + key + "\" in block \"" + name + "\".");
@@ -147,7 +147,7 @@ namespace Akasha.Objects
         /// <returns>Farming tool data if successful, otherwise "null"</returns>
         public IFarmingToolData GetFarmingToolDataFromFarmingToolItem(IItemObject item)
         {
-            string key = ((item == null) ? string.Empty : item.name);
+            string key = ((item == null) ? string.Empty : item.Key);
             if (!(FarmingToolLookup.ContainsKey(key)))
             {
                 key = string.Empty;

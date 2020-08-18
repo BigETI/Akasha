@@ -64,7 +64,7 @@ namespace Akasha
         /// </summary>
         /// <param name="blockID">Block ID</param>
         /// <returns>Chunk ID</returns>
-        ChunkID GetChunkIDFDromBlockID(BlockID blockID);
+        ChunkID GetChunkIDFromBlockID(BlockID blockID);
 
         /// <summary>
         /// Get biome from block ID
@@ -72,6 +72,13 @@ namespace Akasha
         /// <param name="blockID">Block ID</param>
         /// <returns>Biome if successful, otherwise "null"</returns>
         IBiomeData GetBiomeFromBlockID(BlockID blockID);
+
+        /// <summary>
+        /// Get world position from block ID
+        /// </summary>
+        /// <param name="blockID">Block ID</param>
+        /// <returns>World position</returns>
+        Vector3 GetWorldPositionFromBlockID(BlockID blockID);
 
         /// <summary>
         /// Get generated block

@@ -16,8 +16,8 @@ namespace Akasha
         GameObject OriginGameObject { get; set; }
 
         /// <summary>
-        /// Game camera
+        /// Player character controller
         /// </summary>
-        Camera GameCamera { get; }
+        ICharacterController PlayerCharacterController { get; }
     }
 }

@@ -40,7 +40,21 @@ namespace Akasha.Controllers
         /// </summary>
         [SerializeField]
         [Range(0.0f, 1000.0f)]
-        private float movementSpeed = 8.0f;
+        private float movementSpeed = 5.0f;
+
+        /// <summary>
+        /// Sprint multiplier
+        /// </summary>
+        [SerializeField]
+        [Range(1.0f, 1000.0f)]
+        private float sprintMultiplier = 1.5f;
+
+        /// <summary>
+        /// Sneak multiplier
+        /// </summary>
+        [SerializeField]
+        [Range(0.0f, 1.0f)]
+        private float sneakMultiplier = 0.5f;
 
         /// <summary>
         /// Jump height
@@ -50,11 +64,80 @@ namespace Akasha.Controllers
         private float jumpHeight = 1.5f;
 
         /// <summary>
+        /// Minimal fall damage speed
+        /// </summary>
+        [SerializeField]
+        [Range(0.0f, 1000.0f)]
+        private float minimalFallDamageSpeed = 25.0f;
+
+        /// <summary>
+        /// Maximal fall damage speed
+        /// </summary>
+        [SerializeField]
+        [Range(0.0f, 1000.0f)]
+        private float maximalFallDamageSpeed = 50.0f;
+
+        /// <summary>
         /// Default hit cooldown time
         /// </summary>
         [SerializeField]
         [Range(0.0f, 100.0f)]
         private float defaultHitCooldownTime = 0.5f;
+
+        /// <summary>
+        /// Stamina depletion per second
+        /// </summary>
+        [SerializeField]
+        [Range(0.0f, 1000.0f)]
+        private float staminaDepletionPerSecond = 0.0625f;
+
+        /// <summary>
+        /// Stamina regeneration per second
+        /// </summary>
+        [SerializeField]
+        [Range(0.0f, 1000.0f)]
+        private float staminaRegenerationPerSecond = 0.25f;
+
+        /// <summary>
+        /// Stamina regeneration cooldown time
+        /// </summary>
+        [SerializeField]
+        [Range(0.0f, 1000.0f)]
+        private float staminaRegenerationCooldownTime = 0.5f;
+
+        /// <summary>
+        /// Fullness
+        /// </summary>
+        [SerializeField]
+        [Range(0.0f, 1000.0f)]
+        private float fullness = 25.0f;
+
+        /// <summary>
+        /// Maximal fullness
+        /// </summary>
+        [SerializeField]
+        [Range(0.0f, 1000.0f)]
+        private float maximalFullness = 100.0f;
+
+        /// <summary>
+        /// Hunger per second
+        /// </summary>
+        [SerializeField]
+        [Range(0.0f, 1000.0f)]
+        private float hungerPerSecond = 0.03125f;
+
+        /// <summary>
+        /// Hunger damage per second
+        /// </summary>
+        [SerializeField]
+        [Range(0.0f, 1000.0f)]
+        private float hungerDamagePerSecond = 1.0f;
+
+        /// <summary>
+        /// Interaction distance
+        /// </summary>
+        [SerializeField]
+        private float interactionDistance = 3.0f;
 
         /// <summary>
         /// Inventory
@@ -130,6 +213,24 @@ namespace Akasha.Controllers
         }
 
         /// <summary>
+        /// Sprint multiplier
+        /// </summary>
+        public float SprintMultiplier
+        {
+            get => Mathf.Max(sprintMultiplier, 1.0f);
+            set => sprintMultiplier = Mathf.Max(value, 1.0f);
+        }
+
+        /// <summary>
+        /// Sneak multiplier
+        /// </summary>
+        public float SneakMultiplier
+        {
+            get => Mathf.Clamp(sneakMultiplier, 0.0f, 1.0f);
+            set => sneakMultiplier = Mathf.Clamp(value, 0.0f, 1.0f);
+        }
+
+        /// <summary>
         /// Jump height
         /// </summary>
         public float JumpHeight
@@ -139,12 +240,102 @@ namespace Akasha.Controllers
         }
 
         /// <summary>
+        /// Minimal fall damage speed
+        /// </summary>
+        public float MinimalFallDamageSpeed
+        {
+            get => Mathf.Clamp(minimalFallDamageSpeed, 0.0f, MaximalFallDamageSpeed);
+            set => minimalFallDamageSpeed = Mathf.Clamp(value, 0.0f, MaximalFallDamageSpeed);
+        }
+
+        /// <summary>
+        /// Maximal fall damage speed
+        /// </summary>
+        public float MaximalFallDamageSpeed
+        {
+            get => Mathf.Max(maximalFallDamageSpeed, 0.0f);
+            set => maximalFallDamageSpeed = Mathf.Max(value, 0.0f);
+        }
+
+        /// <summary>
         /// Default hit cooldown time
         /// </summary>
         public float DefaultHitCooldownTime
         {
             get => Mathf.Max(defaultHitCooldownTime, 0.0f);
             set => defaultHitCooldownTime = Mathf.Max(value, 0.0f);
+        }
+
+        /// <summary>
+        /// Stamina depletion per second
+        /// </summary>
+        public float StaminaDepletionPerSecond
+        {
+            get => Mathf.Max(staminaDepletionPerSecond, 0.0f);
+            set => staminaDepletionPerSecond = Mathf.Max(value, 0.0f);
+        }
+
+        /// <summary>
+        /// Stamina regeneration per second
+        /// </summary>
+        public float StaminaRegenerationPerSecond
+        {
+            get => Mathf.Max(staminaRegenerationPerSecond, 0.0f);
+            set => staminaRegenerationPerSecond = Mathf.Max(value, 0.0f);
+        }
+
+        /// <summary>
+        /// Stamina regeneration cooldown time
+        /// </summary>
+        public float StaminaRegenerationCooldownTime
+        {
+            get => Mathf.Max(staminaRegenerationCooldownTime, 0.0f);
+            set => staminaRegenerationCooldownTime = Mathf.Max(value, 0.0f);
+        }
+
+        /// <summary>
+        /// Fullness
+        /// </summary>
+        public float Fullness
+        {
+            get => Mathf.Clamp(fullness, 0.0f, MaximalFullness);
+            set => fullness = Mathf.Clamp(value, 0.0f, MaximalFullness);
+        }
+
+        /// <summary>
+        /// Maximal fullness
+        /// </summary>
+        public float MaximalFullness
+        {
+            get => Mathf.Max(maximalFullness, 0.0f);
+            set => maximalFullness = Mathf.Max(value, 0.0f);
+        }
+
+        /// <summary>
+        /// Hunger per second
+        /// </summary>
+        public float HungerPerSecond
+        {
+            get => Mathf.Max(hungerPerSecond, 0.0f);
+            set => hungerPerSecond = Mathf.Max(value, 0.0f);
+        }
+
+        /// <summary>
+        /// Hunger damage per second
+        /// </summary>
+        public float HungerDamagePerSecond
+        {
+            get => Mathf.Max(hungerDamagePerSecond, 0.0f);
+            set => hungerDamagePerSecond = Mathf.Max(value, 0.0f);
+        }
+
+        /// <summary>
+        /// Interaction distance
+        /// </summary>
+        public float InteractionDistance
+        {
+            get => Mathf.Max(interactionDistance, 0.0f);
+            set => interactionDistance = Mathf.Max(value, 0.0f);
         }
 
         /// <summary>
@@ -160,14 +351,7 @@ namespace Akasha.Controllers
                 }
                 return inventory;
             }
-            set
-            {
-                if (value == null)
-                {
-                    throw new ArgumentNullException(nameof(value));
-                }
-                inventory = value;
-            }
+            set => inventory = value ?? throw new ArgumentNullException(nameof(value));
         }
 
         /// <summary>
@@ -292,6 +476,21 @@ namespace Akasha.Controllers
         public float ElapsedHitCooldownTime { get; private set; }
 
         /// <summary>
+        /// Stamina
+        /// </summary>
+        public float Stamina { get; private set; } = 1.0f;
+
+        /// <summary>
+        /// Elapsed stamina regeneration cooldown time
+        /// </summary>
+        public float ElapsedStaminaRegenerationCooldownTime { get; private set; }
+
+        /// <summary>
+        /// Is exhausted
+        /// </summary>
+        public bool IsExhausted { get; private set; }
+
+        /// <summary>
         /// Inventory UI controller
         /// </summary>
         public IInventoryUIController InventoryUIController { get; private set; }
@@ -316,13 +515,13 @@ namespace Akasha.Controllers
         /// </summary>
         /// <param name="collisionNormalDistance">Collision normal distance</param>
         /// <returns>Targeted block</returns>
-        private ITargetedBlock GetTargetedBlock(float collisionNormalDistance)
+        public ITargetedBlock GetTargetedBlock(float collisionNormalDistance)
         {
             ITargetedBlock ret = null;
             WorldManagerScript world_manager = WorldManagerScript.Instance;
             if (world_manager != null)
             {
-                int raycast_hit_count = PhysicsUtils.Raycast(eyesTransform.position, eyesTransform.forward, 20.0f, ref raycastHits);
+                int raycast_hit_count = PhysicsUtils.Raycast(eyesTransform.position, eyesTransform.forward, InteractionDistance, ref raycastHits);
                 if (raycast_hit_count > 0)
                 {
                     Vector3Int chunk_size = world_manager.ChunkSize;
@@ -365,7 +564,7 @@ namespace Akasha.Controllers
             if (world_manager)
             {
                 ITargetedBlock targeted_block = GetTargetedBlock(collisionNormalDistance);
-                if (targeted_block != null)
+                if ((targeted_block != null) && targeted_block.IsNothing)
                 {
                     world_manager.SetBlock(targeted_block.ID, block);
                     ret = true;
@@ -379,37 +578,7 @@ namespace Akasha.Controllers
         /// </summary>
         public void Interact()
         {
-            //if (IsAlive && (eyesTransform != null))
-            //{
-            //    int raycast_hits_count = PhysicsUtils.Raycast(eyesTransform.position, eyesTransform.forward, InteractionDistance, ref raycastHits);
-            //    RaycastHit? nearest_valid_raycast_hit = null;
-            //    for (int raycast_hits_index = 0; raycast_hits_index < raycast_hits_count; raycast_hits_index++)
-            //    {
-            //        RaycastHit raycast_hit = raycastHits[raycast_hits_index];
-            //        if ((nearest_valid_raycast_hit == null) || (nearest_valid_raycast_hit.Value.distance > raycast_hit.distance))
-            //        {
-            //            nearest_valid_raycast_hit = raycast_hit;
-            //        }
-            //    }
-            //    if (nearest_valid_raycast_hit != null)
-            //    {
-            //        GameObject game_object = nearest_valid_raycast_hit.Value.collider.gameObject;
-            //        while (game_object != null)
-            //        {
-            //            InteractableControllerScript interactable_controller = game_object.GetComponent<InteractableControllerScript>();
-            //            if (interactable_controller != null)
-            //            {
-            //                interactable_controller.Interact();
-            //                break;
-            //            }
-            //            if (game_object.transform.parent == null)
-            //            {
-            //                break;
-            //            }
-            //            game_object = game_object.transform.parent.gameObject;
-            //        }
-            //    }
-            //}
+            // TODO
         }
 
         /// <summary>
@@ -419,14 +588,8 @@ namespace Akasha.Controllers
         {
             if (IsAlive && IsOnGround)
             {
-                VerticalVelocityMagnitude = Mathf.Sqrt(2.0f * JumpHeight * GravityMagnitude);// - Vector3.Dot(Vector3.Up, CharacterRigidbody.velocity));
+                VerticalVelocityMagnitude = Mathf.Sqrt(2.0f * JumpHeight * GravityMagnitude);
             }
-
-            //if (IsAlive && (ExecutedJumps < totalJumps) && (CharacterRigidbody != null))
-            //{
-            //    CharacterRigidbody.AddForce(GroundNormal * (Mathf.Sqrt(-2.0f * JumpHeight * Physics.gravity.y) - Vector3.Dot(GroundNormal, CharacterRigidbody.velocity)), ForceMode.VelocityChange);
-            //    ++ExecutedJumps;
-            //}
         }
 
         /// <summary>
@@ -434,90 +597,7 @@ namespace Akasha.Controllers
         /// </summary>
         public void Shoot()
         {
-            //if (IsAlive && (weapon != null))
-            //{
-            //    if (ShotsFired >= weapon.AmmoCapacity)
-            //    {
-            //        Reload();
-            //    }
-            //    else if (elapsedShootTime >= weapon.ShootTime)
-            //    {
-            //        elapsedShootTime = 0.0f;
-            //        ++ShotsFired;
-            //        if ((eyesTransform != null) && (weapon.Distance > float.Epsilon))
-            //        {
-            //            int raycast_hits_count = PhysicsUtils.Raycast(eyesTransform.position, eyesTransform.forward, weapon.Distance, ref raycastHits);
-            //            RaycastHit? nearest_valid_raycast_hit = null;
-            //            for (int raycast_hits_index = 0; raycast_hits_index < raycast_hits_count; raycast_hits_index++)
-            //            {
-            //                RaycastHit raycast_hit = raycastHits[raycast_hits_index];
-            //                if ((nearest_valid_raycast_hit == null) || (nearest_valid_raycast_hit.Value.distance > raycast_hit.distance))
-            //                {
-            //                    GameObject game_object = raycast_hit.collider.gameObject;
-            //                    bool success = true;
-            //                    while (game_object != null)
-            //                    {
-            //                        if (game_object == gameObject)
-            //                        {
-            //                            success = false;
-            //                            break;
-            //                        }
-            //                        if (game_object.transform.parent == null)
-            //                        {
-            //                            break;
-            //                        }
-            //                        game_object = game_object.transform.parent.gameObject;
-            //                    }
-            //                    if (success)
-            //                    {
-            //                        nearest_valid_raycast_hit = raycast_hit;
-            //                    }
-            //                }
-            //            }
-            //            if (nearest_valid_raycast_hit != null)
-            //            {
-            //                RaycastHit raycast_hit = nearest_valid_raycast_hit.Value;
-            //                GameObject game_object = raycast_hit.collider.gameObject;
-            //                while (game_object != null)
-            //                {
-            //                    DestructibleControllerScript descructible_controller = game_object.GetComponent<DestructibleControllerScript>();
-            //                    if (descructible_controller != null)
-            //                    {
-            //                        descructible_controller.Health -= Mathf.Lerp(weapon.Damage, 0.0f, Mathf.Sqrt(raycast_hit.distance / weapon.Distance));
-            //                        break;
-            //                    }
-            //                    if (game_object.transform.parent == null)
-            //                    {
-            //                        break;
-            //                    }
-            //                    game_object = game_object.transform.parent.gameObject;
-            //                }
-            //                game_object = raycast_hit.collider.gameObject;
-            //                while (game_object != null)
-            //                {
-            //                    Rigidbody rigidbody = game_object.GetComponent<Rigidbody>();
-            //                    if (rigidbody != null)
-            //                    {
-            //                        rigidbody.AddForceAtPosition(eyesTransform.forward * weapon.KnockbackImpulse, raycast_hit.point, ForceMode.Impulse);
-            //                    }
-            //                    if (game_object.transform.parent == null)
-            //                    {
-            //                        break;
-            //                    }
-            //                    game_object = game_object.transform.parent.gameObject;
-            //                }
-            //                if (weapon.BulletHoleAsset != null)
-            //                {
-            //                    Instantiate(weapon.BulletHoleAsset, raycast_hit.point, Quaternion.FromToRotation(Vector3.forward, raycast_hit.collider.transform.InverseTransformDirection(-raycast_hit.normal)), raycast_hit.collider.transform);
-            //                }
-            //            }
-            //        }
-            //        if (ShotsFired >= weapon.AmmoCapacity)
-            //        {
-            //            Reload();
-            //        }
-            //    }
-            //}
+            // TODO
         }
 
         /// <summary>
@@ -525,10 +605,7 @@ namespace Akasha.Controllers
         /// </summary>
         public void Reload()
         {
-            //if (IsAlive && (ShotsFired > 0U))
-            //{
-            //    IsReloading = true;
-            //}
+            // TODO
         }
 
         /// <summary>
@@ -588,6 +665,7 @@ namespace Akasha.Controllers
         {
             base.Start();
             InventoryUIController = FindObjectOfType<InventoryUIControllerScript>(true);
+            ElapsedStaminaRegenerationCooldownTime = StaminaRegenerationCooldownTime;
         }
 
         /// <summary>
@@ -605,11 +683,47 @@ namespace Akasha.Controllers
             VerticalVelocityMagnitude -= GravityMagnitude * delta_time;
             if (IsAlive)
             {
-                Move(((transform.right * movement.x) + (transform.forward * movement.y)) * (movementSpeed * delta_time));
+                float movement_speed = MovementSpeed;
+                float stamina_regenration_cooldown_time = StaminaRegenerationCooldownTime;
+                ElapsedStaminaRegenerationCooldownTime = Mathf.Clamp(ElapsedStaminaRegenerationCooldownTime + Time.deltaTime, 0.0f, stamina_regenration_cooldown_time);
+                Fullness -= HungerPerSecond * Time.deltaTime;
+                if (Fullness <= float.Epsilon)
+                {
+                    Health -= HungerDamagePerSecond * Time.deltaTime;
+                }
+                bool deplete_stamina = false;
+                switch (RunningMode)
+                {
+                    case ERunningMode.Sprinting:
+                        float sprint_multiplier = SprintMultiplier;
+                        deplete_stamina = ((movement.magnitude * sprint_multiplier) > 1.0f) && !IsExhausted;
+                        ElapsedStaminaRegenerationCooldownTime = (deplete_stamina ? 0.0f : ElapsedStaminaRegenerationCooldownTime);
+                        if (!IsExhausted && (Stamina > float.Epsilon))
+                        {
+                            movement_speed *= sprint_multiplier;
+                        }
+                        break;
+                    case ERunningMode.Sneaking:
+                        float sneak_multiplier = SneakMultiplier;
+                        deplete_stamina = ((movement.magnitude * sneak_multiplier) > 1.0f) && !IsExhausted;
+                        ElapsedStaminaRegenerationCooldownTime = (deplete_stamina ? 0.0f : ElapsedStaminaRegenerationCooldownTime);
+                        movement_speed *= sneak_multiplier;
+                        break;
+                }
+                Stamina = (deplete_stamina ? Mathf.Clamp(Stamina - (StaminaDepletionPerSecond * Time.deltaTime), 0.0f, 1.0f) : ((ElapsedStaminaRegenerationCooldownTime + float.Epsilon) < stamina_regenration_cooldown_time ? Stamina : Mathf.Clamp(Stamina + (StaminaRegenerationPerSecond * Time.deltaTime), 0.0f, 1.0f)));
+                IsExhausted = (Stamina <= float.Epsilon) || (Stamina < (1.0f - float.Epsilon) && IsExhausted);
+                Move(((transform.right * movement.x) + (transform.forward * movement.y)) * (movement_speed * delta_time));
             }
             IsOnGround = Move(Vector3.up * (VerticalVelocityMagnitude * delta_time)) || TestCollision(transform.position + (Vector3.down * 0.0625f));
             if (IsOnGround)
             {
+                float fall_speed = -VerticalVelocityMagnitude;
+                float minimal_fall_damage_speed = MinimalFallDamageSpeed;
+                if (fall_speed >= minimal_fall_damage_speed)
+                {
+                    float delta = MaximalFallDamageSpeed - minimal_fall_damage_speed;
+                    Damage(MaximalHealth * ((delta > float.Epsilon) ? Mathf.Clamp((fall_speed - minimal_fall_damage_speed) / delta, 0.0f, 1.0f) : 1.0f));
+                }
                 VerticalVelocityMagnitude = 0.0f;
             }
             ElapsedHitCooldownTime += delta_time;
@@ -624,7 +738,7 @@ namespace Akasha.Controllers
                         ITargetedBlock targeted_block = GetTargetedBlock(0.0f);
                         if ((targeted_block != null) && targeted_block.IsABlock)
                         {
-                            IFarmingToolData farming_tool = targeted_block.Block.Block.GetFarmingToolDataFromFarmingToolItem((item == null) ? null : item.Item);
+                            IFarmingToolData farming_tool = targeted_block.Block.Block.GetFarmingToolDataFromFarmingToolItem(item?.Item);
                             if (farming_tool != null)
                             {
                                 while ((((item == null) || item.IsUsable)) && (ElapsedHitCooldownTime >= MaximalHitCooldownTime))
@@ -636,13 +750,12 @@ namespace Akasha.Controllers
                                     {
                                         Inventory.AddItems(farmable_item.FarmableItem, farmable_item.FarmableItem.MaximalHealth, farmable_item.Quantity);
                                     }
-                                    ElapsedHitCooldownTime = 0.0f;
-                                    if ((item != null) && (item.Item != null) && (item.Item.MaximalHealth > 0U) && (item.Health > 0U))
+                                    if (farming_tool.FarmingToolItem && (item != null) && (item.Item != null) && (item.Item.MaximalHealth > 0U) && (item.Health > 0U))
                                     {
                                         item = new InventoryItemData(item.Item, item.Health - 1U, item.Quantity);
                                         Inventory.SetInventoryItemHealth((uint)selectedInventoryItemSlotIndex, item.Health);
                                     }
-                                    ElapsedHitCooldownTime -= MaximalHitCooldownTime;
+                                    ElapsedHitCooldownTime = 0.0f;
                                 }
                             }
                             else
@@ -669,23 +782,6 @@ namespace Akasha.Controllers
             {
                 ElapsedHitCooldownTime = Mathf.Min(ElapsedHitCooldownTime, MaximalHitCooldownTime);
             }
-
-            //if (CharacterController)
-            //{
-
-            //    VerticalVelocityMagnitude -= GravityMagnitude * delta_time;
-            //    CollisionFlags collision_flags = CollisionFlags.None;
-            //    if (IsAlive)
-            //    {
-            //        collision_flags |= CharacterController.Move(((transform.right * movement.x) + (transform.forward * movement.y)) * (movementSpeed * delta_time));
-            //    }
-            //    collision_flags |= CharacterController.Move(Vector3.up * (VerticalVelocityMagnitude * delta_time));
-            //    IsOnGround = ((collision_flags & CollisionFlags.Below) == CollisionFlags.Below);
-            //    if (IsOnGround)
-            //    {
-            //        VerticalVelocityMagnitude = 0.0f;
-            //    }
-            //}
         }
     }
 }

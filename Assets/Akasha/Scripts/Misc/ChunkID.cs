@@ -178,6 +178,18 @@ namespace Akasha
         /// Explicit cast operator
         /// </summary>
         /// <param name="vector">Vector</param>
+        public static explicit operator ChunkID(Vector3 vector) => new ChunkID((int)(vector.x), (int)(vector.y), (int) (vector.z));
+
+        /// <summary>
+        /// Explicit cast operator
+        /// </summary>
+        /// <param name="chunkID">Chunk ID</param>
+        public static explicit operator Vector3(ChunkID chunkID) => new Vector3(chunkID.x, chunkID.y, chunkID.z);
+
+        /// <summary>
+        /// Explicit cast operator
+        /// </summary>
+        /// <param name="vector">Vector</param>
         public static explicit operator ChunkID(Vector3Int vector) => new ChunkID(vector.x, vector.y, vector.z);
 
         /// <summary>
@@ -222,6 +234,6 @@ namespace Akasha
         /// </summary>
         /// <param name="obj">Object</param>
         /// <returns>"true" if equal, otherwise "false"</returns>
-        public override bool Equals(object obj) => ((obj is ChunkID chunk_id) ? (this == chunk_id) : false);
+        public override bool Equals(object obj) => ((obj is ChunkID chunk_id) && (this == chunk_id));
     }
 }

@@ -47,7 +47,7 @@ namespace Akasha.Controllers
         /// Follow transform
         /// </summary>
         [SerializeField]
-        private OldCharacterControllerScript followCharacterController;
+        private CharacterControllerScript followCharacterController;
 
         /// <summary>
         /// Raycast hits
@@ -102,7 +102,7 @@ namespace Akasha.Controllers
         /// <summary>
         /// Follow character controller
         /// </summary>
-        public OldCharacterControllerScript FollowCharacterController
+        public CharacterControllerScript FollowCharacterController
         {
             get => followCharacterController;
             set => followCharacterController = value;

@@ -1,5 +1,4 @@
 ﻿using Akasha.Managers;
-using System;
 using UnityEngine;
 
 /// <summary>
@@ -19,11 +18,6 @@ namespace Akasha.Controllers
         private GameObject originGameObject = default;
 
         /// <summary>
-        /// Raycast hits
-        /// </summary>
-        private RaycastHit[] raycastHits = Array.Empty<RaycastHit>();
-
-        /// <summary>
         /// Origin game object
         /// </summary>
         public GameObject OriginGameObject
@@ -33,16 +27,20 @@ namespace Akasha.Controllers
         }
 
         /// <summary>
-        /// Game camera
+        /// Player character controller
         /// </summary>
-        public Camera GameCamera { get; private set; }
+        public ICharacterController PlayerCharacterController { get; private set; }
 
         /// <summary>
         /// Start
         /// </summary>
         private void Start()
         {
-            GameCamera = FindObjectOfType<Camera>();
+            PlayerControllerScript player_controller = FindObjectOfType<PlayerControllerScript>();
+            if (player_controller)
+            {
+                PlayerCharacterController = player_controller.GetComponent<CharacterControllerScript>();
+            }
         }
 
         /// <summary>
@@ -50,46 +48,30 @@ namespace Akasha.Controllers
         /// </summary>
         private void Update()
         {
-            Vector3? position = null;
-            if (GameCamera)
+            if (originGameObject != null)
             {
                 WorldManagerScript world_manager = WorldManagerScript.Instance;
-                if (world_manager)
+                if (world_manager && (PlayerCharacterController != null))
                 {
-                    int raycast_hit_count = PhysicsUtils.Raycast(GameCamera.transform.position, GameCamera.transform.forward, 20.0f, ref raycastHits);
-                    if (raycast_hit_count > 0)
+                    IInventoryItemData inventory_item = PlayerCharacterController.SelectedInventoryItem;
+                    if ((inventory_item != null) && (inventory_item.Quantity > 0U) && (inventory_item.Item is IBlockObject))
                     {
-                        Vector3Int chunk_size = world_manager.ChunkSize;
-                        float distance = float.PositiveInfinity;
-                        for (int index = 0; index < raycast_hit_count; index++)
+                        ITargetedBlock targeted_block = PlayerCharacterController.GetTargetedBlock(1.0f);
+                        bool show_block_indicator = ((targeted_block != null) && targeted_block.IsNothing);
+                        originGameObject.SetActive(show_block_indicator);
+                        if (show_block_indicator)
                         {
-                            RaycastHit raycast_hit = raycastHits[index];
-                            if ((raycast_hit.distance < distance) && !(raycast_hit.collider.isTrigger) && (raycast_hit.collider.transform.parent != null))
-                            {
-                                ChunkControllerScript chunk_controller = raycast_hit.collider.GetComponentInParent<ChunkControllerScript>();
-                                if (chunk_controller != null)
-                                {
-                                    position = raycast_hit.collider.transform.position + new Vector3(Mathf.Round(raycast_hit.normal.x), Mathf.Round(raycast_hit.normal.y), Mathf.Round(raycast_hit.normal.z));
-                                    distance = raycast_hit.distance;
-                                }
-                            }
+                            originGameObject.transform.position = world_manager.GetWorldPositionFromBlockID(targeted_block.ID);
                         }
                     }
+                    else
+                    {
+                        originGameObject.SetActive(false);
+                    }
                 }
-            }
-            if (position == null)
-            {
-                if (originGameObject/* && originGameObject.activeSelf*/)
+                else
                 {
                     originGameObject.SetActive(false);
-                }
-            }
-            else
-            {
-                transform.position = position.Value;
-                if (originGameObject/* && !(originGameObject.activeSelf)*/)
-                {
-                    originGameObject.SetActive(true);
                 }
             }
         }

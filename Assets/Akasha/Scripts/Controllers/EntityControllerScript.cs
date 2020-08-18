@@ -146,7 +146,7 @@ namespace Akasha.Controllers
         private ChunkID GetBoundsCenterChunkID(Vector3 worldPosition)
         {
             WorldManagerScript world_manager = WorldManagerScript.Instance;
-            return (world_manager ? world_manager.GetChunkIDFDromBlockID(GetBoundsCenterBlockID(worldPosition)) : ChunkID.Zero);
+            return (world_manager ? world_manager.GetChunkIDFromBlockID(GetBoundsCenterBlockID(worldPosition)) : ChunkID.Zero);
         }
 
         /// <summary>
@@ -202,7 +202,7 @@ namespace Akasha.Controllers
                         {
                             Vector3Int check_space_block_position = new Vector3Int(index % check_blocks_size.x, (index / check_blocks_size.x) % check_blocks_size.y, index / (check_blocks_size.x * check_blocks_size.y));
                             BlockID local_space_block_id = new BlockID(check_space_block_position.x - (check_blocks_size.x / 2) + local_space_bounds_center_block_id.X, check_space_block_position.y - (check_blocks_size.y / 2) + local_space_bounds_center_block_id.Y, check_space_block_position.z - (check_blocks_size.z / 2) + local_space_bounds_center_block_id.Z);
-                            ChunkID local_space_chunk_id = world_manager.GetChunkIDFDromBlockID(local_space_block_id);
+                            ChunkID local_space_chunk_id = world_manager.GetChunkIDFromBlockID(local_space_block_id);
                             Vector3Int block_chunk_position = new Vector3Int((int)(local_space_block_id.X % chunk_size.x), (int)(local_space_block_id.Y % chunk_size.y), (int)(local_space_block_id.Z % chunk_size.z));
                             BlockData[] chunk_blocks = chunkBlocks[local_space_chunk_id.X + (local_space_chunk_id.Y * bounds_chunk_blocks_size.x) + (local_space_chunk_id.Z * bounds_chunk_blocks_size.x * bounds_chunk_blocks_size.y)];
                             if (chunk_blocks == null)

@@ -215,7 +215,7 @@ namespace Akasha.Managers
         /// </summary>
         /// <param name="blockID">Block ID</param>
         /// <returns>Chunk ID</returns>
-        public ChunkID GetChunkIDFDromBlockID(BlockID blockID)
+        public ChunkID GetChunkIDFromBlockID(BlockID blockID)
         {
             Vector3Int chunk_size = ChunkSize;
             return new ChunkID
@@ -252,6 +252,31 @@ namespace Akasha.Managers
                 }
             }
             return ret;
+        }
+
+        /// <summary>
+        /// Get world position from block ID
+        /// </summary>
+        /// <param name="blockID">Block ID</param>
+        /// <returns>World position</returns>
+        public Vector3 GetWorldPositionFromBlockID(BlockID blockID)
+        {
+            ChunkID follow_transform_controller_chunk_id = (followTransformController ? followTransformController.ChunkID : ChunkID.Zero);
+            //ChunkID chunk_id = GetChunkIDFromBlockID(blockID);
+            Vector3Int chunk_size = ChunkSize;
+            //Debug.Log("X: " + (int)(blockID.X % chunk_size.x) + "; Y: " + (int)(blockID.Y % chunk_size.y) + "; Z: " + (int)(blockID.Z % chunk_size.z));
+            //return new Vector3
+            //(
+            //    ((chunk_id.X - follow_transform_controller_chunk_id.X) * chunk_size.x) + (int)(((blockID.X < 0L) ? (blockID.X - chunk_size.x + 1) : blockID.X) % chunk_size.x) + 0.5f,
+            //    ((chunk_id.Y - follow_transform_controller_chunk_id.Y) * chunk_size.y) + (int)(((blockID.Y < 0L) ? (blockID.Y - chunk_size.y + 1) : blockID.Y) % chunk_size.y) + 0.5f,
+            //    ((chunk_id.Z - follow_transform_controller_chunk_id.Z) * chunk_size.z) + (int)(((blockID.Z < 0L) ? (blockID.Z - chunk_size.z + 1) : blockID.Z) % chunk_size.z) + 0.5f
+            //);
+            return new Vector3
+            (
+                blockID.X - (follow_transform_controller_chunk_id.X * chunk_size.x) + 0.5f,
+                blockID.Y - (follow_transform_controller_chunk_id.Y * chunk_size.y) + 0.5f,
+                blockID.Z - (follow_transform_controller_chunk_id.Z * chunk_size.z) + 0.5f
+            );
         }
 
         /// <summary>
@@ -412,7 +437,7 @@ namespace Akasha.Managers
         {
             BlockData ret = default;
             Vector3Int chunk_size = ChunkSize;
-            ChunkID chunk_id = GetChunkIDFDromBlockID(blockID);
+            ChunkID chunk_id = GetChunkIDFromBlockID(blockID);
             int block_count = chunk_size.x * chunk_size.y * chunk_size.z;
             BlockData[] blocks = GetChunkBlocksTask(chunk_id).Result;
             if (blocks.Length == block_count)
@@ -432,7 +457,7 @@ namespace Akasha.Managers
         public void SetBlock(BlockID blockID, BlockData block)
         {
             Vector3Int chunk_size = ChunkSize;
-            ChunkID chunk_id = GetChunkIDFDromBlockID(blockID);
+            ChunkID chunk_id = GetChunkIDFromBlockID(blockID);
             int block_count = chunk_size.x * chunk_size.y * chunk_size.z;
             BlockData[] blocks = GetChunkBlocksTask(chunk_id).Result;
             if (blocks.Length == block_count)
@@ -702,14 +727,6 @@ namespace Akasha.Managers
                         chunk_controller.gameObject.SetActive(((Mathf.Abs(delta.x) <= (chunk_size.x * force_chunk_refresh_grid_distance)) && (Mathf.Abs(delta.y) <= (chunk_size.z * force_chunk_refresh_grid_distance))) || ((delta.sqrMagnitude > float.Epsilon) && (Vector2.Angle(delta.normalized, game_camera_forward_plane) <= clip_view_angle)));
                     }
                 }
-                //foreach (ChunkControllerScript chunk_controller in chunkControllers)
-                //{
-                //    if (chunk_controller != null)
-                //    {
-                //        Vector3 delta = (chunk_controller.transform.position - game_camera_position);
-                //        chunk_controller.gameObject.SetActive(((Mathf.Abs(delta.x) <= (chunk_size.x * force_chunk_refresh_grid_distance)) && (Mathf.Abs(delta.y) <= (chunk_size.y * force_chunk_refresh_grid_distance)) && (Mathf.Abs(delta.z) <= (chunk_size.z * force_chunk_refresh_grid_distance))) || ((delta.sqrMagnitude > float.Epsilon) && (Vector3.Angle(delta.normalized, game_camera_forward) <= clip_view_angle)));
-                //    }
-                //}
             }
         }
     }

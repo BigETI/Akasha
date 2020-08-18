@@ -1,0 +1,33 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 753a99c5c8d5469419e0a2f1b6c81c69, type: 3}
+  m_Name: WallBlock
+  m_EditorClassIdentifier: 
+  itemNameStringTranslation: {fileID: 11400000, guid: 9bc32f44388271046ae21061affab388,
+    type: 2}
+  iconSpriteTranslation: {fileID: 11400000, guid: 1d8630b263bd95b408ce9d511f01489a,
+    type: 2}
+  descriptionStringTranslation: {fileID: 11400000, guid: 1f857585ffec188419a61686c6c09a01,
+    type: 2}
+  maximalHealth: 0
+  maximalStackSize: 0
+  weight: 0
+  maximalHitCooldownTime: 0.5
+  itemAndHandsAsset: {fileID: 0}
+  hasRandomOrientation: 0
+  initialHealth: 1024
+  material: {fileID: 2100000, guid: 3807c56f22fd40d4a8aae73d99f6aa5c, type: 2}
+  meshVariants: {fileID: 11400000, guid: 3c04e60adebbf1d449051b9382326711, type: 2}
+  collisionBounds:
+  - m_Center: {x: 0, y: 0, z: 0}
+    m_Extent: {x: 0.5, y: 0.5, z: 0.5}
+  farmingTools: []

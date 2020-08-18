@@ -27,7 +27,7 @@ namespace Akasha.Controllers
         /// <summary>
         /// Entered character IDs
         /// </summary>
-        private HashSet<int> enteredCharacterIDs = new HashSet<int>();
+        private readonly HashSet<int> enteredCharacterIDs = new HashSet<int>();
 
         /// <summary>
         /// Animator
@@ -75,7 +75,7 @@ namespace Akasha.Controllers
             GameObject game_object = collider.gameObject;
             while (game_object != null)
             {
-                if (game_object.GetComponent<OldCharacterControllerScript>() != null)
+                if (game_object.TryGetComponent(out CharacterControllerScript _))
                 {
                     if ((enteredCharacterIDs.Count <= 0) && (onCharacterTriggerEntered != null))
                     {
@@ -101,7 +101,7 @@ namespace Akasha.Controllers
             GameObject game_object = collider.gameObject;
             while (game_object != null)
             {
-                if (game_object.GetComponent<OldCharacterControllerScript>() != null)
+                if (game_object.TryGetComponent(out CharacterControllerScript _))
                 {
                     if (enteredCharacterIDs.Remove(game_object.GetInstanceID()) && (enteredCharacterIDs.Count <= 0) && (onCharacterTriggerExited != null))
                     {

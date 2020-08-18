@@ -14,9 +14,19 @@ namespace Akasha
         float Health { get; set; }
 
         /// <summary>
+        /// Armor
+        /// </summary>
+        float Armor { get; set; }
+
+        /// <summary>
         /// Maximal health
         /// </summary>
         float MaximalHealth { get; set; }
+
+        /// <summary>
+        /// Maximal armor
+        /// </summary>
+        float MaximalArmor { get; set; }
 
         /// <summary>
         /// Is alive
@@ -27,5 +37,11 @@ namespace Akasha
         /// On destroyed
         /// </summary>
         event DiedDelegete OnDied;
+
+        /// <summary>
+        /// Damage
+        /// </summary>
+        /// <param name="value">Value</param>
+        void Damage(float value);
     }
 }

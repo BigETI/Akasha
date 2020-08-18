@@ -33,14 +33,74 @@ namespace Akasha
         float MovementSpeed { get; set; }
 
         /// <summary>
+        /// Sprint multiplier
+        /// </summary>
+        float SprintMultiplier { get; set; }
+
+        /// <summary>
+        /// Sneak multiplier
+        /// </summary>
+        float SneakMultiplier { get; set; }
+
+        /// <summary>
         /// Jump height
         /// </summary>
         float JumpHeight { get; set; }
 
         /// <summary>
+        /// Minimal fall damage speed
+        /// </summary>
+        float MinimalFallDamageSpeed { get; set; }
+
+        /// <summary>
+        /// Maximal fall damage speed
+        /// </summary>
+        float MaximalFallDamageSpeed { get; set; }
+
+        /// <summary>
         /// Default hit cooldown time
         /// </summary>
         float DefaultHitCooldownTime { get; set; }
+
+        /// <summary>
+        /// Stamina depletion per second
+        /// </summary>
+        float StaminaDepletionPerSecond { get; set; }
+
+        /// <summary>
+        /// Stamina regeneration per second
+        /// </summary>
+        float StaminaRegenerationPerSecond { get; set; }
+
+        /// <summary>
+        /// Stamina regeneration cooldown time
+        /// </summary>
+        float StaminaRegenerationCooldownTime { get; set; }
+
+        /// <summary>
+        /// Fullness
+        /// </summary>
+        float Fullness { get; set; }
+
+        /// <summary>
+        /// Maximal fullness
+        /// </summary>
+        float MaximalFullness { get; set; }
+
+        /// <summary>
+        /// Hunger per second
+        /// </summary>
+        float HungerPerSecond { get; set; }
+
+        /// <summary>
+        /// Hunger damage per second
+        /// </summary>
+        float HungerDamagePerSecond { get; set; }
+
+        /// <summary>
+        /// Interaction distance
+        /// </summary>
+        float InteractionDistance { get; set; }
 
         /// <summary>
         /// Inventory
@@ -93,9 +153,36 @@ namespace Akasha
         IInventoryItemData SelectedInventoryItem { get; }
 
         /// <summary>
+        /// Maximal hit cooldown time
+        /// </summary>
+        float MaximalHitCooldownTime { get; }
+
+        /// <summary>
+        /// Elapsed hit cooldown time
+        /// </summary>
+        float ElapsedHitCooldownTime { get; }
+
+        /// <summary>
+        /// Stamina
+        /// </summary>
+        float Stamina { get; }
+
+        /// <summary>
+        /// Elapsed stamina regeneration cooldown time
+        /// </summary>
+        float ElapsedStaminaRegenerationCooldownTime { get; }
+
+        /// <summary>
         /// Place block
         /// </summary>
         void PlaceBlock();
+
+        /// <summary>
+        /// Get targeted block
+        /// </summary>
+        /// <param name="collisionNormalDistance">Collision normal distance</param>
+        /// <returns>Targeted block</returns>
+        ITargetedBlock GetTargetedBlock(float collisionNormalDistance);
 
         /// <summary>
         /// Interact

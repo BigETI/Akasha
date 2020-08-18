@@ -9,7 +9,7 @@ namespace Akasha.Controllers
     /// <summary>
     /// AI controller script class
     /// </summary>
-    [RequireComponent(typeof(OldCharacterControllerScript))]
+    [RequireComponent(typeof(CharacterControllerScript))]
     public class AIControllerScript : MonoBehaviour, IAIController
     {
         /// <summary>
@@ -34,12 +34,12 @@ namespace Akasha.Controllers
         /// <summary>
         /// Detected player characters
         /// </summary>
-        private Dictionary<int, IPlayerCharacterDetectionState> detectedPlayerCharacters = new Dictionary<int, IPlayerCharacterDetectionState>();
+        private readonly Dictionary<int, IPlayerCharacterDetectionState> detectedPlayerCharacters = new Dictionary<int, IPlayerCharacterDetectionState>();
 
         /// <summary>
         /// Delete detected player character IDs
         /// </summary>
-        private HashSet<int> deleteDetectedPlayerCharacterIDs = new HashSet<int>();
+        private readonly HashSet<int> deleteDetectedPlayerCharacterIDs = new HashSet<int>();
 
         /// <summary>
         /// Visibility angle

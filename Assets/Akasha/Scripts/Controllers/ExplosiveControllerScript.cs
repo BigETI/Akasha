@@ -65,21 +65,22 @@ namespace Akasha.Controllers
         {
             float explosion_radius = ExplosionRadius;
             Health = 0.0f;
+            Armor = 0.0f;
             if (explosion_radius > float.Epsilon)
             {
                 float explosion_radius_squared = explosion_radius * explosion_radius;
-                LivingEntityControllerScript[] destructible_controllers = FindObjectsOfType<LivingEntityControllerScript>();
-                if (destructible_controllers != null)
+                LivingEntityControllerScript[] living_entity_controllers = FindObjectsOfType<LivingEntityControllerScript>();
+                if (living_entity_controllers != null)
                 {
                     float maximal_damage = MaximalDamage;
-                    foreach (LivingEntityControllerScript destructible_controller in destructible_controllers)
+                    foreach (LivingEntityControllerScript living_entity_controller in living_entity_controllers)
                     {
-                        if (destructible_controller != null)
+                        if (living_entity_controller != null)
                         {
-                            Vector3 delta = destructible_controller.transform.position - transform.position;
+                            Vector3 delta = living_entity_controller.transform.position - transform.position;
                             if (delta.sqrMagnitude < explosion_radius_squared)
                             {
-                                GameObject game_object = destructible_controller.gameObject;
+                                GameObject game_object = living_entity_controller.gameObject;
                                 bool success = true;
                                 while (game_object != null)
                                 {
@@ -96,7 +97,7 @@ namespace Akasha.Controllers
                                 }
                                 if (success)
                                 {
-                                    destructible_controller.Health -= Mathf.Lerp(maximal_damage, 0.0f, Mathf.Sqrt(delta.magnitude / explosion_radius));
+                                    living_entity_controller.Damage(Mathf.Lerp(maximal_damage, 0.0f, Mathf.Sqrt(delta.magnitude / explosion_radius)));
                                 }
                             }
                         }
