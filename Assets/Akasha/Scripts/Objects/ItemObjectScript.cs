@@ -104,6 +104,6 @@ namespace Akasha.Objects
         /// <summary>
         /// Key
         /// </summary>
-        public virtual string Key => "Misc/" + name;
+        public virtual string Key => $"Misc/{ name }";
     }
 }

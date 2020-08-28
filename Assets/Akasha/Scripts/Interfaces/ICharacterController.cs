@@ -173,6 +173,21 @@ namespace Akasha
         float ElapsedStaminaRegenerationCooldownTime { get; }
 
         /// <summary>
+        /// Is exhausted
+        /// </summary>
+        bool IsExhausted { get; }
+
+        /// <summary>
+        /// Inventory UI controller
+        /// </summary>
+        IInventoryUIController InventoryUIController { get; }
+
+        /// <summary>
+        /// New world player data snapshot
+        /// </summary>
+        WorldPlayerData NewWorldPlayerDataSnapshot { get; }
+
+        /// <summary>
         /// Place block
         /// </summary>
         void PlaceBlock();

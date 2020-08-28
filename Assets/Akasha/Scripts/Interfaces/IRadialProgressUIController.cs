@@ -1,4 +1,5 @@
-﻿using UnityEngine.UI;
+﻿using UnityEngine;
+using UnityEngine.UI;
 
 /// <summary>
 /// Akasha namespace
@@ -19,6 +20,16 @@ namespace Akasha
         /// Border rotation offset
         /// </summary>
         float BorderRotationOffset { get; set; }
+
+        /// <summary>
+        /// Border color
+        /// </summary>
+        Color BorderColor { get; set; }
+
+        /// <summary>
+        /// Inner color
+        /// </summary>
+        Color InnerColor { get; set; }
 
         /// <summary>
         /// Border radial progress image

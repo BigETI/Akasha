@@ -11,6 +11,8 @@ namespace Akasha
         /// <summary>
         /// Name
         /// </summary>
+#pragma warning disable IDE1006 // Naming Styles
         string name { get; }
+#pragma warning restore IDE1006 // Naming Styles
     }
 }

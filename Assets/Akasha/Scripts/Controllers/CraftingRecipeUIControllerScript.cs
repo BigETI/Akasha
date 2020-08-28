@@ -16,7 +16,7 @@ namespace Akasha.Controllers
         /// <summary>
         /// Default recipe text format
         /// </summary>
-        private static readonly string defaultRecipeTextFormat = "{0}" + Environment.NewLine + "<b>x{1}</b>";
+        private static readonly string defaultRecipeTextFormat = $"{{0}}{ Environment.NewLine }<b>x{{1}}</b>";
 
         /// <summary>
         /// Icon image

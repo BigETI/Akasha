@@ -93,7 +93,7 @@ namespace Akasha.Controllers
         /// <returns>Chunk block types</returns>
         private Task<BlockData[]> GetChunkBlocksTaskFromChunk(ChunkControllerScript targetChunkController, ChunkID targetChunkID, WorldManagerScript worldManager)
         {
-            Task<BlockData[]> ret = ((targetChunkController == null) ? null : targetChunkController.chunkBlocksTask);
+            Task<BlockData[]> ret = (targetChunkController ? targetChunkController.chunkBlocksTask : null);
             if (ret == null)
             {
                 ret = worldManager.GetChunkBlocksTask(targetChunkID);
@@ -107,7 +107,7 @@ namespace Akasha.Controllers
         private void Update()
         {
             WorldManagerScript world_manager = WorldManagerScript.Instance;
-            if (world_manager != null)
+            if (world_manager)
             {
                 Vector3Int chunk_size = world_manager.ChunkSize;
                 ChunkID chunk_id = chunkID;
@@ -219,11 +219,10 @@ namespace Akasha.Controllers
                         }
                     }
                 }
-                IReadOnlyDictionary<string, IBlockObject> block_lookup = world_manager.BlockLookup;
                 foreach (KeyValuePair<int, BlockChange> change_block in changeBlocks)
                 {
                     ref InstantiatedBlock instantiated_block = ref instantiatedBlocks[change_block.Key];
-                    if (instantiated_block.Instance != null)
+                    if (instantiated_block.Instance)
                     {
                         Destroy(instantiated_block.Instance);
                     }
@@ -279,7 +278,7 @@ namespace Akasha.Controllers
                                     }
                                 }
                             }
-                            game_object.name = "Block " + block_id;
+                            game_object.name = $"Block { block_id }";
                         }
                     }
                     instantiated_block = new InstantiatedBlock(change_block.Value.Block, change_block.Value.DirectionFlags, game_object);

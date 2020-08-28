@@ -1,4 +1,6 @@
-﻿using UnityEngine;
+﻿using Akasha.Objects;
+using System;
+using UnityEngine;
 
 /// <summary>
 /// Akasha namespace
@@ -26,9 +28,19 @@ namespace Akasha
         float SampleCollisionDistanceMultiplier { get; set; }
 
         /// <summary>
+        /// Entity object
+        /// </summary>
+        EntityObjectScript EntityObject { get; set; }
+
+        /// <summary>
         /// Bounds chunk blocks size
         /// </summary>
         Vector3Int BoundsChunkBlocksSize { get; }
+
+        /// <summary>
+        /// GUID
+        /// </summary>
+        Guid GUID { get; set; }
 
         /// <summary>
         /// World transform controller

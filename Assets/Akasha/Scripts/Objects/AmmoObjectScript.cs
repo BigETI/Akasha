@@ -13,6 +13,6 @@ namespace Akasha.Objects
         /// <summary>
         /// Key
         /// </summary>
-        public override string Key => "Ammo/" + name;
+        public override string Key => $"Ammo/{ name }";
     }
 }

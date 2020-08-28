@@ -1,5 +1,4 @@
 ﻿using Akasha.Data;
-using TMPro;
 using UnityEngine;
 
 /// <summary>
@@ -54,12 +53,6 @@ namespace Akasha.Controllers
         /// </summary>
         [SerializeField]
         private HUDRadialProgressData armorHUDRadialProgress = default;
-
-        /// <summary>
-        /// Character status text
-        /// </summary>
-        [SerializeField]
-        private TextMeshProUGUI characterStatusText = default;
 
         /// <summary>
         /// Blink time
@@ -125,15 +118,6 @@ namespace Akasha.Controllers
         }
 
         /// <summary>
-        /// Character status text
-        /// </summary>
-        public TextMeshProUGUI CharacterStatusText
-        {
-            get => characterStatusText;
-            set => characterStatusText = value;
-        }
-
-        /// <summary>
         /// Elapsed blink time
         /// </summary>
         public float ElapsedBlinkTime { get; private set; }
@@ -161,7 +145,6 @@ namespace Akasha.Controllers
             float new_value = (radialProgress.AnimateProgress ? ((radialProgress.RadialProgress.Value < value) ? Mathf.Clamp(radialProgress.RadialProgress.Value + (progress_speed * Time.deltaTime), radialProgress.RadialProgress.Value, value) : ((radialProgress.RadialProgress.Value > value) ? Mathf.Clamp(radialProgress.RadialProgress.Value - (progress_speed * Time.deltaTime), value, radialProgress.RadialProgress.Value) : radialProgress.RadialProgress.Value)) : value);
             radialProgress.RadialProgress.gameObject.SetActive(showProgress && ((!forceBlinking && (radialProgress.BlinkThreshold <= new_value)) || BlinkState));
             radialProgress.RadialProgress.Value = new_value;
-
         }
 
         /// <summary>
@@ -204,8 +187,16 @@ namespace Akasha.Controllers
                 {
                     ITargetedBlock targeted_block = PlayerCharacterController.GetTargetedBlock(0.0f);
                     IInventoryItemData inventory_item_data = PlayerCharacterController.SelectedInventoryItem;
-                    bool show_block_health = (((targeted_block != null) && targeted_block.IsABlock) && (targeted_block.Block.Block.GetFarmingToolDataFromFarmingToolItem((inventory_item_data == null) ? null : inventory_item_data.Item) != null));
-                    UpdateRadialProgress(blockHealthHUDRadialProgress, show_block_health ? ((targeted_block.Block.Block.InitialHealth > 0) ? ((float)(targeted_block.Block.Health) / targeted_block.Block.Block.InitialHealth) : 0.0f) : 0.0f, show_block_health, false);
+                    bool show_block_health = (((targeted_block != null) && targeted_block.IsABlock) && (targeted_block.Block.Block.GetFarmingToolDataFromFarmingToolItem(inventory_item_data?.Item) != null));
+                    if (show_block_health)
+                    {
+                        UpdateRadialProgress(blockHealthHUDRadialProgress, show_block_health ? ((targeted_block.Block.Block.InitialHealth > 0) ? ((float)(targeted_block.Block.Health) / targeted_block.Block.Block.InitialHealth) : 0.0f) : 0.0f, true, false);
+                    }
+                    else
+                    {
+                        blockHealthHUDRadialProgress.RadialProgress.gameObject.SetActive(false);
+                        blockHealthHUDRadialProgress.RadialProgress.Value = 0.0f;
+                    }
                 }
                 if (hitHUDRadialProgress.RadialProgress)
                 {
@@ -213,7 +204,7 @@ namespace Akasha.Controllers
                 }
                 if (staminaHUDRadialProgress.RadialProgress)
                 {
-                    UpdateRadialProgress(staminaHUDRadialProgress, PlayerCharacterController.Stamina, PlayerCharacterController.Stamina < (1.0f - float.Epsilon), PlayerCharacterController.IsExhausted);
+                    UpdateRadialProgress(staminaHUDRadialProgress, PlayerCharacterController.Stamina * 0.5f, PlayerCharacterController.Stamina < (1.0f - float.Epsilon), PlayerCharacterController.IsExhausted);
                 }
                 if (fullnessHUDRadialProgress.RadialProgress)
                 {
@@ -228,11 +219,7 @@ namespace Akasha.Controllers
                 if (armorHUDRadialProgress.RadialProgress)
                 {
                     float maximal_armor = PlayerCharacterController.MaximalArmor;
-                    UpdateRadialProgress(armorHUDRadialProgress, (maximal_armor > float.Epsilon) ? (PlayerCharacterController.Armor / maximal_armor) : 0.0f, true, false);
-                }
-                if (characterStatusText)
-                {
-                    // TODO
+                    UpdateRadialProgress(armorHUDRadialProgress, (maximal_armor > float.Epsilon) ? ((PlayerCharacterController.Armor * 0.5f) / maximal_armor) : 0.0f, true, false);
                 }
             }
         }

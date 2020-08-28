@@ -1,4 +1,5 @@
-﻿using TMPro;
+﻿using Akasha.Controllers;
+using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 using UnityTranslator.Objects;
@@ -34,14 +35,24 @@ namespace Akasha
         string DescriptionTextFormat { get; set; }
 
         /// <summary>
-        /// Empty health color
+        /// Empty health border color
         /// </summary>
-        Color EmptyHealthColor { get; set; }
+        Color EmptyHealthBorderColor { get; set; }
 
         /// <summary>
-        /// Full health color
+        /// Empty health inner color
         /// </summary>
-        Color FullHealthColor { get; set; }
+        Color EmptyHealthInnerColor { get; set; }
+
+        /// <summary>
+        /// Full health border color
+        /// </summary>
+        Color FullHealthBorderColor { get; set; }
+
+        /// <summary>
+        /// Full health inner color
+        /// </summary>
+        Color FullHealthInnerColor { get; set; }
 
         /// <summary>
         /// Item name text
@@ -54,9 +65,9 @@ namespace Akasha
         Image IconImage { get; set; }
 
         /// <summary>
-        /// Health indicator image
+        /// Health indicator radial progress
         /// </summary>
-        Image HealthIndicatorImage { get; set; }
+        RadialProgressUIControllerScript HealthIndicatorRadialProgress { get; set; }
 
         /// <summary>
         /// Icon image
@@ -74,9 +85,9 @@ namespace Akasha
         TextMeshProUGUI DescriptionText { get; set; }
 
         /// <summary>
-        /// Selectable
+        /// Selection indicator image
         /// </summary>
-        Selectable Selectable { get; }
+        Image SelectionIndicatorImage { get; set; }
 
         /// <summary>
         /// Inventory item data
@@ -93,6 +104,6 @@ namespace Akasha
         /// <summary>
         /// Click
         /// </summary>
-        void Click();
+        void Select();
     }
 }

@@ -89,6 +89,8 @@ namespace Akasha
         /// <summary>
         /// New noise module
         /// </summary>
-        ModuleBase NewNoiseModule { get; }
+        /// <param name="worldSeed">World seed</param>
+        /// <returns>Noise module if successful, otherwise "null"</returns>
+        ModuleBase CreateNewNoiseModule(int worldSeed);
     }
 }

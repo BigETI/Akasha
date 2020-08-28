@@ -27,6 +27,18 @@ namespace Akasha.Controllers
         private float borderRotationOffset = 3.0f;
 
         /// <summary>
+        /// Border color
+        /// </summary>
+        [SerializeField]
+        private Color borderColor = Color.white;
+
+        /// <summary>
+        /// Inner color
+        /// </summary>
+        [SerializeField]
+        private Color innerColor = Color.white;
+
+        /// <summary>
         /// Border radial progress image
         /// </summary>
         [SerializeField]
@@ -65,6 +77,38 @@ namespace Akasha.Controllers
         }
 
         /// <summary>
+        /// Border color
+        /// </summary>
+        public Color BorderColor
+        {
+            get => borderColor;
+            set
+            {
+                if (borderColor != value)
+                {
+                    borderColor = value;
+                    UpdateVisuals();
+                }
+            }
+        }
+
+        /// <summary>
+        /// Inner color
+        /// </summary>
+        public Color InnerColor
+        {
+            get => innerColor;
+            set
+            {
+                if (innerColor != value)
+                {
+                    innerColor = value;
+                    UpdateVisuals();
+                }
+            }
+        }
+
+        /// <summary>
         /// Border radial progress image
         /// </summary>
         public Image BorderRadialProgressImage
@@ -91,6 +135,7 @@ namespace Akasha.Controllers
             if (innerRadialProgressImage)
             {
                 innerRadialProgressImage.fillAmount = value;
+                innerRadialProgressImage.color = innerColor;
             }
             if (borderRadialProgressImage)
             {
@@ -103,6 +148,7 @@ namespace Akasha.Controllers
                 }
                 borderRadialProgressImage.fillAmount = ((value > float.Epsilon) ? Mathf.Clamp(value + ((border_rotation_offset * 2.0f) / 360.0f), 0.0f, 1.0f) : 0.0f);
                 borderRadialProgressImage.rectTransform.localRotation = (innerRadialProgressImage ? innerRadialProgressImage.rectTransform.localRotation : Quaternion.identity) * Quaternion.AngleAxis(borderRadialProgressImage.fillClockwise ? border_rotation_offset : -border_rotation_offset, Vector3.forward);
+                borderRadialProgressImage.color = borderColor;
             }
         }
 

@@ -50,6 +50,6 @@ namespace Akasha.Objects
         /// <summary>
         /// Key
         /// </summary>
-        public override string Key => "Weapons/" + name;
+        public override string Key => $"Weapons/{ name }";
     }
 }

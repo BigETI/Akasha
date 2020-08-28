@@ -184,7 +184,7 @@ namespace Akasha
         /// Explicit cast operator
         /// </summary>
         /// <param name="blockID">Block ID</param>
-        public static explicit operator Vector3Int(BlockID blockID) => new Vector3Int((int)(blockID.x), (int)(blockID.y), (int) (blockID.z));
+        public static explicit operator Vector3Int(BlockID blockID) => new Vector3Int((int)(blockID.x), (int)(blockID.y), (int)(blockID.z));
 
         /// <summary>
         /// Compare to
@@ -209,7 +209,7 @@ namespace Akasha
         /// To string
         /// </summary>
         /// <returns>String representation</returns>
-        public override string ToString() => ("(" + x + ", " + y + ", " + z + ")");
+        public override string ToString() => $"({ x }, { y }, { z })";
 
         /// <summary>
         /// Get hash code
@@ -222,6 +222,6 @@ namespace Akasha
         /// </summary>
         /// <param name="obj">Object</param>
         /// <returns>"true" if equal, otherwise "false"</returns>
-        public override bool Equals(object obj) => ((obj is BlockID block_id) ? (this == block_id) : false);
+        public override bool Equals(object obj) => ((obj is BlockID block_id) && (this == block_id));
     }
 }

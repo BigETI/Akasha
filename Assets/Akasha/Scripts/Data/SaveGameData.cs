@@ -38,6 +38,12 @@ namespace Akasha.Data
         private Vector2 sensitivity = Vector2.one * 15.0f;
 
         /// <summary>
+        /// Player character GUID
+        /// </summary>
+        [SerializeField]
+        private string playerCharacterGUID = string.Empty;
+
+        /// <summary>
         /// Invert X axis
         /// </summary>
         public bool InvertXAxis
@@ -74,6 +80,24 @@ namespace Akasha.Data
         }
 
         /// <summary>
+        /// Player character GUID
+        /// </summary>
+        public Guid PlayerCharacterGUID
+        {
+            get
+            {
+                Guid ret;
+                if ((playerCharacterGUID == null) || !(Guid.TryParse(playerCharacterGUID, out ret)))
+                {
+                    ret = Guid.NewGuid();
+                    playerCharacterGUID = ret.ToString();
+                }
+                return ret;
+            }
+            set => playerCharacterGUID = value.ToString();
+        }
+
+        /// <summary>
         /// Default constructor
         /// </summary>
         public SaveGameData() : base(null)
@@ -93,6 +117,7 @@ namespace Akasha.Data
                 invertYAxis = save_game_data.invertYAxis;
                 enableViewBobbing = save_game_data.enableViewBobbing;
                 Sensitivity = save_game_data.Sensitivity;
+                PlayerCharacterGUID = save_game_data.PlayerCharacterGUID;
             }
         }
     }

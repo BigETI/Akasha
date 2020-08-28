@@ -41,6 +41,11 @@ namespace Akasha
         void ResumeGame();
 
         /// <summary>
+        /// Save game
+        /// </summary>
+        void SaveGame();
+
+        /// <summary>
         /// Show options
         /// </summary>
         void ShowOptions();

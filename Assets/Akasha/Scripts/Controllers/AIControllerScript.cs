@@ -144,10 +144,10 @@ namespace Akasha.Controllers
                 {
                     detectedPlayerCharacters.Remove(delete_detected_player_character_id);
                 }
-                foreach (PlayerCharacterDetectionState player_character_detection_state in detectedPlayerCharacters.Values)
-                {
-                    // TODO
-                }
+                //foreach (PlayerCharacterDetectionState player_character_detection_state in detectedPlayerCharacters.Values)
+                //{
+                //    // TODO
+                //}
             }
         }
 

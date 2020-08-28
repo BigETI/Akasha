@@ -5,6 +5,7 @@ using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using UnityEngine;
+using UnitySceneLoaderManager;
 
 /// <summary>
 /// Akasha managers namespace
@@ -20,7 +21,7 @@ namespace Akasha.Managers
         /// Chunk size
         /// </summary>
         [SerializeField]
-        private Vector3Int chunkSize = new Vector3Int(16, 16, 16);
+        private Vector3Int chunkSize = new Vector3Int(16, 32, 16);
 
         /// <summary>
         /// Render distance
@@ -65,7 +66,12 @@ namespace Akasha.Managers
         /// <summary>
         /// Block lookup
         /// </summary>
-        private readonly Dictionary<string, IBlockObject> blockLookup = new Dictionary<string, IBlockObject>();
+        private readonly Dictionary<string, BlockObjectScript> blockLookup = new Dictionary<string, BlockObjectScript>();
+
+        /// <summary>
+        /// Block lookup
+        /// </summary>
+        private readonly Dictionary<string, EntityObjectScript> entityLookup = new Dictionary<string, EntityObjectScript>();
 
         /// <summary>
         /// Chunk controllers
@@ -81,6 +87,16 @@ namespace Akasha.Managers
         /// Refresh chunk controllers
         /// </summary>
         private readonly List<ChunkControllerScript> refreshChunkControllers = new List<ChunkControllerScript>();
+
+        /// <summary>
+        /// Load world IO task
+        /// </summary>
+        private Task<WorldIO> loadWorldIOTask = Task.FromResult<WorldIO>(null);
+
+        /// <summary>
+        /// Save task
+        /// </summary>
+        private Task<bool> saveTask = Task.FromResult(false);
 
         /// <summary>
         /// Last chunk size
@@ -100,7 +116,12 @@ namespace Akasha.Managers
         /// <summary>
         /// Block lookup
         /// </summary>
-        public IReadOnlyDictionary<string, IBlockObject> BlockLookup => blockLookup;
+        public IReadOnlyDictionary<string, BlockObjectScript> BlockLookup => blockLookup;
+
+        /// <summary>
+        /// Block lookup
+        /// </summary>
+        public IReadOnlyDictionary<string, EntityObjectScript> EntityLookup => entityLookup;
 
         /// <summary>
         /// Chunk size
@@ -209,6 +230,21 @@ namespace Akasha.Managers
         /// Showing blocks prefab
         /// </summary>
         public IBlocksPrefabObject ShowingBlocksPrefab { get; set; }
+
+        /// <summary>
+        /// World IO
+        /// </summary>
+        public IWorldIO IO { get; private set; }
+
+        /// <summary>
+        /// Is loading
+        /// </summary>
+        public bool IsLoading => ((loadWorldIOTask != null) && (loadWorldIOTask.Status == TaskStatus.Running));
+
+        /// <summary>
+        /// Is saving
+        /// </summary>
+        public bool IsSaving => ((saveTask != null) && (saveTask.Status == TaskStatus.Running));
 
         /// <summary>
         /// Get chunk ID from block ID
@@ -334,22 +370,22 @@ namespace Akasha.Managers
         private ChunkControllerScript CreateChunkController(ChunkID chunkID, Vector3Int bufferPosition)
         {
             ChunkControllerScript ret = null;
-            GameObject game_object = new GameObject("Chunk " + chunkID, typeof(ChunkControllerScript));
+            GameObject game_object = new GameObject($"Chunk { chunkID }", typeof(ChunkControllerScript));
             if (game_object)
             {
                 Vector3Int chunk_size = ChunkSize;
                 Vector3Int grid_size = GridSize;
                 game_object.transform.position = new Vector3((bufferPosition.x * chunk_size.x) - (grid_size.x * chunk_size.x * 0.5f) + chunk_size.x, (bufferPosition.y * chunk_size.y) - (grid_size.y * chunk_size.y * 0.5f) + chunk_size.y, (bufferPosition.z * chunk_size.z) - (grid_size.z * chunk_size.z * 0.5f) + chunk_size.z);
                 ret = game_object.GetComponent<ChunkControllerScript>();
-                if (ret == null)
-                {
-                    Destroy(game_object);
-                    ret = null;
-                }
-                else
+                if (ret)
                 {
                     ret.ChunkID = chunkID;
                     game_object.transform.parent = transform;
+                }
+                else
+                {
+                    Destroy(game_object);
+                    ret = null;
                 }
             }
             return ret;
@@ -404,7 +440,7 @@ namespace Akasha.Managers
         }
 
         /// <summary>
-        /// Get chunk blocks task (asynchronous)
+        /// Get chunk blocks task
         /// </summary>
         /// <param name="chunkID">Chunk ID</param>
         /// <returns>Blocks task</returns>
@@ -417,6 +453,10 @@ namespace Akasha.Managers
                 if (chunkBlocksTasksLookup.ContainsKey(chunkID))
                 {
                     ret = chunkBlocksTasksLookup[chunkID];
+                }
+                else if ((IO != null) && IO.CanRead && IO.IsChunkAvailable(chunkID))
+                {
+                    ret = IO.CreateReadChunkBlocksTask(chunkID);
                 }
                 else
                 {
@@ -553,31 +593,87 @@ namespace Akasha.Managers
         }
 
         /// <summary>
+        /// Save
+        /// </summary>
+        public void Save()
+        {
+            if ((IO != null) && IO.CanWrite)
+            {
+                // TODO: Save entities
+                PlayerControllerScript[] player_controllers = FindObjectsOfType<PlayerControllerScript>();
+                List<WorldPlayerData> players = null;
+                foreach (PlayerControllerScript player_controller in player_controllers)
+                {
+                    if (player_controller)
+                    {
+                        if (player_controller.TryGetComponent(out CharacterControllerScript character_controller))
+                        {
+                            players = players ?? new List<WorldPlayerData>();
+                            players.Add(character_controller.NewWorldPlayerDataSnapshot);
+                        }
+                    }
+                }
+                saveTask = Task.Run(() =>
+                {
+                    Task<bool> result = ((players == null) ? Task.FromResult(true) : IO.CreateWritePlayersTask(players));
+                    result.Wait();
+                    return (result.Result ? IO.CreateSaveTask().Result : false);
+                });
+            }
+        }
+
+        /// <summary>
+        /// On destroy
+        /// </summary>
+        private void OnDestroy() => IO?.Dispose();
+
+        /// <summary>
         /// Start
         /// </summary>
         private void Start()
         {
             BlockObjectScript[] blocks = Resources.LoadAll<BlockObjectScript>("Items/Blocks");
+            EntityObjectScript[] entities = Resources.LoadAll<EntityObjectScript>("Entities");
             if (blocks != null)
             {
                 foreach (BlockObjectScript block in blocks)
                 {
                     if (block)
                     {
-                        if (blockLookup.ContainsKey(block.name))
+                        string key = block.Key;
+                        if (blockLookup.ContainsKey(key))
                         {
-                            Debug.LogError("Skipping duplicate block entry \"" + block.name + "\".");
+                            Debug.LogError($"Skipping duplicate block entry \"{ key }\"...");
                         }
                         else
                         {
-                            blockLookup.Add(block.name, block);
+                            blockLookup.Add(key, block);
                         }
                     }
                 }
             }
-            foreach (IBiomeData biome in Biomes)
+            if (entities != null)
             {
-                biome?.Initialize();
+                foreach (EntityObjectScript entity in entities)
+                {
+                    if (entity)
+                    {
+                        string key = entity.Key;
+                        if (entityLookup.ContainsKey(key))
+                        {
+                            Debug.LogError($"Skipping duplicate entity entry \"{ key }\"...");
+                        }
+                        else
+                        {
+                            entityLookup.Add(key, entity);
+                        }
+                    }
+                }
+            }
+            loadWorldIOTask = (WorldIO.DoesWorldFileExist(GameManager.WorldGUID) ? WorldIO.CreateOpenWorldFileTask(GameManager.WorldGUID, this) : WorldIO.CreateCreateWorldTask(GameManager.WorldGUID, GameManager.WorldName, GameManager.WorldDescription, GameManager.WorldSeed, this));
+            if (loadWorldIOTask == null)
+            {
+                SceneLoaderManager.LoadScene("MainMenuScene");
             }
         }
 
@@ -586,7 +682,33 @@ namespace Akasha.Managers
         /// </summary>
         private void Update()
         {
-            if (followTransformController != null)
+            if (IO == null)
+            {
+                if ((GameManager.GameState == EGameState.Nothing) && (loadWorldIOTask != null))
+                {
+                    if (loadWorldIOTask.IsCanceled || loadWorldIOTask.IsFaulted)
+                    {
+                        SceneLoaderManager.LoadScene("MainMenuScene");
+                    }
+                    else if (loadWorldIOTask.IsCompleted)
+                    {
+                        IO = loadWorldIOTask.Result;
+                        if (IO == null)
+                        {
+                            SceneLoaderManager.LoadScene("MainMenuScene");
+                        }
+                        else
+                        {
+                            foreach (IBiomeData biome in Biomes)
+                            {
+                                biome?.Initialize(IO.WorldSeed);
+                            }
+                            GameManager.GameState = EGameState.Playing;
+                        }
+                    }
+                }
+            }
+            else if (followTransformController != null)
             {
                 bool initialize_chunks = false;
                 bool update_chunks = false;
@@ -642,45 +764,68 @@ namespace Akasha.Managers
                 if (lastChunkID != followTransformController.ChunkID)
                 {
                     Vector3Int delta = (Vector3Int)(followTransformController.ChunkID - lastChunkID);
-                    for (int index = 0; index < chunkControllers.Length; index++)
+                    lock (chunkBlocksTasksLookup)
                     {
-                        ChunkControllerScript chunk_controller = chunkControllers[index];
-                        ref ChunkControllerScript buffer_chunk_controller = ref bufferChunkControllers[index];
-                        if (chunk_controller)
+                        List<ChunkData> write_chunks = new List<ChunkData>();
+                        for (int index = 0; index < chunkControllers.Length; index++)
                         {
-                            Vector3Int buffer_position = new Vector3Int(index % grid_size.x, (index / grid_size.x) % grid_size.y, index / (grid_size.x * grid_size.y));
-                            Vector3Int old_buffer_position = buffer_position + delta;
-                            Vector3Int new_buffer_position = buffer_position - delta;
-                            buffer_chunk_controller = null;
-                            if ((old_buffer_position.x >= 0) && (old_buffer_position.x < grid_size.x) && (old_buffer_position.y >= 0) && (old_buffer_position.y < grid_size.y) && (old_buffer_position.z >= 0) && (old_buffer_position.z < grid_size.z))
+                            ChunkControllerScript chunk_controller = chunkControllers[index];
+                            ref ChunkControllerScript buffer_chunk_controller = ref bufferChunkControllers[index];
+                            if (chunk_controller)
                             {
-                                int old_index = old_buffer_position.x + (old_buffer_position.y * grid_size.x) + (old_buffer_position.z * grid_size.x * grid_size.y);
-                                ChunkControllerScript old_chunk_controller = chunkControllers[old_index];
-                                if (old_chunk_controller)
+                                Vector3Int buffer_position = new Vector3Int(index % grid_size.x, (index / grid_size.x) % grid_size.y, index / (grid_size.x * grid_size.y));
+                                Vector3Int old_buffer_position = buffer_position + delta;
+                                Vector3Int new_buffer_position = buffer_position - delta;
+                                buffer_chunk_controller = null;
+                                if ((old_buffer_position.x >= 0) && (old_buffer_position.x < grid_size.x) && (old_buffer_position.y >= 0) && (old_buffer_position.y < grid_size.y) && (old_buffer_position.z >= 0) && (old_buffer_position.z < grid_size.z))
                                 {
-                                    old_chunk_controller.transform.position -= delta * chunk_size;
+                                    int old_index = old_buffer_position.x + (old_buffer_position.y * grid_size.x) + (old_buffer_position.z * grid_size.x * grid_size.y);
+                                    ChunkControllerScript old_chunk_controller = chunkControllers[old_index];
+                                    if (old_chunk_controller)
+                                    {
+                                        old_chunk_controller.transform.position -= delta * chunk_size;
+                                    }
+                                    buffer_chunk_controller = old_chunk_controller;
                                 }
-                                buffer_chunk_controller = old_chunk_controller;
-                            }
-                            if (chunk_controller && ((new_buffer_position.x < 0) || (new_buffer_position.x >= grid_size.x) || (new_buffer_position.y < 0) || (new_buffer_position.y >= grid_size.y) || (new_buffer_position.z < 0) || (new_buffer_position.z >= grid_size.z)))
-                            {
-                                refreshChunkControllers.Remove(chunk_controller);
-                                Destroy(chunk_controller.gameObject);
-                            }
-                            ChunkID chunk_id = (ChunkID)buffer_position + followTransformController.ChunkID - (ChunkID)(grid_size / 2);
-                            if (!buffer_chunk_controller)
-                            {
-                                buffer_chunk_controller = CreateChunkController(chunk_id, buffer_position);
-                                if (buffer_chunk_controller)
+                                if (chunk_controller && ((new_buffer_position.x < 0) || (new_buffer_position.x >= grid_size.x) || (new_buffer_position.y < 0) || (new_buffer_position.y >= grid_size.y) || (new_buffer_position.z < 0) || (new_buffer_position.z >= grid_size.z)))
                                 {
-                                    buffer_chunk_controller.name = "Chunk " + buffer_chunk_controller.ChunkID;
-                                    refreshChunkControllers.Add(buffer_chunk_controller);
+                                    refreshChunkControllers.Remove(chunk_controller);
+                                    if (chunkBlocksTasksLookup.ContainsKey(chunk_controller.ChunkID))
+                                    {
+                                        Task<BlockData[]> chunk_blocks_task = chunkBlocksTasksLookup[chunk_controller.ChunkID];
+                                        if (chunk_blocks_task.IsCompleted)
+                                        {
+                                            write_chunks.Add(new ChunkData(chunk_controller.ChunkID, chunk_blocks_task.Result));
+                                        }
+                                    }
+                                    Destroy(chunk_controller.gameObject);
+                                }
+                                ChunkID chunk_id = (ChunkID)buffer_position + followTransformController.ChunkID - (ChunkID)(grid_size / 2);
+                                if (!buffer_chunk_controller)
+                                {
+                                    buffer_chunk_controller = CreateChunkController(chunk_id, buffer_position);
+                                    if (buffer_chunk_controller)
+                                    {
+                                        buffer_chunk_controller.name = $"Chunk { buffer_chunk_controller.ChunkID }";
+                                        refreshChunkControllers.Add(buffer_chunk_controller);
+                                    }
+                                }
+                                else
+                                {
+                                    buffer_chunk_controller.ChunkID = chunk_id;
                                 }
                             }
-                            else
-                            {
-                                buffer_chunk_controller.ChunkID = chunk_id;
-                            }
+                        }
+                        if ((IO != null) && IO.CanWrite)
+                        {
+                            IO.CreateWriteChunksTask(write_chunks.ToArray(), Array.Empty<ChunkID>());
+                            IO.CreateWriteEntitiesTask(Array.Empty<WorldEntityData>(), Array.Empty<string>());
+                            // TODO: Fix collision issues when tasks are removed from dictionary
+                            //foreach (ChunkData write_chunk in write_chunks)
+                            //{
+                            //    chunkBlocksTasksLookup.Remove(write_chunk.ChunkID);
+                            //}
+                            write_chunks.Clear();
                         }
                     }
                     ChunkControllerScript[] temporary_chunk_controllers = chunkControllers;

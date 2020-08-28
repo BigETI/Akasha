@@ -496,6 +496,11 @@ namespace Akasha.Controllers
         public IInventoryUIController InventoryUIController { get; private set; }
 
         /// <summary>
+        /// New world player data snapshot
+        /// </summary>
+        public WorldPlayerData NewWorldPlayerDataSnapshot => new WorldPlayerData(GUID, EntityObject, Health, Armor, (WorldTransformController == null) ? BlockID.Zero : WorldTransformController.BlockID, (WorldTransformController == null) ? Vector3.zero : WorldTransformController.PositionOffset, Rotation, Inventory, Fullness, Stamina, IsExhausted, ElapsedHitCooldownTime, ElapsedStaminaRegenerationCooldownTime, (new List<string>(KnownCraftingRecipesLookup.Keys)).ToArray());
+
+        /// <summary>
         /// Place block
         /// </summary>
         public void PlaceBlock()

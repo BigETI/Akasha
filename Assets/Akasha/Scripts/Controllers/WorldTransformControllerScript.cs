@@ -59,6 +59,24 @@ namespace Akasha.Controllers
         }
 
         /// <summary>
+        /// Position offset
+        /// </summary>
+        public Vector3 PositionOffset
+        {
+            get
+            {
+                Vector3 position = transform.position;
+                return new Vector3
+                (
+                    Mathf.Repeat(position.x + 0.5f, 1.0f) - 0.5f,
+                    Mathf.Repeat(position.y + 0.5f, 1.0f) - 0.5f,
+                    Mathf.Repeat(position.z + 0.5f, 1.0f) - 0.5f
+                );
+            }
+            set => transform.position = value - PositionOffset;
+        }
+
+        /// <summary>
         /// Get block ID
         /// </summary>
         /// <param name="worldPosition">World position</param>

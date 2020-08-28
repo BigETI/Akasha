@@ -14,7 +14,7 @@ namespace Akasha.Controllers
         /// <summary>
         /// Children transforms
         /// </summary>
-        private Dictionary<int, ITransformAndOldParent> childrenTransforms = new Dictionary<int, ITransformAndOldParent>();
+        private readonly Dictionary<int, ITransformAndOldParent> childrenTransforms = new Dictionary<int, ITransformAndOldParent>();
 
         /// <summary>
         /// Children transforms

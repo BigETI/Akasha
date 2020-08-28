@@ -69,7 +69,7 @@ namespace Akasha.Data
         /// </summary>
         /// <param name="obj">Object</param>
         /// <returns>"true" if equivalent, otherwise "false"</returns>
-        public override bool Equals(object obj) => ((obj is BlockData block) ? (this == block) : false);
+        public override bool Equals(object obj) => ((obj is BlockData block) && (this == block));
 
         /// <summary>
         /// Get hash code
@@ -81,7 +81,7 @@ namespace Akasha.Data
         /// To string
         /// </summary>
         /// <returns>String representation</returns>
-        public override string ToString() => (IsABlock ? ("(" + block.ToString() + ", " + health + ")") : string.Empty);
+        public override string ToString() => (IsABlock ? $"({ block }, { health })" : string.Empty);
 
         /// <summary>
         /// Equals operator

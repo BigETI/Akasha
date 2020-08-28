@@ -6,6 +6,12 @@ EditorBuildSettings:
   serializedVersion: 2
   m_Scenes:
   - enabled: 1
+    path: Assets/Akasha/Scenes/Intros/IntroScene.unity
+    guid: e102517a8cf47e742b3d6b50fa691575
+  - enabled: 1
+    path: Assets/Akasha/Scenes/Menus/MainMenuScene.unity
+    guid: 19addc174cb8ca740869705c5538aad4
+  - enabled: 1
     path: Assets/Akasha/Scenes/Game/GameScene.unity
     guid: ef20a8a4ade0eb44c8ac45a94b2f2935
   m_configObjects: {}

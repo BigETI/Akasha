@@ -178,7 +178,7 @@ namespace Akasha
         /// Explicit cast operator
         /// </summary>
         /// <param name="vector">Vector</param>
-        public static explicit operator ChunkID(Vector3 vector) => new ChunkID((int)(vector.x), (int)(vector.y), (int) (vector.z));
+        public static explicit operator ChunkID(Vector3 vector) => new ChunkID((int)(vector.x), (int)(vector.y), (int)(vector.z));
 
         /// <summary>
         /// Explicit cast operator
@@ -221,7 +221,7 @@ namespace Akasha
         /// To string
         /// </summary>
         /// <returns>String representation</returns>
-        public override string ToString() => ("(" + x + ", " + y + ", " + z + ")");
+        public override string ToString() => $"({ x }, { y }, { z })";
 
         /// <summary>
         /// Get hash code

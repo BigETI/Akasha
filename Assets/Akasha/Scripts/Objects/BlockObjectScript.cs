@@ -123,7 +123,7 @@ namespace Akasha.Objects
                         string key = (farming_tool.FarmingToolItem ? farming_tool.FarmingToolItem.Key : string.Empty);
                         if (farmingToolLookup.ContainsKey(key))
                         {
-                            Debug.LogError("Skipping duplicate farming tool entry \"" + key + "\" in block \"" + name + "\".");
+                            Debug.LogError($"Skipping duplicate farming tool entry \"{ key }\" in block \"{ name }\".");
                         }
                         else
                         {
@@ -138,7 +138,7 @@ namespace Akasha.Objects
         /// <summary>
         /// Key
         /// </summary>
-        public override string Key => "Blocks/" + name;
+        public override string Key => $"Blocks/{ name }";
 
         /// <summary>
         /// Get farming tool data from farming tool

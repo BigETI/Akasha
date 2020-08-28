@@ -77,11 +77,6 @@ namespace Akasha.Controllers
         private Vector2 rotation;
 
         /// <summary>
-        /// Raycast hits
-        /// </summary>
-        private RaycastHit[] raycastHits = Array.Empty<RaycastHit>();
-
-        /// <summary>
         /// Frames time
         /// </summary>
         private float framesTime;
@@ -228,7 +223,7 @@ namespace Akasha.Controllers
             ++frameCount;
             if (framesTime >= FPSSampleTime)
             {
-                fpsLabelString = (frameCount / framesTime) + " FPS";
+                fpsLabelString = $"{ frameCount / framesTime } FPS";
                 framesTime = 0.0f;
                 frameCount = 0U;
             }

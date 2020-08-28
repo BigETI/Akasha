@@ -498,6 +498,322 @@ namespace Akasha.InputActions
                     ""isPartOfComposite"": false
                 }
             ]
+        },
+        {
+            ""name"": ""UsagesActionMap"",
+            ""id"": ""8904d836-e732-437d-b0cf-76e079028efa"",
+            ""actions"": [
+                {
+                    ""name"": ""Any"",
+                    ""type"": ""Button"",
+                    ""id"": ""eef00eeb-fecd-4a23-bbf3-430868c59805"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """"
+                },
+                {
+                    ""name"": ""Back"",
+                    ""type"": ""Button"",
+                    ""id"": ""a040e0a7-226f-4dcb-85ee-a6631b6e1d0f"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """"
+                },
+                {
+                    ""name"": ""Cancel"",
+                    ""type"": ""Button"",
+                    ""id"": ""faef346d-db26-4bfd-8d69-13f9b00ef68a"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """"
+                },
+                {
+                    ""name"": ""Forward"",
+                    ""type"": ""Button"",
+                    ""id"": ""d000a919-9299-47c4-ba80-7317be07a555"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """"
+                },
+                {
+                    ""name"": ""Menu"",
+                    ""type"": ""Button"",
+                    ""id"": ""7f4e5a99-39fd-4a6d-9150-e88e94b792b1"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """"
+                },
+                {
+                    ""name"": ""Modifier"",
+                    ""type"": ""Button"",
+                    ""id"": ""9e6bad40-7a03-4826-bfc1-e3574a48d24b"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """"
+                },
+                {
+                    ""name"": ""PrimaryAction"",
+                    ""type"": ""Button"",
+                    ""id"": ""877c1642-3302-4730-822e-37db43bdce18"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """"
+                },
+                {
+                    ""name"": ""PrimaryTrigger"",
+                    ""type"": ""Button"",
+                    ""id"": ""e7c0ce1d-4bb8-4635-b866-db0e0e1f391c"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """"
+                },
+                {
+                    ""name"": ""SecondaryAction"",
+                    ""type"": ""Button"",
+                    ""id"": ""590859ad-e9e5-4c61-b07e-d3f5de909c30"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """"
+                },
+                {
+                    ""name"": ""SecondaryTrigger"",
+                    ""type"": ""Button"",
+                    ""id"": ""dd21a5d2-f8d0-42e0-8910-0a9beef0dc0d"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """"
+                },
+                {
+                    ""name"": ""Submit"",
+                    ""type"": ""Button"",
+                    ""id"": ""0f6c08d5-c754-468d-9282-43c39bf42800"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """"
+                }
+            ],
+            ""bindings"": [
+                {
+                    ""name"": """",
+                    ""id"": ""b7275e78-7ec9-485a-b572-d881d2618cd6"",
+                    ""path"": ""*/{Back}"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Any"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""12b06c27-f85e-4ed1-b1a7-407a7b96606b"",
+                    ""path"": ""*/{Cancel}"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Any"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""8e29d98b-5214-4bf1-ae82-038d69a1fff5"",
+                    ""path"": ""*/{Forward}"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Any"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""978bcc85-db29-4832-9f13-d91d6656d2ef"",
+                    ""path"": ""*/{Menu}"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Any"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""68c9daa4-a581-459e-9ed1-fcf1c8c18af5"",
+                    ""path"": ""*/{Modifier}"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Any"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""a8142cfe-b439-47a3-a2d9-3b775dbe5dc5"",
+                    ""path"": ""*/{PrimaryAction}"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Any"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""fbb29cc4-7456-42ad-8be3-f88df60ac79e"",
+                    ""path"": ""*/{PrimaryTrigger}"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Any"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""71a75c2b-9d42-4df8-b8a4-1142ddeb0436"",
+                    ""path"": ""*/{SecondaryAction}"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Any"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""a6d210d4-62ba-4d36-a812-646c98a95818"",
+                    ""path"": ""*/{SecondaryTrigger}"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Any"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""41267437-d00e-429e-b114-9162919fdc17"",
+                    ""path"": ""*/{Submit}"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Any"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""ad012863-03f1-48a8-8976-009c3f4864df"",
+                    ""path"": ""*/{Cancel}"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Cancel"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""691974f3-63c5-4f1f-99a1-732f1f3e4ae1"",
+                    ""path"": ""*/{Forward}"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Forward"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""eae9cb1e-6e78-4452-8e6d-e7021f150242"",
+                    ""path"": ""*/{Menu}"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Menu"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""c1e1569f-0f08-43f6-af77-bd3fc870e793"",
+                    ""path"": ""*/{Modifier}"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Modifier"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""377ad766-723b-4386-9650-33d876401844"",
+                    ""path"": ""*/{PrimaryAction}"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""PrimaryAction"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""f63a33f1-9372-4e96-bda3-f1c26822bd6f"",
+                    ""path"": ""*/{PrimaryTrigger}"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""PrimaryTrigger"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""45695053-27d7-4779-bf3a-74756036fe7d"",
+                    ""path"": ""*/{SecondaryAction}"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""SecondaryAction"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""e32f5c82-7f16-470b-a602-fa2d3053dab0"",
+                    ""path"": ""*/{SecondaryTrigger}"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""SecondaryTrigger"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""746798d9-2472-477d-874e-b80e7a914b09"",
+                    ""path"": ""*/{Submit}"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Submit"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""b246dc3d-611b-45cc-a512-09edd7c177c3"",
+                    ""path"": ""*/{Back}"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Back"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                }
+            ]
         }
     ],
     ""controlSchemes"": [
@@ -546,6 +862,19 @@ namespace Akasha.InputActions
             m_GameActionMap_Sneak = m_GameActionMap.FindAction("Sneak", throwIfNotFound: true);
             m_GameActionMap_Sprint = m_GameActionMap.FindAction("Sprint", throwIfNotFound: true);
             m_GameActionMap_SwitchView = m_GameActionMap.FindAction("SwitchView", throwIfNotFound: true);
+            // UsagesActionMap
+            m_UsagesActionMap = asset.FindActionMap("UsagesActionMap", throwIfNotFound: true);
+            m_UsagesActionMap_Any = m_UsagesActionMap.FindAction("Any", throwIfNotFound: true);
+            m_UsagesActionMap_Back = m_UsagesActionMap.FindAction("Back", throwIfNotFound: true);
+            m_UsagesActionMap_Cancel = m_UsagesActionMap.FindAction("Cancel", throwIfNotFound: true);
+            m_UsagesActionMap_Forward = m_UsagesActionMap.FindAction("Forward", throwIfNotFound: true);
+            m_UsagesActionMap_Menu = m_UsagesActionMap.FindAction("Menu", throwIfNotFound: true);
+            m_UsagesActionMap_Modifier = m_UsagesActionMap.FindAction("Modifier", throwIfNotFound: true);
+            m_UsagesActionMap_PrimaryAction = m_UsagesActionMap.FindAction("PrimaryAction", throwIfNotFound: true);
+            m_UsagesActionMap_PrimaryTrigger = m_UsagesActionMap.FindAction("PrimaryTrigger", throwIfNotFound: true);
+            m_UsagesActionMap_SecondaryAction = m_UsagesActionMap.FindAction("SecondaryAction", throwIfNotFound: true);
+            m_UsagesActionMap_SecondaryTrigger = m_UsagesActionMap.FindAction("SecondaryTrigger", throwIfNotFound: true);
+            m_UsagesActionMap_Submit = m_UsagesActionMap.FindAction("Submit", throwIfNotFound: true);
         }
 
         public void Dispose()
@@ -728,6 +1057,119 @@ namespace Akasha.InputActions
             }
         }
         public GameActionMapActions @GameActionMap => new GameActionMapActions(this);
+
+        // UsagesActionMap
+        private readonly InputActionMap m_UsagesActionMap;
+        private IUsagesActionMapActions m_UsagesActionMapActionsCallbackInterface;
+        private readonly InputAction m_UsagesActionMap_Any;
+        private readonly InputAction m_UsagesActionMap_Back;
+        private readonly InputAction m_UsagesActionMap_Cancel;
+        private readonly InputAction m_UsagesActionMap_Forward;
+        private readonly InputAction m_UsagesActionMap_Menu;
+        private readonly InputAction m_UsagesActionMap_Modifier;
+        private readonly InputAction m_UsagesActionMap_PrimaryAction;
+        private readonly InputAction m_UsagesActionMap_PrimaryTrigger;
+        private readonly InputAction m_UsagesActionMap_SecondaryAction;
+        private readonly InputAction m_UsagesActionMap_SecondaryTrigger;
+        private readonly InputAction m_UsagesActionMap_Submit;
+        public struct UsagesActionMapActions
+        {
+            private @GameInputActions m_Wrapper;
+            public UsagesActionMapActions(@GameInputActions wrapper) { m_Wrapper = wrapper; }
+            public InputAction @Any => m_Wrapper.m_UsagesActionMap_Any;
+            public InputAction @Back => m_Wrapper.m_UsagesActionMap_Back;
+            public InputAction @Cancel => m_Wrapper.m_UsagesActionMap_Cancel;
+            public InputAction @Forward => m_Wrapper.m_UsagesActionMap_Forward;
+            public InputAction @Menu => m_Wrapper.m_UsagesActionMap_Menu;
+            public InputAction @Modifier => m_Wrapper.m_UsagesActionMap_Modifier;
+            public InputAction @PrimaryAction => m_Wrapper.m_UsagesActionMap_PrimaryAction;
+            public InputAction @PrimaryTrigger => m_Wrapper.m_UsagesActionMap_PrimaryTrigger;
+            public InputAction @SecondaryAction => m_Wrapper.m_UsagesActionMap_SecondaryAction;
+            public InputAction @SecondaryTrigger => m_Wrapper.m_UsagesActionMap_SecondaryTrigger;
+            public InputAction @Submit => m_Wrapper.m_UsagesActionMap_Submit;
+            public InputActionMap Get() { return m_Wrapper.m_UsagesActionMap; }
+            public void Enable() { Get().Enable(); }
+            public void Disable() { Get().Disable(); }
+            public bool enabled => Get().enabled;
+            public static implicit operator InputActionMap(UsagesActionMapActions set) { return set.Get(); }
+            public void SetCallbacks(IUsagesActionMapActions instance)
+            {
+                if (m_Wrapper.m_UsagesActionMapActionsCallbackInterface != null)
+                {
+                    @Any.started -= m_Wrapper.m_UsagesActionMapActionsCallbackInterface.OnAny;
+                    @Any.performed -= m_Wrapper.m_UsagesActionMapActionsCallbackInterface.OnAny;
+                    @Any.canceled -= m_Wrapper.m_UsagesActionMapActionsCallbackInterface.OnAny;
+                    @Back.started -= m_Wrapper.m_UsagesActionMapActionsCallbackInterface.OnBack;
+                    @Back.performed -= m_Wrapper.m_UsagesActionMapActionsCallbackInterface.OnBack;
+                    @Back.canceled -= m_Wrapper.m_UsagesActionMapActionsCallbackInterface.OnBack;
+                    @Cancel.started -= m_Wrapper.m_UsagesActionMapActionsCallbackInterface.OnCancel;
+                    @Cancel.performed -= m_Wrapper.m_UsagesActionMapActionsCallbackInterface.OnCancel;
+                    @Cancel.canceled -= m_Wrapper.m_UsagesActionMapActionsCallbackInterface.OnCancel;
+                    @Forward.started -= m_Wrapper.m_UsagesActionMapActionsCallbackInterface.OnForward;
+                    @Forward.performed -= m_Wrapper.m_UsagesActionMapActionsCallbackInterface.OnForward;
+                    @Forward.canceled -= m_Wrapper.m_UsagesActionMapActionsCallbackInterface.OnForward;
+                    @Menu.started -= m_Wrapper.m_UsagesActionMapActionsCallbackInterface.OnMenu;
+                    @Menu.performed -= m_Wrapper.m_UsagesActionMapActionsCallbackInterface.OnMenu;
+                    @Menu.canceled -= m_Wrapper.m_UsagesActionMapActionsCallbackInterface.OnMenu;
+                    @Modifier.started -= m_Wrapper.m_UsagesActionMapActionsCallbackInterface.OnModifier;
+                    @Modifier.performed -= m_Wrapper.m_UsagesActionMapActionsCallbackInterface.OnModifier;
+                    @Modifier.canceled -= m_Wrapper.m_UsagesActionMapActionsCallbackInterface.OnModifier;
+                    @PrimaryAction.started -= m_Wrapper.m_UsagesActionMapActionsCallbackInterface.OnPrimaryAction;
+                    @PrimaryAction.performed -= m_Wrapper.m_UsagesActionMapActionsCallbackInterface.OnPrimaryAction;
+                    @PrimaryAction.canceled -= m_Wrapper.m_UsagesActionMapActionsCallbackInterface.OnPrimaryAction;
+                    @PrimaryTrigger.started -= m_Wrapper.m_UsagesActionMapActionsCallbackInterface.OnPrimaryTrigger;
+                    @PrimaryTrigger.performed -= m_Wrapper.m_UsagesActionMapActionsCallbackInterface.OnPrimaryTrigger;
+                    @PrimaryTrigger.canceled -= m_Wrapper.m_UsagesActionMapActionsCallbackInterface.OnPrimaryTrigger;
+                    @SecondaryAction.started -= m_Wrapper.m_UsagesActionMapActionsCallbackInterface.OnSecondaryAction;
+                    @SecondaryAction.performed -= m_Wrapper.m_UsagesActionMapActionsCallbackInterface.OnSecondaryAction;
+                    @SecondaryAction.canceled -= m_Wrapper.m_UsagesActionMapActionsCallbackInterface.OnSecondaryAction;
+                    @SecondaryTrigger.started -= m_Wrapper.m_UsagesActionMapActionsCallbackInterface.OnSecondaryTrigger;
+                    @SecondaryTrigger.performed -= m_Wrapper.m_UsagesActionMapActionsCallbackInterface.OnSecondaryTrigger;
+                    @SecondaryTrigger.canceled -= m_Wrapper.m_UsagesActionMapActionsCallbackInterface.OnSecondaryTrigger;
+                    @Submit.started -= m_Wrapper.m_UsagesActionMapActionsCallbackInterface.OnSubmit;
+                    @Submit.performed -= m_Wrapper.m_UsagesActionMapActionsCallbackInterface.OnSubmit;
+                    @Submit.canceled -= m_Wrapper.m_UsagesActionMapActionsCallbackInterface.OnSubmit;
+                }
+                m_Wrapper.m_UsagesActionMapActionsCallbackInterface = instance;
+                if (instance != null)
+                {
+                    @Any.started += instance.OnAny;
+                    @Any.performed += instance.OnAny;
+                    @Any.canceled += instance.OnAny;
+                    @Back.started += instance.OnBack;
+                    @Back.performed += instance.OnBack;
+                    @Back.canceled += instance.OnBack;
+                    @Cancel.started += instance.OnCancel;
+                    @Cancel.performed += instance.OnCancel;
+                    @Cancel.canceled += instance.OnCancel;
+                    @Forward.started += instance.OnForward;
+                    @Forward.performed += instance.OnForward;
+                    @Forward.canceled += instance.OnForward;
+                    @Menu.started += instance.OnMenu;
+                    @Menu.performed += instance.OnMenu;
+                    @Menu.canceled += instance.OnMenu;
+                    @Modifier.started += instance.OnModifier;
+                    @Modifier.performed += instance.OnModifier;
+                    @Modifier.canceled += instance.OnModifier;
+                    @PrimaryAction.started += instance.OnPrimaryAction;
+                    @PrimaryAction.performed += instance.OnPrimaryAction;
+                    @PrimaryAction.canceled += instance.OnPrimaryAction;
+                    @PrimaryTrigger.started += instance.OnPrimaryTrigger;
+                    @PrimaryTrigger.performed += instance.OnPrimaryTrigger;
+                    @PrimaryTrigger.canceled += instance.OnPrimaryTrigger;
+                    @SecondaryAction.started += instance.OnSecondaryAction;
+                    @SecondaryAction.performed += instance.OnSecondaryAction;
+                    @SecondaryAction.canceled += instance.OnSecondaryAction;
+                    @SecondaryTrigger.started += instance.OnSecondaryTrigger;
+                    @SecondaryTrigger.performed += instance.OnSecondaryTrigger;
+                    @SecondaryTrigger.canceled += instance.OnSecondaryTrigger;
+                    @Submit.started += instance.OnSubmit;
+                    @Submit.performed += instance.OnSubmit;
+                    @Submit.canceled += instance.OnSubmit;
+                }
+            }
+        }
+        public UsagesActionMapActions @UsagesActionMap => new UsagesActionMapActions(this);
         private int m_GamepadSchemeIndex = -1;
         public InputControlScheme GamepadScheme
         {
@@ -762,6 +1204,20 @@ namespace Akasha.InputActions
             void OnSneak(InputAction.CallbackContext context);
             void OnSprint(InputAction.CallbackContext context);
             void OnSwitchView(InputAction.CallbackContext context);
+        }
+        public interface IUsagesActionMapActions
+        {
+            void OnAny(InputAction.CallbackContext context);
+            void OnBack(InputAction.CallbackContext context);
+            void OnCancel(InputAction.CallbackContext context);
+            void OnForward(InputAction.CallbackContext context);
+            void OnMenu(InputAction.CallbackContext context);
+            void OnModifier(InputAction.CallbackContext context);
+            void OnPrimaryAction(InputAction.CallbackContext context);
+            void OnPrimaryTrigger(InputAction.CallbackContext context);
+            void OnSecondaryAction(InputAction.CallbackContext context);
+            void OnSecondaryTrigger(InputAction.CallbackContext context);
+            void OnSubmit(InputAction.CallbackContext context);
         }
     }
 }

@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using System;
+using UnityEngine;
 
 /// <summary>
 /// Akasha namespace
@@ -29,5 +30,10 @@ namespace Akasha
         /// Sensitivity
         /// </summary>
         Vector2 Sensitivity { get; set; }
+
+        /// <summary>
+        /// Player character GUID
+        /// </summary>
+        Guid PlayerCharacterGUID { get; set; }
     }
 }

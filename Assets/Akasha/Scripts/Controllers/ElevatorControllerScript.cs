@@ -150,14 +150,6 @@ namespace Akasha.Controllers
         }
 
         /// <summary>
-        /// Update
-        /// </summary>
-        private void Update()
-        {
-            // TODO
-        }
-
-        /// <summary>
         /// On draw gizmos selected
         /// </summary>
         private void OnDrawGizmosSelected()

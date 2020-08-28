@@ -1,5 +1,4 @@
 ﻿using Akasha.Objects;
-using System;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -124,7 +123,7 @@ namespace Akasha.Controllers
                                 }
                                 else
                                 {
-                                    Debug.LogError("Game object must contain \"" + nameof(RectTransform) + "\" and \"" + nameof(CraftingRecipesUIControllerScript) + "\" components.");
+                                    Debug.LogError($"Game object must contain \"{ nameof(RectTransform) }\" and \"{ nameof(CraftingRecipesUIControllerScript) }\" components.");
                                 }
                             }
                             else

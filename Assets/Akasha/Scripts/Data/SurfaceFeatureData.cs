@@ -104,7 +104,7 @@ namespace Akasha.Data
                 if (noiseSeed != value)
                 {
                     noiseSeed = value;
-                    Initialize(true);
+                    Initialize(WorldSeed, true);
                 }
             }
         }
@@ -120,7 +120,7 @@ namespace Akasha.Data
                 if (noiseFrequency != value)
                 {
                     noiseFrequency = value;
-                    Initialize(true);
+                    Initialize(WorldSeed, true);
                 }
             }
         }
@@ -136,7 +136,7 @@ namespace Akasha.Data
                 if (noiseLacunarity != value)
                 {
                     noiseLacunarity = value;
-                    Initialize(true);
+                    Initialize(WorldSeed, true);
                 }
             }
         }
@@ -152,7 +152,7 @@ namespace Akasha.Data
                 if (noisePersistence != value)
                 {
                     noisePersistence = value;
-                    Initialize(true);
+                    Initialize(WorldSeed, true);
                 }
             }
         }
@@ -168,7 +168,7 @@ namespace Akasha.Data
                 if (noiseOctaveCount != value)
                 {
                     noiseOctaveCount = value;
-                    Initialize(true);
+                    Initialize(WorldSeed, true);
                 }
             }
         }
@@ -184,7 +184,7 @@ namespace Akasha.Data
                 if (noiseQuality != value)
                 {
                     noiseQuality = value;
-                    Initialize(true);
+                    Initialize(WorldSeed, true);
                 }
             }
         }
@@ -251,6 +251,11 @@ namespace Akasha.Data
         }
 
         /// <summary>
+        /// World seed
+        /// </summary>
+        public int WorldSeed { get; private set; }
+
+        /// <summary>
         /// Is initialized
         /// </summary>
         public bool IsInitialized => (perlinNoise != null);
@@ -258,17 +263,20 @@ namespace Akasha.Data
         /// <summary>
         /// Initialize
         /// </summary>
-        public void Initialize() => Initialize(false);
+        /// <param name="worldSeed">World seed</param>
+        public void Initialize(int worldSeed) => Initialize(worldSeed, false);
 
         /// <summary>
         /// Initialize
         /// </summary>
+        /// <param name="worldSeed">World seed</param>
         /// <param name="force">Force initialization</param>
-        public void Initialize(bool force)
+        public void Initialize(int worldSeed, bool force)
         {
-            if (force || (perlinNoise == null))
+            if (force || (WorldSeed != worldSeed) || (perlinNoise == null))
             {
-                perlinNoise = new Perlin(noiseFrequency, noiseLacunarity, noisePersistence, noiseOctaveCount, noiseSeed, noiseQuality);
+                WorldSeed = worldSeed;
+                perlinNoise = new Perlin(noiseFrequency, noiseLacunarity, noisePersistence, noiseOctaveCount, noiseSeed + worldSeed, noiseQuality);
             }
         }
 

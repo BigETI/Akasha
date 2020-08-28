@@ -104,6 +104,11 @@ namespace Akasha.Controllers
         }
 
         /// <summary>
+        /// Save game
+        /// </summary>
+        public void SaveGame() => GameManager.Save();
+
+        /// <summary>
         /// Show options
         /// </summary>
         public void ShowOptions()

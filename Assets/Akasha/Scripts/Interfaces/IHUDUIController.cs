@@ -1,6 +1,5 @@
 ﻿using Akasha.Controllers;
 using Akasha.Data;
-using TMPro;
 
 /// <summary>
 /// Akasha namespace
@@ -46,11 +45,6 @@ namespace Akasha
         /// Armor HUD radial progress
         /// </summary>
         HUDRadialProgressData ArmorHUDRadialProgress { get; set; }
-
-        /// <summary>
-        /// Character status text
-        /// </summary>
-        TextMeshProUGUI CharacterStatusText { get; set; }
 
         /// <summary>
         /// Elapsed blink time

@@ -1,5 +1,5 @@
 ﻿using System;
-using System.Diagnostics;
+using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -23,7 +23,12 @@ namespace Akasha.Controllers
         /// <summary>
         /// Default description text format
         /// </summary>
-        private static readonly string defaultDescriptionTextFormat = "<b>{0}:</b>" + Environment.NewLine + "{1}";
+        private static readonly string defaultDescriptionTextFormat = $"<b>{{0}}:</b>{ Environment.NewLine }{{1}}";
+
+        /// <summary>
+        /// Inventory item slots
+        /// </summary>
+        private static readonly List<InventoryItemSlotUIControllerScript> inventoryItemSlots = new List<InventoryItemSlotUIControllerScript>();
 
         /// <summary>
         /// Weight string translation
@@ -51,16 +56,28 @@ namespace Akasha.Controllers
         private string descriptionTextFormat = defaultDescriptionTextFormat;
 
         /// <summary>
-        /// Empty health color
+        /// Empty health border color
         /// </summary>
         [SerializeField]
-        private Color emptyHealthColor = new Color(0.5f, 0.0f, 0.0f);
+        private Color emptyHealthBorderColor = new Color(0.25f, 0.0f, 0.0f);
 
         /// <summary>
-        /// Full health color
+        /// Empty health inner color
         /// </summary>
         [SerializeField]
-        private Color fullHealthColor = new Color(0.0f, 0.5f, 0.0f);
+        private Color emptyHealthInnerColor = new Color(0.5f, 0.0f, 0.0f);
+
+        /// <summary>
+        /// Full health border color
+        /// </summary>
+        [SerializeField]
+        private Color fullHealthBorderColor = new Color(0.0f, 0.25f, 0.0f);
+
+        /// <summary>
+        /// Full health inner color
+        /// </summary>
+        [SerializeField]
+        private Color fullHealthInnerColor = new Color(0.0f, 0.5f, 0.0f);
 
         /// <summary>
         /// Item name text
@@ -75,10 +92,10 @@ namespace Akasha.Controllers
         private Image iconImage = default;
 
         /// <summary>
-        /// Health indicator image
+        /// Health indicator radial progress
         /// </summary>
         [SerializeField]
-        private Image healthIndicatorImage = default;
+        private RadialProgressUIControllerScript healthIndicatorRadialProgress = default;
 
         /// <summary>
         /// Icon image
@@ -97,6 +114,12 @@ namespace Akasha.Controllers
         /// </summary>
         [SerializeField]
         private TextMeshProUGUI descriptionText = default;
+
+        /// <summary>
+        /// Selection indicator image
+        /// </summary>
+        [SerializeField]
+        private Image selectionIndicatorImage = default;
 
         /// <summary>
         /// Weight string translation
@@ -149,21 +172,39 @@ namespace Akasha.Controllers
         }
 
         /// <summary>
-        /// Empty health color
+        /// Empty health border color
         /// </summary>
-        public Color EmptyHealthColor
+        public Color EmptyHealthBorderColor
         {
-            get => emptyHealthColor;
-            set => emptyHealthColor = value;
+            get => emptyHealthBorderColor;
+            set => emptyHealthBorderColor = value;
         }
 
         /// <summary>
-        /// Full health color
+        /// Empty health inner color
         /// </summary>
-        public Color FullHealthColor
+        public Color EmptyHealthInnerColor
         {
-            get => fullHealthColor;
-            set => fullHealthColor = value;
+            get => emptyHealthInnerColor;
+            set => emptyHealthInnerColor = value;
+        }
+
+        /// <summary>
+        /// Full health border color
+        /// </summary>
+        public Color FullHealthBorderColor
+        {
+            get => fullHealthBorderColor;
+            set => fullHealthBorderColor = value;
+        }
+
+        /// <summary>
+        /// Full health inner color
+        /// </summary>
+        public Color FullHealthInnerColor
+        {
+            get => fullHealthInnerColor;
+            set => fullHealthInnerColor = value;
         }
 
         /// <summary>
@@ -185,12 +226,12 @@ namespace Akasha.Controllers
         }
 
         /// <summary>
-        /// Health indicator image
+        /// Health indicator radial progress
         /// </summary>
-        public Image HealthIndicatorImage
+        public RadialProgressUIControllerScript HealthIndicatorRadialProgress
         {
-            get => healthIndicatorImage;
-            set => healthIndicatorImage = value;
+            get => healthIndicatorRadialProgress;
+            set => healthIndicatorRadialProgress = value;
         }
 
         /// <summary>
@@ -221,9 +262,13 @@ namespace Akasha.Controllers
         }
 
         /// <summary>
-        /// Selectable
+        /// Selection indicator image
         /// </summary>
-        public Selectable Selectable { get; private set; }
+        public Image SelectionIndicatorImage
+        {
+            get => selectionIndicatorImage;
+            set => selectionIndicatorImage = value;
+        }
 
         /// <summary>
         /// Inventory item data
@@ -252,12 +297,14 @@ namespace Akasha.Controllers
             {
                 iconImage.sprite = inventoryItemData?.Item.IconSprite;
             }
-            if (healthIndicatorImage)
+            if (healthIndicatorRadialProgress)
             {
-                float fill_amount = (((inventoryItemData != null) && (inventoryItemData.Item != null) && (inventoryItemData.Item.MaximalHealth > 0U)) ? ((float)(inventoryItemData.Health) / inventoryItemData.Item.MaximalHealth) : 0.0f);
-                Vector3 new_color_vector = Vector3.Slerp(new Vector3(emptyHealthColor.r, emptyHealthColor.g, emptyHealthColor.b), new Vector3(fullHealthColor.r, fullHealthColor.g, fullHealthColor.b), fill_amount);
-                healthIndicatorImage.color = new Color(new_color_vector.x, new_color_vector.y, new_color_vector.z, Mathf.Lerp(emptyHealthColor.a, fullHealthColor.a, fill_amount));
-                healthIndicatorImage.fillAmount = fill_amount;
+                float value = (((inventoryItemData != null) && (inventoryItemData.Item != null) && (inventoryItemData.Item.MaximalHealth > 0U)) ? ((float)(inventoryItemData.Health) / inventoryItemData.Item.MaximalHealth) : 0.0f);
+                Vector3 new_border_color_vector = Vector3.Slerp(new Vector3(emptyHealthBorderColor.r, emptyHealthBorderColor.g, emptyHealthBorderColor.b), new Vector3(fullHealthBorderColor.r, fullHealthBorderColor.g, fullHealthBorderColor.b), value);
+                Vector3 new_inner_color_vector = Vector3.Slerp(new Vector3(emptyHealthInnerColor.r, emptyHealthInnerColor.g, emptyHealthInnerColor.b), new Vector3(fullHealthInnerColor.r, fullHealthInnerColor.g, fullHealthInnerColor.b), value);
+                healthIndicatorRadialProgress.BorderColor = new Color(new_border_color_vector.x, new_border_color_vector.y, new_border_color_vector.z, Mathf.Lerp(emptyHealthBorderColor.a, fullHealthBorderColor.a, value));
+                healthIndicatorRadialProgress.InnerColor = new Color(new_inner_color_vector.x, new_inner_color_vector.y, new_inner_color_vector.z, Mathf.Lerp(emptyHealthInnerColor.a, fullHealthInnerColor.a, value));
+                healthIndicatorRadialProgress.Value = value;
             }
             if (quantityText)
             {
@@ -274,13 +321,28 @@ namespace Akasha.Controllers
         }
 
         /// <summary>
-        /// Click
+        /// Select
         /// </summary>
-        public void Click() => Parent?.SelectInventoryItemSlot(InventoryItemData);
+        public void Select()
+        {
+            foreach (InventoryItemSlotUIControllerScript inventory_item_slot in inventoryItemSlots)
+            {
+                if (inventory_item_slot && inventory_item_slot.SelectionIndicatorImage)
+                {
+                    inventory_item_slot.SelectionIndicatorImage.gameObject.SetActive(inventory_item_slot == this);
+                }
+            }
+            Parent?.SelectInventoryItemSlot(InventoryItemData);
+        }
 
         /// <summary>
-        /// Start
+        /// On enable
         /// </summary>
-        private void Start() => Selectable = GetComponentInChildren<Selectable>(true);
+        private void OnEnable() => inventoryItemSlots.Add(this);
+
+        /// <summary>
+        /// On disable
+        /// </summary>
+        private void OnDisable() => inventoryItemSlots.Remove(this);
     }
 }

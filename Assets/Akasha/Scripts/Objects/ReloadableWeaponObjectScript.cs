@@ -71,6 +71,6 @@ namespace Akasha.Objects
         /// <summary>
         /// Key
         /// </summary>
-        public override string Key => "ReloadableWeapons/" + name;
+        public override string Key => $"ReloadableWeapons/{ name }";
     }
 }

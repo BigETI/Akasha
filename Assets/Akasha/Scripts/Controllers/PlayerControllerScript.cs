@@ -205,7 +205,14 @@ namespace Akasha.Controllers
         /// <summary>
         /// Start
         /// </summary>
-        private void Start() => CharacterController = GetComponent<CharacterControllerScript>();
+        private void Start()
+        {
+            CharacterController = GetComponent<CharacterControllerScript>();
+            if (CharacterController != null)
+            {
+                CharacterController.GUID = GameManager.SaveGameData.PlayerCharacterGUID;
+            }
+        }
 
         /// <summary>
         /// Update

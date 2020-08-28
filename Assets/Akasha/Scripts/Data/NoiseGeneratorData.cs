@@ -242,40 +242,39 @@ namespace Akasha.Data
         /// <summary>
         /// New noise module
         /// </summary>
-        public ModuleBase NewNoiseModule
+        /// <param name="worldSeed">World seed</param>
+        /// <returns>Noise module if successful, otherwise "null"</returns>
+        public ModuleBase CreateNewNoiseModule(int worldSeed)
         {
-            get
+            ModuleBase ret = null;
+            switch (noiseLayerAlgorithm)
             {
-                ModuleBase ret = null;
-                switch (noiseLayerAlgorithm)
-                {
-                    case ENoiseGeneratorAlgorithm.Billow:
-                        ret = new Billow(frequency, lacunarity, persistence, octaveCount, seed, quality);
-                        break;
-                    case ENoiseGeneratorAlgorithm.Checker:
-                        ret = new Checker();
-                        break;
-                    case ENoiseGeneratorAlgorithm.Constant:
-                        ret = new Const(0.0f);
-                        break;
-                    case ENoiseGeneratorAlgorithm.Cylinders:
-                        ret = new Cylinders(frequency);
-                        break;
-                    case ENoiseGeneratorAlgorithm.Perlin:
-                        ret = new Perlin(frequency, lacunarity, persistence, octaveCount, seed, quality);
-                        break;
-                    case ENoiseGeneratorAlgorithm.RidgedMultiFractal:
-                        ret = new RidgedMultifractal(frequency, lacunarity, octaveCount, seed, quality);
-                        break;
-                    case ENoiseGeneratorAlgorithm.Spheres:
-                        ret = new Spheres(frequency);
-                        break;
-                    case ENoiseGeneratorAlgorithm.Voronoi:
-                        ret = new Voronoi(frequency, displacement, seed, distance);
-                        break;
-                }
-                return ret;
+                case ENoiseGeneratorAlgorithm.Billow:
+                    ret = new Billow(frequency, lacunarity, persistence, octaveCount, seed + worldSeed, quality);
+                    break;
+                case ENoiseGeneratorAlgorithm.Checker:
+                    ret = new Checker();
+                    break;
+                case ENoiseGeneratorAlgorithm.Constant:
+                    ret = new Const(0.0f);
+                    break;
+                case ENoiseGeneratorAlgorithm.Cylinders:
+                    ret = new Cylinders(frequency);
+                    break;
+                case ENoiseGeneratorAlgorithm.Perlin:
+                    ret = new Perlin(frequency, lacunarity, persistence, octaveCount, seed + worldSeed, quality);
+                    break;
+                case ENoiseGeneratorAlgorithm.RidgedMultiFractal:
+                    ret = new RidgedMultifractal(frequency, lacunarity, octaveCount, seed + worldSeed, quality);
+                    break;
+                case ENoiseGeneratorAlgorithm.Spheres:
+                    ret = new Spheres(frequency);
+                    break;
+                case ENoiseGeneratorAlgorithm.Voronoi:
+                    ret = new Voronoi(frequency, displacement, seed + worldSeed, distance);
+                    break;
             }
+            return ret;
         }
 
         ///// <summary>

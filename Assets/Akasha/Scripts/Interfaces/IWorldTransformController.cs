@@ -20,6 +20,11 @@ namespace Akasha
         BlockID BlockID { get; set; }
 
         /// <summary>
+        /// Position offset
+        /// </summary>
+        Vector3 PositionOffset { get; set; }
+
+        /// <summary>
         /// Get block ID
         /// </summary>
         /// <param name="worldPosition">World position</param>

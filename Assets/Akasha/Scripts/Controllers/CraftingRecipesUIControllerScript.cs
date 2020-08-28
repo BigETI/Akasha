@@ -315,10 +315,6 @@ namespace Akasha.Controllers
             {
                 quantitySelection.SetQuantityWithoutNotification((int)quantity);
             }
-            //if (TryGetComponent(out Selectable selectable))
-            //{
-            //    selectable.interactable = isKnown;
-            //}
             UpdateControls();
         }
 

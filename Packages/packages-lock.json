@@ -21,6 +21,13 @@
       "dependencies": {},
       "hash": "d80f12a14a0e6a05cf9bc86bb2795c1c01eaf619"
     },
+    "com.bigeti.timing": {
+      "version": "https://github.com/BigETI/UnityTiming.git",
+      "depth": 0,
+      "source": "git",
+      "dependencies": {},
+      "hash": "a958207e245ca79bfa1eb3027f2e72ff32315d94"
+    },
     "com.bigeti.translator": {
       "version": "https://github.com/BigETI/UnityTranslator.git",
       "depth": 0,

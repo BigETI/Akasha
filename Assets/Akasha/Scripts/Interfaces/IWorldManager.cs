@@ -1,5 +1,6 @@
 ﻿using Akasha.Controllers;
 using Akasha.Data;
+using Akasha.Objects;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using UnityEngine;
@@ -17,7 +18,12 @@ namespace Akasha
         /// <summary>
         /// Block lookup
         /// </summary>
-        IReadOnlyDictionary<string, IBlockObject> BlockLookup { get; }
+        IReadOnlyDictionary<string, BlockObjectScript> BlockLookup { get; }
+
+        /// <summary>
+        /// Block lookup
+        /// </summary>
+        IReadOnlyDictionary<string, EntityObjectScript> EntityLookup { get; }
 
         /// <summary>
         /// Chunk size
@@ -58,6 +64,16 @@ namespace Akasha
         /// Showing blocks prefab
         /// </summary>
         IBlocksPrefabObject ShowingBlocksPrefab { get; set; }
+
+        /// <summary>
+        /// World IO stream
+        /// </summary>
+        IWorldIO IO { get; }
+
+        /// <summary>
+        /// Is saving
+        /// </summary>
+        bool IsSaving { get; }
 
         /// <summary>
         /// Get chunk ID from block ID

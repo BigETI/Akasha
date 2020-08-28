@@ -45,7 +45,7 @@ namespace Akasha.Data
             {
                 if (item == null)
                 {
-                    item = Resources.Load<ItemObjectScript>("Items/" + name);
+                    item = Resources.Load<ItemObjectScript>($"Items/{ name }");
                 }
                 return item;
             }

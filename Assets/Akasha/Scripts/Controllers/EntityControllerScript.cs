@@ -1,5 +1,7 @@
 ﻿using Akasha.Data;
 using Akasha.Managers;
+using Akasha.Objects;
+using System;
 using System.Threading.Tasks;
 using UnityEngine;
 
@@ -32,6 +34,12 @@ namespace Akasha.Controllers
         [SerializeField]
         [Range(0.0f, 1.0f)]
         private float sampleCollisionDistanceMultiplier = 0.5f;
+
+        /// <summary>
+        /// Entity object
+        /// </summary>
+        [SerializeField]
+        private EntityObjectScript entityObject;
 
         /// <summary>
         /// Chunk blocks tasks
@@ -86,6 +94,15 @@ namespace Akasha.Controllers
         }
 
         /// <summary>
+        /// Entity object
+        /// </summary>
+        public EntityObjectScript EntityObject
+        {
+            get => entityObject;
+            set => entityObject = value;
+        }
+
+        /// <summary>
         /// Bounds chunk blocks size
         /// </summary>
         public Vector3Int BoundsChunkBlocksSize
@@ -103,6 +120,11 @@ namespace Akasha.Controllers
                 return ret;
             }
         }
+
+        /// <summary>
+        /// GUID
+        /// </summary>
+        public Guid GUID { get; set; } = Guid.NewGuid();
 
         /// <summary>
         /// World transform controller

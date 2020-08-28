@@ -103,6 +103,11 @@ namespace Akasha
         NoiseLayerData[] NoiseLayers { get; set; }
 
         /// <summary>
+        /// World seed
+        /// </summary>
+        int WorldSeed { get; }
+
+        /// <summary>
         /// Is initialized
         /// </summary>
         bool IsInitialized { get; }
@@ -110,13 +115,15 @@ namespace Akasha
         /// <summary>
         /// Initialize
         /// </summary>
-        void Initialize();
+        /// <param name="worldSeed">World seed</param>
+        void Initialize(int worldSeed);
 
         /// <summary>
         /// Initialize
         /// </summary>
+        /// <param name="worldSeed">World seed</param>
         /// <param name="force">Force initialization</param>
-        void Initialize(bool force);
+        void Initialize(int worldSeed, bool force);
 
         /// <summary>
         /// Get biome weight

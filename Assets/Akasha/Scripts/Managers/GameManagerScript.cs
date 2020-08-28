@@ -173,11 +173,6 @@ namespace Akasha.Managers
         public event GameStateChangedDelegate OnGameResumed;
 
         /// <summary>
-        /// Start
-        /// </summary>
-        private void Start() => GameState = EGameState.Playing;
-
-        /// <summary>
         /// Update
         /// </summary>
         private void Update()
