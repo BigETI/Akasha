@@ -1,6 +1,5 @@
 ﻿using System;
 using System.IO;
-using System.Runtime.Remoting;
 using System.Threading;
 using System.Threading.Tasks;
 using UnityEngine;
@@ -200,13 +199,6 @@ namespace Akasha
         /// <param name="cancellationToken">Cancellation token</param>
         /// <returns></returns>
         public override Task CopyToAsync(Stream destination, int bufferSize, CancellationToken cancellationToken) => fileStream.CopyToAsync(destination, bufferSize, cancellationToken);
-
-        /// <summary>
-        /// Create object reference
-        /// </summary>
-        /// <param name="requestedType">Requested type</param>
-        /// <returns>Object reference</returns>
-        public override ObjRef CreateObjRef(Type requestedType) => fileStream.CreateObjRef(requestedType);
 
         /// <summary>
         /// Dispose
