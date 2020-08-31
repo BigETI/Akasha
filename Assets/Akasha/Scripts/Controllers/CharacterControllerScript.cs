@@ -496,9 +496,47 @@ namespace Akasha.Controllers
         public IInventoryUIController InventoryUIController { get; private set; }
 
         /// <summary>
-        /// New world player data snapshot
+        /// World player data snapshot
         /// </summary>
-        public WorldPlayerData NewWorldPlayerDataSnapshot => new WorldPlayerData(GUID, EntityObject, Health, Armor, (WorldTransformController == null) ? BlockID.Zero : WorldTransformController.BlockID, (WorldTransformController == null) ? Vector3.zero : WorldTransformController.PositionOffset, Rotation, Inventory, Fullness, Stamina, IsExhausted, ElapsedHitCooldownTime, ElapsedStaminaRegenerationCooldownTime, (new List<string>(KnownCraftingRecipesLookup.Keys)).ToArray());
+        public WorldPlayerData WorldPlayerDataSnapshot
+        {
+            get => new WorldPlayerData(GUID, EntityObject, Health, Armor, (WorldTransformController == null) ? BlockID.Zero : WorldTransformController.BlockID, (WorldTransformController == null) ? Vector3.zero : WorldTransformController.PositionOffset, Rotation, Inventory, Fullness, Stamina, IsExhausted, ElapsedHitCooldownTime, ElapsedStaminaRegenerationCooldownTime, (new List<string>(KnownCraftingRecipesLookup.Keys)).ToArray());
+            set
+            {
+                if (value == null)
+                {
+                    throw new ArgumentNullException(nameof(value));
+                }
+                EntityObject = value.Entity as EntityObjectScript;
+                Health = value.Health;
+                Armor = value.Armor;
+                if (WorldTransformController != null)
+                {
+                    WorldTransformController.BlockID = value.BlockID;
+                    // TODO: Fix position offset
+                    //WorldTransformController.PositionOffset = value.PositionOffset;
+                }
+                Rotation = value.Rotation;
+                Inventory = value.Inventory;
+                Fullness = value.Fullness;
+                Stamina = value.Stamina;
+                IsExhausted = value.IsExhausted;
+                ElapsedHitCooldownTime = value.ElapsedHitCooldownTime;
+                ElapsedStaminaRegenerationCooldownTime = value.ElapsedStaminaRegenerationCooldownTime;
+                knownCraftingRecipesLookup.Clear();
+                foreach (string key in value.KnownCraftingRecipes)
+                {
+                    if (key != null)
+                    {
+                        CraftingRecipesObjectScript crafting_recipe = Resources.Load<CraftingRecipesObjectScript>($"CraftingRecipes/{ key }");
+                        if (crafting_recipe)
+                        {
+                            knownCraftingRecipesLookup.Add(key, crafting_recipe);
+                        }
+                    }
+                }
+            }
+        }
 
         /// <summary>
         /// Place block

@@ -336,20 +336,14 @@ namespace Akasha.Controllers
                 ++count;
             }
             while (ret);
-            if (!ret)
-            {
-                transform.position = new_position;
-            }
+            transform.position = (ret ? (TestCollision(transform.position) ? (position - motion) : position) : new_position);
             return ret;
         }
 
         /// <summary>
         /// Start
         /// </summary>
-        protected virtual void Start()
-        {
-            WorldTransformController = GetComponent<WorldTransformControllerScript>();
-        }
+        protected virtual void Start() => WorldTransformController = GetComponent<WorldTransformControllerScript>();
 
         /// <summary>
         /// On draw gizmos

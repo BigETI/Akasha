@@ -15,6 +15,11 @@ namespace Akasha
     public interface ICraftingRecipesUIController : IBehaviour
     {
         /// <summary>
+        /// Unknown crafting recipes icon image sprite translation
+        /// </summary>
+        SpriteTranslationObjectScript UnknownCraftingRecipesIconImageSpriteTranslation { get; set; }
+
+        /// <summary>
         /// Crafting recipes weight string translation
         /// </summary>
         StringTranslationObjectScript CraftingRecipesWeightStringTranslation { get; set; }

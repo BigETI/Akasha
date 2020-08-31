@@ -1,4 +1,5 @@
 ﻿using UnityEngine;
+using UnityEngine.UI;
 
 /// <summary>
 /// Akasha namespace
@@ -19,5 +20,15 @@ namespace Akasha
         /// Rectangle transform
         /// </summary>
         RectTransform RectangleTransform { get; }
+
+        /// <summary>
+        /// Vertical layout group
+        /// </summary>
+        VerticalLayoutGroup VerticalLayoutGroup { get; }
+
+        /// <summary>
+        /// Update visuals
+        /// </summary>
+        void UpdateVisuals();
     }
 }

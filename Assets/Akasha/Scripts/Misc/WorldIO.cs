@@ -170,17 +170,17 @@ namespace Akasha
         private WorldIO(Guid worldGUID, string worldName, string worldDescription, int worldSeed, Vector3Int chunkSize, Dictionary<ChunkID, long> chunkDataLookup, Dictionary<string, long> entityDataLookup, Dictionary<ChunkID, List<string>> chunkEntitiesLookup, BlockObjectScript[] blockPalette, ReopenableFileStream worldChunksFileStream, ReopenableFileStream worldEntitiesFileStream, IWorldManager worldManager)
         {
             WorldGUID = worldGUID;
-            WorldName = worldName;
-            WorldDescription = worldDescription;
+            WorldName = worldName ?? throw new ArgumentNullException(nameof(worldName));
+            WorldDescription = worldDescription ?? throw new ArgumentNullException(nameof(worldDescription));
             WorldSeed = worldSeed;
             ChunkSize = chunkSize;
-            this.chunkDataLookup = chunkDataLookup;
-            this.entityDataLookup = entityDataLookup;
-            this.chunkEntitiesLookup = chunkEntitiesLookup;
-            this.blockPalette = blockPalette;
-            WorldChunksFileStream = worldChunksFileStream;
-            WorldEntitiesFileStream = worldEntitiesFileStream;
-            WorldManager = worldManager;
+            this.chunkDataLookup = chunkDataLookup ?? throw new ArgumentNullException(nameof(chunkDataLookup));
+            this.entityDataLookup = entityDataLookup ?? throw new ArgumentNullException(nameof(entityDataLookup));
+            this.chunkEntitiesLookup = chunkEntitiesLookup ?? throw new ArgumentNullException(nameof(chunkEntitiesLookup));
+            this.blockPalette = blockPalette ?? throw new ArgumentNullException(nameof(blockPalette));
+            WorldChunksFileStream = worldChunksFileStream ?? throw new ArgumentNullException(nameof(worldChunksFileStream));
+            WorldEntitiesFileStream = worldEntitiesFileStream ?? throw new ArgumentNullException(nameof(worldEntitiesFileStream));
+            WorldManager = worldManager ?? throw new ArgumentNullException(nameof(worldManager));
         }
 
         /// <summary>
@@ -307,7 +307,7 @@ namespace Akasha
                 {
                     if (Directory.Exists(cache_world_directory_path))
                     {
-                        Directory.Delete(cache_world_directory_path);
+                        Directory.Delete(cache_world_directory_path, true);
                     }
                     Directory.CreateDirectory(cache_world_directory_path);
                     using (FileStream world_file_stream = File.OpenRead(world_file_path))
@@ -363,8 +363,8 @@ namespace Akasha
                     }
                     if (world_meta_data != null)
                     {
-                        cache_world_chunks_file_stream = ReopenableFileStream.Open(Path.Combine(cache_world_directory_path, worldChunksFilePath), FileMode.Create, FileAccess.ReadWrite, FileShare.None);
-                        cache_world_entities_file_stream = ReopenableFileStream.Open(Path.Combine(cache_world_directory_path, worldEntitiesFilePath), FileMode.Create, FileAccess.ReadWrite, FileShare.None);
+                        cache_world_chunks_file_stream = ReopenableFileStream.Open(Path.Combine(cache_world_directory_path, worldChunksFilePath), FileMode.Open, FileAccess.ReadWrite, FileShare.None);
+                        cache_world_entities_file_stream = ReopenableFileStream.Open(Path.Combine(cache_world_directory_path, worldEntitiesFilePath), FileMode.Open, FileAccess.ReadWrite, FileShare.None);
                         if ((cache_world_chunks_file_stream != null) && (cache_world_entities_file_stream != null))
                         {
                             cache_world_chunks_file_stream.Seek(0L, SeekOrigin.Begin);
@@ -388,7 +388,7 @@ namespace Akasha
                                 {
                                     throw new InvalidDataException($"Incompatible chunk size. Read: { chunk_size }; Expected: { worldManager.ChunkSize }");
                                 }
-                                long chunk_data_size = (chunk_width * chunk_height * chunk_depth) * (sizeof(uint) + sizeof(ushort));
+                                long chunk_data_size = (long)(chunk_width * chunk_height * chunk_depth) * (sizeof(uint) + sizeof(ushort));
                                 uint blocks_in_palette_count = cache_world_chunks_file_stream_binary_reader.ReadUInt32();
                                 uint chunk_count = cache_world_chunks_file_stream_binary_reader.ReadUInt32();
                                 block_palette = new BlockObjectScript[blocks_in_palette_count];
@@ -703,6 +703,31 @@ namespace Akasha
         }
 
         /// <summary>
+        /// Delete world file
+        /// </summary>
+        /// <param name="worldGUID">World GUID</param>
+        /// <returns>"true" if successful, otherwise "false"</returns>
+        public static bool DeleteWorldFile(Guid worldGUID)
+        {
+            bool ret = false;
+            try
+            {
+                string world_file_path = GetWorldFilePath(worldGUID);
+                if (File.Exists(world_file_path))
+                {
+                    File.Delete(world_file_path);
+                    ret = true;
+                }
+            }
+            catch (Exception e)
+            {
+                Debug.LogError(e);
+                ret = false;
+            }
+            return ret;
+        }
+
+        /// <summary>
         /// Create clear cache task
         /// </summary>
         /// <returns>Delete cache task</returns>
@@ -720,16 +745,23 @@ namespace Akasha
             {
                 if (chunkDataLookup.ContainsKey(chunkID))
                 {
-                    WorldChunksFileStream.Seek(chunkDataLookup[chunkID], SeekOrigin.Begin);
-                    using (BinaryReader stream_reader = new BinaryReader(WorldChunksFileStream, Encoding.UTF8, true))
+                    try
                     {
-                        ret = new BlockData[ChunkSize.x * ChunkSize.y * ChunkSize.z];
-                        for (int index = 0; index < ret.Length; index++)
+                        WorldChunksFileStream.Seek(chunkDataLookup[chunkID], SeekOrigin.Begin);
+                        using (BinaryReader world_chunks_file_stream_binary_reader = new BinaryReader(WorldChunksFileStream, Encoding.UTF8, true))
                         {
-                            uint block_palette_index = stream_reader.ReadUInt32();
-                            ushort health = stream_reader.ReadUInt16();
-                            ret[index] = ((block_palette_index < blockPalette.Length) ? (new BlockData(blockPalette[block_palette_index], health)) : default);
+                            ret = new BlockData[ChunkSize.x * ChunkSize.y * ChunkSize.z];
+                            for (int index = 0; index < ret.Length; index++)
+                            {
+                                uint block_palette_index = world_chunks_file_stream_binary_reader.ReadUInt32();
+                                ushort health = world_chunks_file_stream_binary_reader.ReadUInt16();
+                                ret[index] = ((block_palette_index < blockPalette.Length) ? (new BlockData(blockPalette[block_palette_index], health)) : default);
+                            }
                         }
+                    }
+                    catch (Exception e)
+                    {
+                        Debug.LogError(e);
                     }
                 }
             }
@@ -750,7 +782,7 @@ namespace Akasha
                 {
                     List<string> chunk_entity_guids = chunkEntitiesLookup[chunkID];
                     ret = new WorldEntityData[chunk_entity_guids.Count];
-                    using (BinaryReader stream_reader = new BinaryReader(WorldEntitiesFileStream, Encoding.UTF8, true))
+                    using (BinaryReader world_entities_file_stream_binary_reader = new BinaryReader(WorldEntitiesFileStream, Encoding.UTF8, true))
                     {
                         for (int index = 0; index < ret.Length; index++)
                         {
@@ -759,7 +791,7 @@ namespace Akasha
                             {
                                 long entity_data_position = entityDataLookup[chunk_entity_guid];
                                 WorldEntitiesFileStream.Seek(entity_data_position, SeekOrigin.Begin);
-                                string entity_json = stream_reader.ReadString();
+                                string entity_json = world_entities_file_stream_binary_reader.ReadString();
                                 WorldEntityData entity = JsonUtility.FromJson<WorldEntityData>(entity_json);
                                 if ((entity != null) && entity.IsValid)
                                 {
@@ -773,6 +805,65 @@ namespace Akasha
                         }
                     }
                 }
+            }
+            return ret;
+        }
+
+        /// <summary>
+        /// Read players
+        /// </summary>
+        /// <returns>Players</returns>
+        private IReadOnlyDictionary<string, WorldPlayerData> ReadPlayers()
+        {
+            Dictionary<string, WorldPlayerData> ret = new Dictionary<string, WorldPlayerData>();
+            string players_directory_path = Path.Combine(GetWorldCacheDirectoryPath(WorldGUID), "players");
+            try
+            {
+                if (Directory.Exists(players_directory_path))
+                {
+                    string[] player_paths = Directory.GetFiles(players_directory_path, "*.json");
+                    if (player_paths != null)
+                    {
+                        foreach (string player_path in player_paths)
+                        {
+                            try
+                            {
+                                using (FileStream player_file_stream = File.OpenRead(player_path))
+                                {
+                                    using (StreamReader player_file_stream_reader = new StreamReader(player_file_stream))
+                                    {
+                                        string player_json = player_file_stream_reader.ReadToEnd();
+                                        WorldPlayerData player = JsonUtility.FromJson<WorldPlayerData>(player_json);
+                                        if (player != null)
+                                        {
+                                            string key = player.GUID.ToString();
+                                            if (ret.ContainsKey(key))
+                                            {
+                                                Debug.LogError($"Skipping duplicate player GUID \"{ key }\".");
+                                            }
+                                            else
+                                            {
+                                                ret.Add(key, player);
+                                            }
+                                        }
+                                        else
+                                        {
+                                            Debug.LogError($"Invalid player JSON:{ Environment.NewLine }{ player_json }");
+                                        }
+                                    }
+                                }
+                            }
+                            catch (Exception ex)
+                            {
+                                Debug.LogError(ex);
+                            }
+                        }
+                    }
+                }
+            }
+            catch (Exception e)
+            {
+                Debug.LogError(e);
             }
             return ret;
         }
@@ -1162,6 +1253,12 @@ namespace Akasha
         /// <param name="chunkID">Chunk ID</param>
         /// <returns>Read chunk entities task</returns>
         public Task<WorldEntityData[]> CreateReadChunkEntitiesTask(ChunkID chunkID) => (CanRead ? Task.Run(() => ReadChunkEntityData(chunkID)) : Task.FromResult(Array.Empty<WorldEntityData>()));
+
+        /// <summary>
+        /// Create read players task
+        /// </summary>
+        /// <returns>Read players task</returns>
+        public Task<IReadOnlyDictionary<string, WorldPlayerData>> CreateReadPlayersTask() => Task.Run(ReadPlayers);
 
         /// <summary>
         /// Create write chunks task

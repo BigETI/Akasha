@@ -27,6 +27,12 @@ namespace Akasha.Controllers
         private static readonly string defaultCraftingResultsWeightTextFormat = "<b>{0}:</b> {1} kg";
 
         /// <summary>
+        /// Unknown crafting recipes icon image sprite translation
+        /// </summary>
+        [SerializeField]
+        private SpriteTranslationObjectScript unknownCraftingRecipesIconImageSpriteTranslation = default;
+
+        /// <summary>
         /// Crafting recipes weight string translation
         /// </summary>
         [SerializeField]
@@ -96,6 +102,15 @@ namespace Akasha.Controllers
         /// Crafting recipe UI controllers
         /// </summary>
         private readonly List<CraftingRecipeUIControllerScript> craftingRecipeUIControllers = new List<CraftingRecipeUIControllerScript>();
+
+        /// <summary>
+        /// Unknown crafting recipes icon image sprite translation
+        /// </summary>
+        public SpriteTranslationObjectScript UnknownCraftingRecipesIconImageSpriteTranslation
+        {
+            get => unknownCraftingRecipesIconImageSpriteTranslation;
+            set => unknownCraftingRecipesIconImageSpriteTranslation = value;
+        }
 
         /// <summary>
         /// Crafting recipes weight string translation
@@ -255,7 +270,8 @@ namespace Akasha.Controllers
                 }
                 if (iconImage)
                 {
-                    iconImage.sprite = CraftingRecipes.IconSprite;
+                    Sprite icon_image_sprite = CraftingRecipes.IconSprite;
+                    iconImage.sprite = (icon_image_sprite ? icon_image_sprite : (unknownCraftingRecipesIconImageSpriteTranslation ? unknownCraftingRecipesIconImageSpriteTranslation.Sprite : null));
                 }
                 if (craftingRecipesWeightText)
                 {
@@ -308,9 +324,10 @@ namespace Akasha.Controllers
         /// <param name="parent">Parent</param>
         public void SetValues(ICraftingRecipesObject craftingRecipes, uint quantity, bool isKnown, ICraftingUIController parent)
         {
+            ISaveGameData save_game = GameManager.SaveGameData;
             Parent = parent ?? throw new ArgumentNullException(nameof(parent));
             CraftingRecipes = craftingRecipes;
-            IsKnown = isKnown;
+            IsKnown = (isKnown || ((save_game != null) && save_game.AreCheatsEnabled));
             if (quantitySelection)
             {
                 quantitySelection.SetQuantityWithoutNotification((int)quantity);

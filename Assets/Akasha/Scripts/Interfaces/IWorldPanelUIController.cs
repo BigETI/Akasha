@@ -28,14 +28,25 @@ namespace Akasha
         TextMeshProUGUI WorldDescriptionText { get; set; }
 
         /// <summary>
+        /// World GUID
+        /// </summary>
+        Guid WorldGUID { get; }
+
+        /// <summary>
         /// Set values
         /// </summary>
         /// <param name="worldGUID">World GUID</param>
-        void SetValues(Guid worldGUID);
+        /// <param name="parent">Parent</param>
+        void SetValues(Guid worldGUID, IWorldsPanelUIController parent);
 
         /// <summary>
-        /// Click
+        /// Load world
         /// </summary>
-        void Click();
+        void LoadWorld();
+
+        /// <summary>
+        /// Delete world
+        /// </summary>
+        void DeleteWorld();
     }
 }

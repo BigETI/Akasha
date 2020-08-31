@@ -31,6 +31,12 @@ namespace Akasha.Controllers
         private static readonly List<InventoryItemSlotUIControllerScript> inventoryItemSlots = new List<InventoryItemSlotUIControllerScript>();
 
         /// <summary>
+        /// Unknown item icon image sprite translation
+        /// </summary>
+        [SerializeField]
+        private SpriteTranslationObjectScript unknownItemIconImageSpriteTranslation = default;
+
+        /// <summary>
         /// Weight string translation
         /// </summary>
         [SerializeField]
@@ -120,6 +126,15 @@ namespace Akasha.Controllers
         /// </summary>
         [SerializeField]
         private Image selectionIndicatorImage = default;
+
+        /// <summary>
+        /// Unknown item icon image sprite translation
+        /// </summary>
+        public SpriteTranslationObjectScript UnknownItemIconImageSpriteTranslation
+        {
+            get => unknownItemIconImageSpriteTranslation;
+            set => unknownItemIconImageSpriteTranslation = value;
+        }
 
         /// <summary>
         /// Weight string translation
@@ -295,7 +310,8 @@ namespace Akasha.Controllers
             }
             if (iconImage)
             {
-                iconImage.sprite = inventoryItemData?.Item.IconSprite;
+                Sprite icon_image_sprite = inventoryItemData?.Item.IconSprite;
+                iconImage.sprite = (icon_image_sprite ? icon_image_sprite : (unknownItemIconImageSpriteTranslation ? unknownItemIconImageSpriteTranslation.Sprite : null));
             }
             if (healthIndicatorRadialProgress)
             {

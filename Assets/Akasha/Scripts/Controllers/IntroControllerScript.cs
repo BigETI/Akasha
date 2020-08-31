@@ -34,6 +34,7 @@ namespace Akasha.Controllers
             {
                 input_controller.OnAnyKeyPressed += ShowMainMenu;
             }
+            WorldIO.CreateClearCacheTask();
         }
 
         /// <summary>

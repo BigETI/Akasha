@@ -12,6 +12,21 @@ namespace Akasha
     public interface ISaveGameData
     {
         /// <summary>
+        /// Master volume
+        /// </summary>
+        float MasterVolume { get; set; }
+
+        /// <summary>
+        /// Music volume
+        /// </summary>
+        float MusicVolume { get; set; }
+
+        /// <summary>
+        /// Sound effects volume
+        /// </summary>
+        float SoundEffectsVolume { get; set; }
+
+        /// <summary>
         /// Invert X axis
         /// </summary>
         bool InvertXAxis { get; set; }
@@ -35,5 +50,10 @@ namespace Akasha
         /// Player character GUID
         /// </summary>
         Guid PlayerCharacterGUID { get; set; }
+
+        /// <summary>
+        /// Are cheats enabled
+        /// </summary>
+        bool AreCheatsEnabled { get; set; }
     }
 }

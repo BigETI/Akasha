@@ -1,0 +1,37 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 633ca26d071a54346aec853814800eb0, type: 3}
+  m_Name: CreditsTextStringTranslation
+  m_EditorClassIdentifier: 
+  stringTranslation:
+    strings:
+    - stringValue: 'Art style, game design, music, programming and UX design for
+        this game
+
+        have been made by Ethem Kurt.
+
+
+        Thanks to <b>feathericons.com</b>
+
+        for
+        providing open source icons.
+
+
+        This project is available at
+
+        <b>https://github.com/BigETI/Akasha</b>'
+      language: 10
+    - stringValue: "Art Stil, Game Design, Musik, Programmierung und UX Design\nwurden
+        von Ethem Kurt f\xFCr dieses Spiel durchgef\xFChrt.\n\nVielen Dank an <b>feathericons.com</b>\nf\xFCr
+        die Open Source Icons.\n\nDieses Projekt ist verf\xFCgbar auf\n<b>https://github.com/BigETI/Akasha</b>"
+      language: 15
+  comment: 

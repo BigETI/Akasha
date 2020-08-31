@@ -1,5 +1,12 @@
 {
   "dependencies": {
+    "com.bigeti.audio-manager": {
+      "version": "https://github.com/BigETI/UnityAudioManager.git",
+      "depth": 0,
+      "source": "git",
+      "dependencies": {},
+      "hash": "67ec5e827a107b40772f84e256f06750923f7c83"
+    },
     "com.bigeti.save-game": {
       "version": "https://github.com/BigETI/UnitySaveGame.git",
       "depth": 0,

@@ -1,6 +1,4 @@
-﻿using Akasha.Managers;
-using System;
-using System.Linq.Expressions;
+﻿using System;
 using System.Threading.Tasks;
 using TMPro;
 using UnityEngine;
@@ -67,11 +65,21 @@ namespace Akasha.Controllers
         }
 
         /// <summary>
+        /// World GUID
+        /// </summary>
+        public Guid WorldGUID { get; private set; }
+
+        public IWorldsPanelUIController Parent { get; private set; }
+
+        /// <summary>
         /// Set values
         /// </summary>
         /// <param name="worldGUID">World GUID</param>
-        public void SetValues(Guid worldGUID)
+        /// <param name="parent">Parent</param>
+        public void SetValues(Guid worldGUID, IWorldsPanelUIController parent)
         {
+            WorldGUID = worldGUID;
+            Parent = parent ?? throw new ArgumentNullException(nameof(parent));
             if (readWorldPreviewTask != null)
             {
                 try
@@ -88,11 +96,19 @@ namespace Akasha.Controllers
         }
 
         /// <summary>
-        /// Click
+        /// Load world
         /// </summary>
-        public void Click()
+        public void LoadWorld() => GameManager.LoadWorld(WorldGUID);
+
+        /// <summary>
+        /// Delete world
+        /// </summary>
+        public void DeleteWorld()
         {
-            // TODO
+            if (WorldIO.DeleteWorldFile(WorldGUID) && (Parent != null))
+            {
+                Parent.UpdateVisuals();
+            }
         }
 
         /// <summary>

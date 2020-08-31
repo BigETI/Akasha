@@ -33,8 +33,8 @@ namespace Akasha
         /// <param name="metaData">Meta data</param>
         public WorldPreview(byte[] previewImageData, WorldMetaData metaData)
         {
-            PreviewImageData = previewImageData ?? throw new ArgumentNullException(nameof(previewImageData));
-            MetaData = metaData;
+            PreviewImageData = previewImageData;
+            MetaData = metaData ?? throw new ArgumentNullException(nameof(metaData));
         }
     }
 }

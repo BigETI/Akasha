@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using TMPro;
+using UnityEngine;
 using UnityEngine.Events;
 
 /// <summary>
@@ -12,6 +13,18 @@ namespace Akasha.Controllers
     [RequireComponent(typeof(InputControllerScript))]
     public class MainMenuUIControllerScript : MonoBehaviour, IMainMenuUIController
     {
+        /// <summary>
+        /// World name input field
+        /// </summary>
+        [SerializeField]
+        private TMP_InputField worldNameInputField = default;
+
+        /// <summary>
+        /// World description input field
+        /// </summary>
+        [SerializeField]
+        private TMP_InputField worldDescriptionInputField = default;
+
         /// <summary>
         /// On menus hidden
         /// </summary>
@@ -52,6 +65,24 @@ namespace Akasha.Controllers
         /// Main menu state
         /// </summary>
         private EMainMenuState mainMenuState = EMainMenuState.Nothing;
+
+        /// <summary>
+        /// World name input field
+        /// </summary>
+        public TMP_InputField WorldNameInputField
+        {
+            get => worldNameInputField;
+            set => worldNameInputField = value;
+        }
+
+        /// <summary>
+        /// World description input field
+        /// </summary>
+        public TMP_InputField WorldDescriptionInputField
+        {
+            get => worldDescriptionInputField;
+            set => worldDescriptionInputField = value;
+        }
 
         /// <summary>
         /// Main menu state
@@ -172,6 +203,22 @@ namespace Akasha.Controllers
         /// Show credits menu
         /// </summary>
         public void ShowCreditsMenu() => MainMenuState = EMainMenuState.Credits;
+
+        /// <summary>
+        /// Create new world
+        /// </summary>
+        public void CreateNewWorld()
+        {
+            if (worldNameInputField && worldDescriptionInputField)
+            {
+                string world_name = worldNameInputField.text.Trim();
+                string world_description = worldDescriptionInputField.text.Trim();
+                if (world_name.Length > 0)
+                {
+                    GameManager.CreateNewWorld(world_name, world_description, 0);
+                }
+            }
+        }
 
         /// <summary>
         /// Back

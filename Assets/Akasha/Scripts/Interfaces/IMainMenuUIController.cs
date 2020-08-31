@@ -1,4 +1,6 @@
-﻿/// <summary>
+﻿using TMPro;
+
+/// <summary>
 /// Akasha namespace
 /// </summary>
 namespace Akasha
@@ -8,6 +10,16 @@ namespace Akasha
     /// </summary>
     public interface IMainMenuUIController : IBehaviour
     {
+        /// <summary>
+        /// World name input field
+        /// </summary>
+        TMP_InputField WorldNameInputField { get; set; }
+
+        /// <summary>
+        /// World description input field
+        /// </summary>
+        TMP_InputField WorldDescriptionInputField { get; set; }
+
         /// <summary>
         /// Main menu state
         /// </summary>
@@ -72,6 +84,11 @@ namespace Akasha
         /// Show credits menu
         /// </summary>
         void ShowCreditsMenu();
+
+        /// <summary>
+        /// Create new world
+        /// </summary>
+        void CreateNewWorld();
 
         /// <summary>
         /// Back

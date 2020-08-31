@@ -183,9 +183,9 @@ namespace Akasha
         IInventoryUIController InventoryUIController { get; }
 
         /// <summary>
-        /// New world player data snapshot
+        /// World player data snapshot
         /// </summary>
-        WorldPlayerData NewWorldPlayerDataSnapshot { get; }
+        WorldPlayerData WorldPlayerDataSnapshot { get; set; }
 
         /// <summary>
         /// Place block

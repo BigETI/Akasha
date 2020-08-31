@@ -117,6 +117,13 @@ namespace Akasha
         ChunkControllerScript GetChunkController(ChunkID chunkID);
 
         /// <summary>
+        /// Get generated blocks task
+        /// </summary>
+        /// <param name="chunkID">Chunk ID</param>
+        /// <returns>Blocks task</returns>
+        Task<BlockData[]> GetGeneratedBlocksTask(ChunkID chunkID);
+
+        /// <summary>
         /// Get chunk blocks task (asynchronous)
         /// </summary>
         /// <param name="chunkID">Chunk ID</param>

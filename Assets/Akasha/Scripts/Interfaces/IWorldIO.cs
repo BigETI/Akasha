@@ -1,7 +1,6 @@
 ﻿using Akasha.Data;
 using System;
 using System.Collections.Generic;
-using System.IO;
 using System.Threading.Tasks;
 using UnityEngine;
 
@@ -85,6 +84,12 @@ namespace Akasha
         /// <param name="chunkID">Chunk ID</param>
         /// <returns>Read chunk entities task</returns>
         Task<WorldEntityData[]> CreateReadChunkEntitiesTask(ChunkID chunkID);
+
+        /// <summary>
+        /// Create read players task
+        /// </summary>
+        /// <returns>Read players task</returns>
+        Task<IReadOnlyDictionary<string, WorldPlayerData>> CreateReadPlayersTask();
 
         /// <summary>
         /// Create write chunks task

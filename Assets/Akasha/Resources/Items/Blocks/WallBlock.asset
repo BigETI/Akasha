@@ -20,11 +20,11 @@ MonoBehaviour:
     type: 2}
   maximalHealth: 0
   maximalStackSize: 0
-  weight: 0
+  weight: 16
   maximalHitCooldownTime: 0.5
   itemAndHandsAsset: {fileID: 0}
   hasRandomOrientation: 0
-  initialHealth: 1024
+  initialHealth: 16
   material: {fileID: 2100000, guid: 3807c56f22fd40d4a8aae73d99f6aa5c, type: 2}
   meshVariants: {fileID: 11400000, guid: 3c04e60adebbf1d449051b9382326711, type: 2}
   collisionBounds:

@@ -1,0 +1,24 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8e2850b3cf0305849a87ebc9b1b08c5f, type: 3}
+  m_Name: WallBlockCraftingRecipes
+  m_EditorClassIdentifier: 
+  craftingRecipesNameStringTranslation: {fileID: 11400000, guid: 9bc32f44388271046ae21061affab388,
+    type: 2}
+  iconSpriteTranslation: {fileID: 11400000, guid: 1d8630b263bd95b408ce9d511f01489a,
+    type: 2}
+  craftingRecipes:
+  - item: {fileID: 11400000, guid: 854ee07c4e77893498d0e8cc799c177c, type: 2}
+    quantity: 16
+  craftingResults:
+  - item: {fileID: 11400000, guid: 9b3ccfc8783347f41ac65a549a511990, type: 2}
+    quantity: 1

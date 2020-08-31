@@ -1,0 +1,24 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8e2850b3cf0305849a87ebc9b1b08c5f, type: 3}
+  m_Name: DirtBlockCraftingRecipes
+  m_EditorClassIdentifier: 
+  craftingRecipesNameStringTranslation: {fileID: 11400000, guid: 35d4cde7020225a45910e2e055e8e63a,
+    type: 2}
+  iconSpriteTranslation: {fileID: 11400000, guid: 83a3526846b9e99409d6ce5cd8ed0746,
+    type: 2}
+  craftingRecipes:
+  - item: {fileID: 11400000, guid: 6875cfd1c0b550143ad0450fcaeb5eaf, type: 2}
+    quantity: 1024
+  craftingResults:
+  - item: {fileID: 11400000, guid: 0dbc7e0021bd2824c9a935b61791e0b6, type: 2}
+    quantity: 1

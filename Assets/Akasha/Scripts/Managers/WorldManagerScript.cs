@@ -3,6 +3,7 @@ using Akasha.Data;
 using Akasha.Objects;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using UnityEngine;
 using UnitySceneLoaderManager;
@@ -92,6 +93,11 @@ namespace Akasha.Managers
         /// Load world IO task
         /// </summary>
         private Task<WorldIO> loadWorldIOTask = Task.FromResult<WorldIO>(null);
+
+        /// <summary>
+        /// Read players task
+        /// </summary>
+        private Task<IReadOnlyDictionary<string, WorldPlayerData>> readPlayersTask = null;
 
         /// <summary>
         /// Save task
@@ -440,6 +446,29 @@ namespace Akasha.Managers
         }
 
         /// <summary>
+        /// Get generated blocks task
+        /// </summary>
+        /// <param name="chunkID">Chunk ID</param>
+        /// <returns>Blocks task</returns>
+        public Task<BlockData[]> GetGeneratedBlocksTask(ChunkID chunkID)
+        {
+            Task<BlockData[]> ret = Task.FromResult(Array.Empty<BlockData>());
+            lock (chunkBlocksTasksLookup)
+            {
+                if (chunkBlocksTasksLookup.ContainsKey(chunkID))
+                {
+                    ret = chunkBlocksTasksLookup[chunkID];
+                }
+                else
+                {
+                    ChunkID chunk_id = chunkID;
+                    ret = Task.Run(() => GetGeneratedBlocks(chunk_id));
+                }
+            }
+            return ret;
+        }
+
+        /// <summary>
         /// Get chunk blocks task
         /// </summary>
         /// <param name="chunkID">Chunk ID</param>
@@ -457,6 +486,7 @@ namespace Akasha.Managers
                 else if ((IO != null) && IO.CanRead && IO.IsChunkAvailable(chunkID))
                 {
                     ret = IO.CreateReadChunkBlocksTask(chunkID);
+                    chunkBlocksTasksLookup.Add(chunkID, ret);
                 }
                 else
                 {
@@ -609,15 +639,28 @@ namespace Akasha.Managers
                         if (player_controller.TryGetComponent(out CharacterControllerScript character_controller))
                         {
                             players = players ?? new List<WorldPlayerData>();
-                            players.Add(character_controller.NewWorldPlayerDataSnapshot);
+                            players.Add(character_controller.WorldPlayerDataSnapshot);
                         }
                     }
                 }
                 saveTask = Task.Run(() =>
                 {
-                    Task<bool> result = ((players == null) ? Task.FromResult(true) : IO.CreateWritePlayersTask(players));
-                    result.Wait();
-                    return (result.Result ? IO.CreateSaveTask().Result : false);
+                    Dictionary<ChunkID, Task<BlockData[]>> chunk_blocks_tasks_lookup = new Dictionary<ChunkID, Task<BlockData[]>>(chunkBlocksTasksLookup);
+                    List<ChunkData> chunk_data = new List<ChunkData>();
+                    foreach (KeyValuePair<ChunkID, Task<BlockData[]>> chunk_blocks_task in chunk_blocks_tasks_lookup)
+                    {
+                        if (chunk_blocks_task.Value.IsCompleted)
+                        {
+                            chunk_data.Add(new ChunkData(chunk_blocks_task.Key, chunk_blocks_task.Value.Result));
+                        }
+                    }
+                    chunk_blocks_tasks_lookup.Clear();
+                    Task<bool> write_chunks_task = IO.CreateWriteChunksTask(chunk_data, Array.Empty<ChunkID>());
+                    // TODO: Save entities
+                    Task<bool> write_players_task = ((players == null) ? Task.FromResult(true) : IO.CreateWritePlayersTask(players));
+                    write_chunks_task.Wait();
+                    write_players_task.Wait();
+                    return (write_chunks_task.Result && write_players_task.Result && IO.CreateSaveTask().GetAwaiter().GetResult());
                 });
             }
         }
@@ -703,9 +746,37 @@ namespace Akasha.Managers
                             {
                                 biome?.Initialize(IO.WorldSeed);
                             }
-                            GameManager.GameState = EGameState.Playing;
+                            readPlayersTask = IO.CreateReadPlayersTask();
                         }
                     }
+                }
+            }
+            else if (readPlayersTask != null)
+            {
+                if (readPlayersTask.IsCanceled || readPlayersTask.IsFaulted)
+                {
+                    SceneLoaderManager.LoadScene("MainMenuScene");
+                }
+                else if (readPlayersTask.IsCompleted)
+                {
+                    IReadOnlyDictionary<string, WorldPlayerData> player_data_lookup = readPlayersTask.Result;
+                    PlayerControllerScript[] player_controllers = FindObjectsOfType<PlayerControllerScript>();
+                    if (player_controllers != null)
+                    {
+                        foreach (PlayerControllerScript player_controller in player_controllers)
+                        {
+                            if (player_controller && player_controller.TryGetComponent(out CharacterControllerScript character_controller))
+                            {
+                                string key = character_controller.GUID.ToString();
+                                if (player_data_lookup.ContainsKey(key))
+                                {
+                                    character_controller.WorldPlayerDataSnapshot = player_data_lookup[key];
+                                }
+                            }
+                        }
+                    }
+                    GameManager.GameState = EGameState.Playing;
+                    readPlayersTask = null;
                 }
             }
             else if (followTransformController != null)
@@ -766,7 +837,8 @@ namespace Akasha.Managers
                     Vector3Int delta = (Vector3Int)(followTransformController.ChunkID - lastChunkID);
                     lock (chunkBlocksTasksLookup)
                     {
-                        List<ChunkData> write_chunks = new List<ChunkData>();
+                        // TEST
+                        //List<ChunkData> write_chunks = new List<ChunkData>();
                         for (int index = 0; index < chunkControllers.Length; index++)
                         {
                             ChunkControllerScript chunk_controller = chunkControllers[index];
@@ -790,14 +862,14 @@ namespace Akasha.Managers
                                 if (chunk_controller && ((new_buffer_position.x < 0) || (new_buffer_position.x >= grid_size.x) || (new_buffer_position.y < 0) || (new_buffer_position.y >= grid_size.y) || (new_buffer_position.z < 0) || (new_buffer_position.z >= grid_size.z)))
                                 {
                                     refreshChunkControllers.Remove(chunk_controller);
-                                    if (chunkBlocksTasksLookup.ContainsKey(chunk_controller.ChunkID))
-                                    {
-                                        Task<BlockData[]> chunk_blocks_task = chunkBlocksTasksLookup[chunk_controller.ChunkID];
-                                        if (chunk_blocks_task.IsCompleted)
-                                        {
-                                            write_chunks.Add(new ChunkData(chunk_controller.ChunkID, chunk_blocks_task.Result));
-                                        }
-                                    }
+                                    //if (chunkBlocksTasksLookup.ContainsKey(chunk_controller.ChunkID))
+                                    //{
+                                    //    Task<BlockData[]> chunk_blocks_task = chunkBlocksTasksLookup[chunk_controller.ChunkID];
+                                    //    if (chunk_blocks_task.IsCompleted)
+                                    //    {
+                                    //        write_chunks.Add(new ChunkData(chunk_controller.ChunkID, chunk_blocks_task.Result));
+                                    //    }
+                                    //}
                                     Destroy(chunk_controller.gameObject);
                                 }
                                 ChunkID chunk_id = (ChunkID)buffer_position + followTransformController.ChunkID - (ChunkID)(grid_size / 2);
@@ -816,17 +888,17 @@ namespace Akasha.Managers
                                 }
                             }
                         }
-                        if ((IO != null) && IO.CanWrite)
-                        {
-                            IO.CreateWriteChunksTask(write_chunks.ToArray(), Array.Empty<ChunkID>());
-                            IO.CreateWriteEntitiesTask(Array.Empty<WorldEntityData>(), Array.Empty<string>());
-                            // TODO: Fix collision issues when tasks are removed from dictionary
-                            //foreach (ChunkData write_chunk in write_chunks)
-                            //{
-                            //    chunkBlocksTasksLookup.Remove(write_chunk.ChunkID);
-                            //}
-                            write_chunks.Clear();
-                        }
+                        //if ((IO != null) && IO.CanWrite)
+                        //{
+                        //    IO.CreateWriteChunksTask(write_chunks.ToArray(), Array.Empty<ChunkID>());
+                        //    IO.CreateWriteEntitiesTask(Array.Empty<WorldEntityData>(), Array.Empty<string>());
+                        //    // TODO: Fix collision issues when tasks are removed from dictionary
+                        //    //foreach (ChunkData write_chunk in write_chunks)
+                        //    //{
+                        //    //    chunkBlocksTasksLookup.Remove(write_chunk.ChunkID);
+                        //    //}
+                        //    write_chunks.Clear();
+                        //}
                     }
                     ChunkControllerScript[] temporary_chunk_controllers = chunkControllers;
                     chunkControllers = bufferChunkControllers;

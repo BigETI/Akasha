@@ -15,6 +15,11 @@ namespace Akasha
     public interface IInventoryItemSlotUIController : IBehaviour
     {
         /// <summary>
+        /// Unknown item icon image sprite translation
+        /// </summary>
+        SpriteTranslationObjectScript UnknownItemIconImageSpriteTranslation { get; set; }
+
+        /// <summary>
         /// Weight string translation
         /// </summary>
         StringTranslationObjectScript WeightStringTranslation { get; set; }
